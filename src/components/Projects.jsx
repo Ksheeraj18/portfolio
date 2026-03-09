@@ -56,7 +56,7 @@ export default function Projects() {
                             <span className="w-8 h-[2px] bg-blue-500"></span>
                             <h3 className="text-blue-400 font-bold tracking-widest uppercase text-sm">Portfolio</h3>
                         </div>
-                        <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight">
+                        <h2 className="text-4xl md:text-7xl font-black text-white tracking-tight">
                             Selected <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400">Works.</span>
                         </h2>
                     </div>
@@ -80,7 +80,7 @@ export default function Projects() {
                             transition={{ duration: 0.7, delay: index * 0.15 }}
                             className="h-full flex"
                         >
-                            <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} perspective={1000} scale={1.02} transitionSpeed={1000} className="w-full flex">
+                            <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true} className="w-full flex">
                                 <div className="group relative bg-white/[0.03] border border-white/5 rounded-3xl overflow-hidden backdrop-blur-md transition-all duration-500 hover:bg-white/[0.06] hover:border-white/30 hover:shadow-[0_0_40px_rgba(14,165,233,0.15)] flex flex-col h-full w-full">
                                     <div className={`h-2 w-full bg-linear-to-r ${project.color}`}></div>
 

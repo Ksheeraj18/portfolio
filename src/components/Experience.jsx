@@ -65,7 +65,7 @@ export default function Experience() {
                             transition={{ duration: 0.5 }}
                         />
                     </div>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight">
+                    <h2 className="text-4xl md:text-7xl font-black text-white tracking-tight">
                         Professional <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-indigo-400">Experience.</span>
                     </h2>
                 </motion.div>

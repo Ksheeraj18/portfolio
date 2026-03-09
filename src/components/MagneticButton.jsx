@@ -23,6 +23,7 @@ export default function MagneticButton({ children, className = '', ...props }) {
             onMouseMove={handleMouse}
             onMouseLeave={handleMouseLeave}
             animate={{ x: position.x, y: position.y }}
+            whileTap={{ scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
             className={`inline-block ${className}`}
             {...props}

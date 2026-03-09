@@ -93,29 +93,39 @@ export default function Navbar() {
                             exit={{ opacity: 0, height: 0 }}
                             className="md:hidden overflow-hidden border-t border-white/10"
                         >
-                            <div className="flex flex-col px-6 py-4 gap-2 pb-6">
-                                {navItems.map((item) => (
-                                    <Link
+                            <div className="flex flex-col px-6 py-8 gap-4 pb-12">
+                                {navItems.map((item, i) => (
+                                    <motion.div
                                         key={item.name}
-                                        to={item.to}
-                                        smooth={true}
-                                        duration={500}
-                                        offset={-100}
-                                        className="text-gray-300 hover:text-white hover:bg-white/5 text-lg py-3 px-4 rounded-xl cursor-pointer transition-colors"
-                                        onClick={() => setMobileMenuOpen(false)}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: i * 0.1 }}
                                     >
-                                        {item.name}
-                                    </Link>
+                                        <Link
+                                            to={item.to}
+                                            smooth={true}
+                                            duration={500}
+                                            offset={-100}
+                                            className="text-gray-300 hover:text-white hover:bg-white/5 text-2xl font-bold py-3 px-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between group"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            {item.name}
+                                            <span className="w-2 h-2 rounded-full bg-blue-500 scale-0 group-hover:scale-100 transition-transform" />
+                                        </Link>
+                                    </motion.div>
                                 ))}
-                                <a
+                                <motion.a
                                     href="https://mail.google.com/mail/?view=cm&fs=1&to=ksheeraj1811@gmail.com"
                                     target="_blank"
                                     rel="noreferrer"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="mt-4 text-center font-medium bg-white text-black px-5 py-3 rounded-xl shadow-lg"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: navItems.length * 0.1 }}
+                                    className="mt-8 text-center font-bold bg-linear-to-r from-blue-600 to-purple-600 text-white px-5 py-4 rounded-2xl shadow-xl active:scale-95 transition-transform"
                                 >
                                     Let's Talk
-                                </a>
+                                </motion.a>
                             </div>
                         </motion.div>
                     )}

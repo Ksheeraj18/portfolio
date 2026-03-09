@@ -92,7 +92,7 @@ export default function About() {
                             transition={{ duration: 0.6, delay: index * 0.15 }}
                             className="h-full"
                         >
-                            <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.02} transitionSpeed={1000} className="h-full">
+                            <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true} className="h-full">
                                 <div className={`relative overflow-hidden bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 group h-full shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]`}>
                                     <div className={`absolute inset-0 bg-linear-to-br ${card.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
 
