@@ -51,9 +51,9 @@ export default function Skills() {
             {/* Floating background icons */}
             <FloatingIcons />
 
-            {/* Soft backdrop blur spot blur */}
+            {/* Soft backdrop blur spot blur - hidden on mobile for performance */}
             <motion.div
-                className="absolute top-1/2 right-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2"
+                className="hidden md:block absolute top-1/2 right-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2"
                 animate={{ scale: [1, 1.2, 1], x: [0, -30, 0] }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />

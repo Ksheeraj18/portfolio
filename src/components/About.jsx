@@ -48,7 +48,7 @@ export default function About() {
                             <span className="w-8 h-[2px] bg-blue-500"></span>
                             <h3 className="text-blue-400 font-bold tracking-widest uppercase text-sm">About Me</h3>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
+                        <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
                             Engineering the <br />
                             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-300">future of digital.</span>
                         </h2>
@@ -61,7 +61,7 @@ export default function About() {
                         transition={{ duration: 0.7, delay: 0.2 }}
                         className="md:w-1/2 flex items-center"
                     >
-                        <p className="text-gray-400 text-lg md:text-xl leading-relaxed font-light">
+                        <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed font-light">
                             I am a visionary Computer Science student deeply immersed in the intersection of modern scalable web technologies and Artificial Intelligence.
                             I don't just write code; I design systems that bridge the gap between experimental AI research and practical, impactful user-centered applications.
                         </p>
@@ -93,8 +93,8 @@ export default function About() {
                             className="h-full"
                         >
                             <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true} className="h-full">
-                                <div className={`relative overflow-hidden bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 group h-full shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]`}>
-                                    <div className={`absolute inset-0 bg-linear-to-br ${card.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                                <div className={`relative overflow-hidden bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-200 group h-full shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]`}>
+                                    <div className={`absolute inset-0 bg-linear-to-br ${card.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-200`}></div>
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         <motion.div

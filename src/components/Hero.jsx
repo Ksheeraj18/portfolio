@@ -21,9 +21,9 @@ export default function Hero() {
             {/* Interactive 3D Particle Background */}
             <ParticleBackground />
 
-            {/* Massive Background Gradients with animation */}
+            {/* Massive Background Gradients with animation - hidden on mobile for performance */}
             <motion.div
-                className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
+                className="hidden md:block absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
                 animate={{
                     scale: [1, 1.2, 1],
                     x: [0, 30, 0],
@@ -32,7 +32,7 @@ export default function Hero() {
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
-                className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
+                className="hidden md:block absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
                 animate={{
                     scale: [1, 1.15, 1],
                     x: [0, -25, 0],
@@ -42,7 +42,7 @@ export default function Hero() {
             />
             {/* Additional floating orb */}
             <motion.div
-                className="absolute top-1/3 right-1/3 w-[300px] h-[300px] bg-pink-600/15 rounded-full blur-[120px] pointer-events-none z-0"
+                className="hidden md:block absolute top-1/3 right-1/3 w-[300px] h-[300px] bg-pink-600/15 rounded-full blur-[120px] pointer-events-none z-0"
                 animate={{
                     scale: [1, 1.3, 1],
                     x: [0, 40, 0],
@@ -73,7 +73,7 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                 >
-                    <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black tracking-tighter leading-[0.9] mb-6">
+                    <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-[8rem] font-black tracking-tighter leading-[0.9] mb-6">
                         <motion.span
                             className="block text-white"
                             initial={{ opacity: 0, x: -50 }}
@@ -113,7 +113,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3 }}
-                    className="text-lg md:text-3xl text-gray-300 font-medium mb-6 tracking-wide"
+                    className="text-base sm:text-lg md:text-3xl text-gray-300 font-medium mb-6 tracking-wide h-8 md:h-12"
                 >
                     <span className="text-white">{text}</span>
                     <Cursor cursorStyle="|" cursorColor="#8b5cf6" />
@@ -140,7 +140,7 @@ export default function Hero() {
                             smooth={true}
                             duration={500}
                             offset={-100}
-                            className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-black font-bold text-lg transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_35px_rgba(255,255,255,0.8)] hover:-translate-y-1 hover:scale-105 block"
+                            className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-black font-bold text-lg transition-all duration-150 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_35px_rgba(255,255,255,0.8)] hover:-translate-y-1 hover:scale-105 block"
                         >
                             Explore My Work
                         </Link>
@@ -152,7 +152,7 @@ export default function Hero() {
                             download="Ksheeraj_Gubbala_Resume.pdf"
                             target="_blank"
                             rel="noreferrer"
-                            className="group w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white font-medium text-lg transition-all duration-300 hover:bg-white/10 hover:-translate-y-1 hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center gap-2"
+                            className="group w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white font-medium text-lg transition-all duration-150 hover:bg-white/10 hover:-translate-y-1 hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center gap-2"
                         >
                             <Download size={20} className="group-hover:-translate-y-1 transition-transform" />
                             Download Resume

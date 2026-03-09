@@ -5,15 +5,46 @@ import { useState } from 'react';
 export default function Contact() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [focused, setFocused] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
-        setFormData({ name: '', email: '', message: '' });
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        try {
+            const response = await fetch("https://formsubmit.co/ajax/ksheeraj1811@gmail.com", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    _subject: `New Portfolio Message from ${formData.name}`,
+                })
+            });
+
+            if (response.ok) {
+                setSubmitStatus('success');
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            console.error(error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+            setTimeout(() => setSubmitStatus(null), 5000);
+        }
     };
 
     const contactLinks = [
@@ -50,7 +81,7 @@ export default function Contact() {
 
     return (
         <section id="contact" className="py-24 w-full bg-black/50 border-t border-white/5 relative overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
 
             {/* Animated floating orbs */}
             <motion.div
@@ -100,9 +131,9 @@ export default function Contact() {
                                 whileHover={{ x: 8 }}
                             >
                                 <motion.div
-                                    className={`p-4 bg-white/5 border border-white/10 rounded-xl ${link.hoverBg} transition-all duration-300`}
+                                    className={`p-4 bg-white/5 border border-white/10 rounded-xl ${link.hoverBg} transition-all duration-150`}
                                     whileHover={{ rotate: [0, -5, 5, 0], scale: 1.05 }}
-                                    transition={{ duration: 0.3 }}
+                                    transition={{ duration: 0.15 }}
                                 >
                                     {link.icon}
                                 </motion.div>
@@ -133,7 +164,7 @@ export default function Contact() {
                                 animate={focused === field.name ? { scale: 1.01 } : { scale: 1 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <label htmlFor={field.name} className={`text-sm font-medium transition-colors duration-300 ${focused === field.name ? 'text-blue-400' : 'text-gray-400'}`}>
+                                <label htmlFor={field.name} className={`text-sm font-medium transition-colors duration-150 ${focused === field.name ? 'text-blue-400' : 'text-gray-400'}`}>
                                     {field.label}
                                 </label>
                                 <input
@@ -145,7 +176,7 @@ export default function Contact() {
                                     onFocus={() => setFocused(field.name)}
                                     onBlur={() => setFocused(null)}
                                     required
-                                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300"
+                                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-150"
                                     placeholder={field.placeholder}
                                 />
                                 {/* Animated underline */}
@@ -163,7 +194,7 @@ export default function Contact() {
                             animate={focused === 'message' ? { scale: 1.01 } : { scale: 1 }}
                             transition={{ duration: 0.2 }}
                         >
-                            <label htmlFor="message" className={`text-sm font-medium transition-colors duration-300 ${focused === 'message' ? 'text-blue-400' : 'text-gray-400'}`}>
+                            <label htmlFor="message" className={`text-sm font-medium transition-colors duration-150 ${focused === 'message' ? 'text-blue-400' : 'text-gray-400'}`}>
                                 Your Message
                             </label>
                             <textarea
@@ -175,7 +206,7 @@ export default function Contact() {
                                 onBlur={() => setFocused(null)}
                                 required
                                 rows={5}
-                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300 resize-none"
+                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-150 resize-none"
                                 placeholder="How can I help you?"
                             ></textarea>
                             <motion.div
@@ -188,19 +219,28 @@ export default function Contact() {
 
                         <motion.button
                             type="submit"
-                            className="w-full py-4 mt-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all group relative overflow-hidden"
-                            whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(59,130,246,0.4)' }}
-                            whileTap={{ scale: 0.98 }}
+                            disabled={isSubmitting}
+                            className={`w-full py-4 mt-2 font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-150 group relative overflow-hidden ${submitStatus === 'success' ? 'bg-green-500 text-white' :
+                                    submitStatus === 'error' ? 'bg-red-500 text-white' :
+                                        'bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white disabled:opacity-70'
+                                }`}
+                            whileHover={submitStatus ? {} : { scale: 1.02, boxShadow: '0 0 30px rgba(59,130,246,0.4)', transition: { duration: 0.15 } }}
+                            whileTap={submitStatus ? {} : { scale: 0.98 }}
                         >
                             {/* Shimmer effect */}
-                            <motion.div
-                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
-                                animate={{ x: ['-100%', '100%'] }}
-                                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                            />
+                            {!submitStatus && !isSubmitting && (
+                                <motion.div
+                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
+                                    animate={{ x: ['-100%', '100%'] }}
+                                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                                />
+                            )}
                             <span className="relative z-10 flex items-center gap-2">
-                                Send Message
-                                <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                {isSubmitting ? 'Sending...' :
+                                    submitStatus === 'success' ? 'Message Sent Successfully!' :
+                                        submitStatus === 'error' ? 'Failed to send. Try again.' :
+                                            <>Send Message <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                                }
                             </span>
                         </motion.button>
                     </form>

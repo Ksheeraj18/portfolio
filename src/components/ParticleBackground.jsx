@@ -3,17 +3,20 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Preload, Float, TorusKnot, Icosahedron } from '@react-three/drei';
 import * as random from 'maath/random/dist/maath-random.esm';
 
-const Stars = ({ mousePosition, ...props }) => {
+const Stars = ({ mousePosition, isMobile, ...props }) => {
     const ref = useRef();
-    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.5 }));
+    const numStars = isMobile ? 1500 : 5000;
+    const [sphere] = useState(() => random.inSphere(new Float32Array(numStars * 3), { radius: 1.5 }));
 
     useFrame((state, delta) => {
         ref.current.rotation.x -= delta / 15;
         ref.current.rotation.y -= delta / 20;
 
         // Subtle mouse parallax
-        ref.current.position.x += (mousePosition.current.x * 0.1 - ref.current.position.x) * 0.05;
-        ref.current.position.y += (mousePosition.current.y * 0.1 - ref.current.position.y) * 0.05;
+        if (!isMobile) {
+            ref.current.position.x += (mousePosition.current.x * 0.1 - ref.current.position.x) * 0.05;
+            ref.current.position.y += (mousePosition.current.y * 0.1 - ref.current.position.y) * 0.05;
+        }
     });
 
     return (
@@ -22,7 +25,7 @@ const Stars = ({ mousePosition, ...props }) => {
                 <PointMaterial
                     transparent
                     color="#8b5cf6"
-                    size={0.004}
+                    size={isMobile ? 0.006 : 0.004}
                     sizeAttenuation={true}
                     depthWrite={false}
                 />
@@ -31,14 +34,18 @@ const Stars = ({ mousePosition, ...props }) => {
     );
 };
 
-const AbstractShapes = ({ mousePosition }) => {
+const AbstractShapes = ({ mousePosition, isMobile }) => {
     const groupRef = useRef();
 
     useFrame((state, delta) => {
         // Subtle floating movement and array response
-        groupRef.current.position.x += (mousePosition.current.x * 0.3 - groupRef.current.position.x) * 0.02;
-        groupRef.current.position.y += (mousePosition.current.y * 0.3 - groupRef.current.position.y) * 0.02;
+        if (!isMobile) {
+            groupRef.current.position.x += (mousePosition.current.x * 0.3 - groupRef.current.position.x) * 0.02;
+            groupRef.current.position.y += (mousePosition.current.y * 0.3 - groupRef.current.position.y) * 0.02;
+        }
     });
+
+    if (isMobile) return null; // Very heavy to render on mobile
 
     return (
         <group ref={groupRef}>
@@ -63,25 +70,39 @@ const AbstractShapes = ({ mousePosition }) => {
 
 export default function ParticleBackground() {
     const mousePosition = useRef({ x: 0, y: 0 });
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
         const handleMouseMove = (e) => {
             // Normalize mouse coordinates to -1 to +1
             mousePosition.current.x = (e.clientX / window.innerWidth) * 2 - 1;
             mousePosition.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+        if (!isMobile) {
+            window.addEventListener('mousemove', handleMouseMove);
+        }
+
+        return () => {
+            window.removeEventListener('resize', checkMobile);
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [isMobile]);
 
     return (
         <div className="w-full h-full absolute inset-0 z-0 overflow-hidden pointer-events-none">
-            <Canvas camera={{ position: [0, 0, 1] }}>
+            <Canvas camera={{ position: [0, 0, 1] }} dpr={isMobile ? [1, 1] : [1, 2]}>
                 <ambientLight intensity={1} />
                 <Suspense fallback={null}>
-                    <Stars mousePosition={mousePosition} />
-                    <AbstractShapes mousePosition={mousePosition} />
+                    <Stars mousePosition={mousePosition} isMobile={isMobile} />
+                    <AbstractShapes mousePosition={mousePosition} isMobile={isMobile} />
                 </Suspense>
                 <Preload all />
             </Canvas>
