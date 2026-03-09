@@ -1,0 +1,31 @@
+﻿
+> portfolio@0.0.0 lint
+> eslint .
+
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\About.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\Contact.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\Experience.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\GithubStats.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\Hero.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\Navbar.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\Projects.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\kshee\OneDrive\Desktop\Portfolio\src\components\Skills.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+Γ£û 8 problems (8 errors, 0 warnings)
+
