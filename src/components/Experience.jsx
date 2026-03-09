@@ -33,9 +33,9 @@ export default function Experience() {
 
     return (
         <section id="experience" className="py-32 w-full relative bg-zinc-950 overflow-hidden">
-            {/* Background element */}
+            {/* Background element - hidden on mobile for performance */}
             <motion.div
-                className="absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px] pointer-events-none"
+                className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px] pointer-events-none"
                 animate={{ scale: [1, 1.15, 1], x: [0, -40, 0] }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -125,7 +125,7 @@ export default function Experience() {
                             </div>
 
                             <motion.div
-                                className="bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-md transition-all duration-500 mt-8 shadow-xl"
+                                className="bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-md transition-all duration-200 mt-8 shadow-xl"
                                 whileHover={{
                                     borderColor: 'rgba(168,85,247,0.3)',
                                     boxShadow: '0 0 30px rgba(168,85,247,0.1)',

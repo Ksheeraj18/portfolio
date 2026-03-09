@@ -40,8 +40,8 @@ export default function Projects() {
     ];
 
     return (
-        <section id="projects" className="py-32 w-full bg-black relative border-t border-white/5">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-blue-900/20 rounded-full blur-[150px] pointer-events-none"></div>
+        <section id="projects" className="py-32 w-full bg-black relative border-t border-white/5 overflow-hidden">
+            <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-blue-900/20 rounded-full blur-[150px] pointer-events-none"></div>
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <motion.div
@@ -81,7 +81,7 @@ export default function Projects() {
                             className="h-full flex"
                         >
                             <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true} className="w-full flex">
-                                <div className="group relative bg-white/[0.03] border border-white/5 rounded-3xl overflow-hidden backdrop-blur-md transition-all duration-500 hover:bg-white/[0.06] hover:border-white/30 hover:shadow-[0_0_40px_rgba(14,165,233,0.15)] flex flex-col h-full w-full">
+                                <div className="group relative bg-white/[0.03] border border-white/5 rounded-3xl overflow-hidden backdrop-blur-md transition-all duration-200 hover:bg-white/[0.06] hover:border-white/30 hover:shadow-[0_0_40px_rgba(14,165,233,0.15)] flex flex-col h-full w-full">
                                     <div className={`h-2 w-full bg-linear-to-r ${project.color}`}></div>
 
                                     <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -90,7 +90,7 @@ export default function Projects() {
                                                 href={project.github}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="p-4 bg-white/5 rounded-2xl border border-white/10 block hover:bg-white/10 group-hover:scale-110 transition-all duration-500 cursor-pointer text-gray-300 hover:text-white"
+                                                className="p-4 bg-white/5 rounded-2xl border border-white/10 block hover:bg-white/10 group-hover:scale-110 transition-all duration-150 cursor-pointer text-gray-300 hover:text-white"
                                                 title="View Source Code"
                                             >
                                                 <Code2 size={28} />

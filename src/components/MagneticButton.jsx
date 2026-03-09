@@ -1,20 +1,38 @@
-import { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function MagneticButton({ children, className = '', ...props }) {
     const ref = useRef(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+    // Use MotionValues instead of React state to rapidly update positioning without triggering component re-renders
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    // Much snappier spring configuration for instant responsive feel
+    const springX = useSpring(x, { stiffness: 400, damping: 25, mass: 0.5 });
+    const springY = useSpring(y, { stiffness: 400, damping: 25, mass: 0.5 });
+
+    useEffect(() => {
+        if (window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window)) {
+            setIsTouchDevice(true);
+        }
+    }, []);
 
     const handleMouse = (e) => {
+        if (isTouchDevice || !ref.current) return;
         const { clientX, clientY } = e;
         const { width, height, left, top } = ref.current.getBoundingClientRect();
-        const x = (clientX - (left + width / 2)) * 0.3;
-        const y = (clientY - (top + height / 2)) * 0.3;
-        setPosition({ x, y });
+        const newX = (clientX - (left + width / 2)) * 0.3;
+        const newY = (clientY - (top + height / 2)) * 0.3;
+        x.set(newX);
+        y.set(newY);
     };
 
     const handleMouseLeave = () => {
-        setPosition({ x: 0, y: 0 });
+        if (isTouchDevice) return;
+        x.set(0);
+        y.set(0);
     };
 
     return (
@@ -22,9 +40,8 @@ export default function MagneticButton({ children, className = '', ...props }) {
             ref={ref}
             onMouseMove={handleMouse}
             onMouseLeave={handleMouseLeave}
-            animate={{ x: position.x, y: position.y }}
+            style={{ x: springX, y: springY }}
             whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
             className={`inline-block ${className}`}
             {...props}
         >

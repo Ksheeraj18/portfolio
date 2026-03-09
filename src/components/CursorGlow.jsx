@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function CursorGlow() {
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
@@ -9,6 +10,12 @@ export default function CursorGlow() {
     const springY = useSpring(cursorY, { stiffness: 120, damping: 18 });
 
     useEffect(() => {
+        // Only enable on devices with a fine pointer (mouse)
+        if (window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window)) {
+            setIsTouchDevice(true);
+            return;
+        }
+
         const handleMouseMove = (e) => {
             cursorX.set(e.clientX);
             cursorY.set(e.clientY);
@@ -16,6 +23,8 @@ export default function CursorGlow() {
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, [cursorX, cursorY]);
+
+    if (isTouchDevice) return null;
 
     return (
         <>
