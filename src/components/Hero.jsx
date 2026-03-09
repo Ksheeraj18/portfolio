@@ -73,7 +73,7 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                 >
-                    <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black tracking-tighter leading-[0.9] mb-6">
+                    <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-black tracking-tighter leading-[0.9] mb-6">
                         <motion.span
                             className="block text-white"
                             initial={{ opacity: 0, x: -50 }}
@@ -113,7 +113,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3 }}
-                    className="text-xl md:text-3xl text-gray-300 font-medium mb-6 tracking-wide"
+                    className="text-lg md:text-3xl text-gray-300 font-medium mb-6 tracking-wide"
                 >
                     <span className="text-white">{text}</span>
                     <Cursor cursorStyle="|" cursorColor="#8b5cf6" />
@@ -123,7 +123,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="max-w-2xl text-gray-400 text-lg md:text-xl md:leading-relaxed mb-12 font-light"
+                    className="max-w-2xl text-gray-400 text-base md:text-xl md:leading-relaxed mb-12 font-light px-4 md:px-0"
                 >
                     I build powerful AI-driven applications, scalable production systems, and design experiences that push the boundaries of modern web technologies.
                 </motion.p>
@@ -132,7 +132,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto px-6"
                 >
                     <MagneticButton>
                         <Link

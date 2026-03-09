@@ -83,7 +83,7 @@ export default function Skills() {
                             transition={{ duration: 0.5 }}
                         />
                     </div>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight">
+                    <h2 className="text-4xl md:text-7xl font-black text-white tracking-tight">
                         Technical <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">Expertise.</span>
                     </h2>
                 </motion.div>
@@ -98,7 +98,7 @@ export default function Skills() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             className="h-full"
                         >
-                            <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.05} transitionSpeed={1000} className="h-full">
+                            <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.05} transitionSpeed={1000} disableTiltOnTouch={true} className="h-full">
                                 <motion.div
                                     className={`h-full relative overflow-hidden bg-black/40 border ${category.border} rounded-3xl p-8 backdrop-blur-xl group transition-all duration-300 shadow-lg hover:border-white/20`}
                                     whileHover={{ boxShadow: `0 0 40px ${category.glow}` }}

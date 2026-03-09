@@ -17,7 +17,7 @@ export default function FloatingIcons() {
             {icons.map((icon, i) => (
                 <motion.div
                     key={i}
-                    className="absolute"
+                    className={`absolute ${i > 4 ? 'hidden md:block' : 'block'}`}
                     style={{ left: icon.x, top: icon.y, fontSize: icon.size }}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{
