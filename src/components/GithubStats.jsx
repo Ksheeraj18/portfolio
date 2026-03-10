@@ -25,7 +25,7 @@ export default function GithubStats() {
                     className="flex flex-col lg:flex-row gap-6 justify-center items-center"
                 >
                     {/* Main Stats Card */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-sm group hover:bg-white/10 transition-colors">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] group hover:bg-white/10 transition-colors">
                         <img
                             src={`https://github-readme-stats-eight-theta.vercel.app/api?username=${username}&show_icons=true&theme=omni&hide_border=true&bg_color=00000000&title_color=3b82f6&text_color=9ca3af&icon_color=8b5cf6`}
                             alt="GitHub Stats"
@@ -35,7 +35,7 @@ export default function GithubStats() {
                     </div>
 
                     {/* Top Languages Card */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-sm group hover:bg-white/10 transition-colors">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] group hover:bg-white/10 transition-colors">
                         <img
                             src={`https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=omni&hide_border=true&bg_color=00000000&title_color=3b82f6&text_color=9ca3af`}
                             alt="Top Languages"

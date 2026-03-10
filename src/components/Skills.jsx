@@ -53,7 +53,7 @@ export default function Skills() {
 
             {/* Soft backdrop blur spot blur - hidden on mobile for performance */}
             <motion.div
-                className="hidden md:block absolute top-1/2 right-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2"
+                className="hidden md:block absolute top-1/2 right-0 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-600/10 to-transparent pointer-events-none -translate-y-1/2"
                 animate={{ scale: [1, 1.2, 1], x: [0, -30, 0] }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -100,7 +100,7 @@ export default function Skills() {
                         >
                             <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.05} transitionSpeed={1000} disableTiltOnTouch={true} className="h-full">
                                 <motion.div
-                                    className={`h-full relative overflow-hidden bg-black/40 border ${category.border} rounded-3xl p-8 backdrop-blur-xl group transition-all duration-300 shadow-lg hover:border-white/20`}
+                                    className={`h-full relative overflow-hidden bg-black/60 border ${category.border} rounded-3xl p-8 backdrop-blur-sm group transition-all duration-300 shadow-lg hover:border-white/20`}
                                     whileHover={{ boxShadow: `0 0 40px ${category.glow}` }}
                                 >
                                     <motion.div
@@ -118,10 +118,6 @@ export default function Skills() {
                                             <motion.span
                                                 key={skill}
                                                 className="px-4 py-2 bg-white/3 border border-white/10 rounded-xl text-gray-200 text-sm font-medium hover:bg-white/10 hover:border-white/20 transition-all cursor-default shadow-sm"
-                                                initial={{ opacity: 0, scale: 0.8 }}
-                                                whileInView={{ opacity: 1, scale: 1 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: index * 0.1 + skillIdx * 0.05, duration: 0.3 }}
                                                 whileHover={{
                                                     scale: 1.1,
                                                     y: -3,

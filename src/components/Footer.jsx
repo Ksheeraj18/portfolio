@@ -21,9 +21,6 @@ export default function Footer() {
                 {/* Back to top */}
                 <motion.div
                     className="flex justify-center mb-8"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
                 >
                     <MagneticButton>
                         <Link
@@ -47,9 +44,6 @@ export default function Footer() {
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     <motion.p
                         className="text-gray-500 text-sm flex items-center gap-1"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
                     >
                         &copy; {currentYear} Ksheeraj Gubbala. Made with
                         <motion.span
@@ -71,10 +65,6 @@ export default function Footer() {
                                     className="text-gray-500 hover:text-white transition-all p-2.5 bg-white/5 rounded-full border border-white/10 hover:border-white/30 hover:bg-white/10 block"
                                     whileHover={{ scale: 1.15, boxShadow: '0 0 15px rgba(168,85,247,0.3)' }}
                                     whileTap={{ scale: 0.9 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.1 }}
                                 >
                                     {link.icon}
                                     <span className="sr-only">{link.label}</span>
