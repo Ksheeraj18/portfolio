@@ -81,7 +81,7 @@ export default function Contact() {
 
     return (
         <section id="contact" className="py-24 w-full bg-black/50 border-t border-white/5 relative overflow-hidden">
-            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/5 to-transparent pointer-events-none"></div>
 
             {/* Animated floating orbs */}
             <motion.div
@@ -151,7 +151,7 @@ export default function Contact() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="bg-white/5 border border-white/10 p-8 rounded-3xl backdrop-blur-sm relative overflow-hidden"
+                    className="bg-white/5 border border-white/10 p-8 rounded-3xl relative overflow-hidden"
                 >
                     {/* Animated gradient border glow */}
                     <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-blue-500/10 via-transparent to-purple-500/10 opacity-0 hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -221,8 +221,8 @@ export default function Contact() {
                             type="submit"
                             disabled={isSubmitting}
                             className={`w-full py-4 mt-2 font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-150 group relative overflow-hidden ${submitStatus === 'success' ? 'bg-green-500 text-white' :
-                                    submitStatus === 'error' ? 'bg-red-500 text-white' :
-                                        'bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white disabled:opacity-70'
+                                submitStatus === 'error' ? 'bg-red-500 text-white' :
+                                    'bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white disabled:opacity-70'
                                 }`}
                             whileHover={submitStatus ? {} : { scale: 1.02, boxShadow: '0 0 30px rgba(59,130,246,0.4)', transition: { duration: 0.15 } }}
                             whileTap={submitStatus ? {} : { scale: 0.98 }}
@@ -232,7 +232,7 @@ export default function Contact() {
                                 <motion.div
                                     className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
                                     animate={{ x: ['-100%', '100%'] }}
-                                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 6 }}
                                 />
                             )}
                             <span className="relative z-10 flex items-center gap-2">

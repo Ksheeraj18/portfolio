@@ -35,7 +35,7 @@ export default function Experience() {
         <section id="experience" className="py-32 w-full relative bg-zinc-950 overflow-hidden">
             {/* Background element - hidden on mobile for performance */}
             <motion.div
-                className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px] pointer-events-none"
+                className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-900/10 to-transparent pointer-events-none"
                 animate={{ scale: [1, 1.15, 1], x: [0, -40, 0] }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -125,7 +125,7 @@ export default function Experience() {
                             </div>
 
                             <motion.div
-                                className="bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-md transition-all duration-200 mt-8 shadow-xl"
+                                className="bg-black/60 border border-white/10 rounded-3xl p-8 md:p-10 transition-all duration-200 mt-8 shadow-xl"
                                 whileHover={{
                                     borderColor: 'rgba(168,85,247,0.3)',
                                     boxShadow: '0 0 30px rgba(168,85,247,0.1)',
@@ -155,10 +155,6 @@ export default function Experience() {
                                             <motion.li
                                                 key={i}
                                                 className="flex items-start gap-4 text-gray-300 font-light text-base md:text-lg"
-                                                initial={{ opacity: 0, x: -20 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: i * 0.15 + index * 0.3, duration: 0.4 }}
                                             >
                                                 <motion.div
                                                     whileHover={{ scale: 1.2, rotate: 360 }}
@@ -177,10 +173,6 @@ export default function Experience() {
                                         <motion.span
                                             key={tech}
                                             className="text-sm font-semibold px-4 py-2 bg-linear-to-br from-white/10 to-transparent border border-white/10 rounded-xl text-white shadow-sm"
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            viewport={{ once: true }}
-                                            transition={{ delay: techIdx * 0.05 + index * 0.2, duration: 0.3 }}
                                             whileHover={{
                                                 scale: 1.1,
                                                 y: -2,

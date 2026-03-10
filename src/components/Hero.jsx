@@ -23,7 +23,7 @@ export default function Hero() {
 
             {/* Massive Background Gradients with animation - hidden on mobile for performance */}
             <motion.div
-                className="hidden md:block absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
+                className="hidden md:block absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/20 to-transparent pointer-events-none z-0"
                 animate={{
                     scale: [1, 1.2, 1],
                     x: [0, 30, 0],
@@ -32,7 +32,7 @@ export default function Hero() {
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
-                className="hidden md:block absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
+                className="hidden md:block absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-purple-600/10 to-transparent pointer-events-none z-0"
                 animate={{
                     scale: [1, 1.15, 1],
                     x: [0, -25, 0],
@@ -42,7 +42,7 @@ export default function Hero() {
             />
             {/* Additional floating orb */}
             <motion.div
-                className="hidden md:block absolute top-1/3 right-1/3 w-[300px] h-[300px] bg-pink-600/15 rounded-full blur-[120px] pointer-events-none z-0"
+                className="hidden md:block absolute top-1/3 right-1/3 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-pink-600/15 to-transparent pointer-events-none z-0"
                 animate={{
                     scale: [1, 1.3, 1],
                     x: [0, 40, 0],
