@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, CheckCircle2, Sparkles } from 'lucide-react';
+import Tilt from 'react-parallax-tilt';
 
 export default function Experience() {
     const experiences = [
@@ -124,66 +125,68 @@ export default function Experience() {
                                 </motion.div>
                             </div>
 
-                            <motion.div
-                                className="bg-black/60 border border-white/10 rounded-3xl p-8 md:p-10 transition-all duration-200 mt-8 shadow-xl"
-                                whileHover={{
-                                    borderColor: 'rgba(168,85,247,0.3)',
-                                    boxShadow: '0 0 30px rgba(168,85,247,0.1)',
-                                    backgroundColor: 'rgba(255,255,255,0.03)'
-                                }}
-                            >
-                                <div className="mb-8">
-                                    <h4 className="flex items-center gap-3 text-xl font-bold text-white mb-4">
-                                        <motion.span
-                                            className="px-3 py-1 bg-white/10 text-white rounded-lg text-sm border border-white/10"
-                                            whileHover={{ scale: 1.05 }}
-                                        >
-                                            <Sparkles size={14} className="inline mr-1" />
-                                            Project
-                                        </motion.span>
-                                        {exp.project}
-                                    </h4>
-                                    <p className="text-gray-400 leading-relaxed font-light text-lg">
-                                        {exp.desc}
-                                    </p>
-                                </div>
-
-                                <div className="mb-8 p-6 bg-white/5 rounded-2xl border border-white/5">
-                                    <h5 className="text-sm font-bold text-white mb-4 uppercase tracking-widest">Key Contributions</h5>
-                                    <ul className="space-y-4">
-                                        {exp.contributions.map((item, i) => (
-                                            <motion.li
-                                                key={i}
-                                                className="flex items-start gap-4 text-gray-300 font-light text-base md:text-lg"
+                            <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} scale={1.01} transitionSpeed={1000} disableTiltOnTouch={true}>
+                                <motion.div
+                                    className="bg-black/60 border border-white/10 rounded-3xl p-8 md:p-10 transition-all duration-200 mt-8 shadow-xl transform-style-3d"
+                                    whileHover={{
+                                        borderColor: 'rgba(168,85,247,0.3)',
+                                        boxShadow: '0 0 30px rgba(168,85,247,0.1)',
+                                        backgroundColor: 'rgba(255,255,255,0.03)'
+                                    }}
+                                >
+                                    <div className="mb-8 transform translate-z-10">
+                                        <h4 className="flex items-center gap-3 text-xl font-bold text-white mb-4">
+                                            <motion.span
+                                                className="px-3 py-1 bg-white/10 text-white rounded-lg text-sm border border-white/10 shadow-sm"
+                                                whileHover={{ scale: 1.05 }}
                                             >
-                                                <motion.div
-                                                    whileHover={{ scale: 1.2, rotate: 360 }}
-                                                    transition={{ duration: 0.3 }}
-                                                >
-                                                    <CheckCircle2 size={22} className="text-purple-500 shrink-0 mt-0.5" />
-                                                </motion.div>
-                                                <span className="leading-relaxed">{item}</span>
-                                            </motion.li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                                <Sparkles size={14} className="inline mr-1" />
+                                                Project
+                                            </motion.span>
+                                            {exp.project}
+                                        </h4>
+                                        <p className="text-gray-400 leading-relaxed font-light text-lg">
+                                            {exp.desc}
+                                        </p>
+                                    </div>
 
-                                <div className="pt-6 flex flex-wrap gap-3">
-                                    {exp.tech.map((tech, techIdx) => (
-                                        <motion.span
-                                            key={tech}
-                                            className="text-sm font-semibold px-4 py-2 bg-linear-to-br from-white/10 to-transparent border border-white/10 rounded-xl text-white shadow-sm"
-                                            whileHover={{
-                                                scale: 1.1,
-                                                y: -2,
-                                                boxShadow: '0 4px 15px rgba(168,85,247,0.3)'
-                                            }}
-                                        >
-                                            {tech}
-                                        </motion.span>
-                                    ))}
-                                </div>
-                            </motion.div>
+                                    <div className="mb-8 p-6 bg-white/5 rounded-2xl border border-white/5 transform translate-z-20">
+                                        <h5 className="text-sm font-bold text-white mb-4 uppercase tracking-widest">Key Contributions</h5>
+                                        <ul className="space-y-4">
+                                            {exp.contributions.map((item, i) => (
+                                                <motion.li
+                                                    key={i}
+                                                    className="flex items-start gap-4 text-gray-300 font-light text-base md:text-lg"
+                                                >
+                                                    <motion.div
+                                                        whileHover={{ scale: 1.2, rotate: 360 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    >
+                                                        <CheckCircle2 size={22} className="text-purple-500 shrink-0 mt-0.5" />
+                                                    </motion.div>
+                                                    <span className="leading-relaxed">{item}</span>
+                                                </motion.li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="pt-6 flex flex-wrap gap-3 transform translate-z-10">
+                                        {exp.tech.map((tech, techIdx) => (
+                                            <motion.span
+                                                key={tech}
+                                                className="text-sm font-semibold px-4 py-2 bg-linear-to-br from-white/10 to-transparent border border-white/10 rounded-xl text-white shadow-sm"
+                                                whileHover={{
+                                                    scale: 1.1,
+                                                    y: -2,
+                                                    boxShadow: '0 4px 15px rgba(168,85,247,0.3)'
+                                                }}
+                                            >
+                                                {tech}
+                                            </motion.span>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            </Tilt>
                         </motion.div>
                     ))}
                 </div>

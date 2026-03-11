@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Tilt from 'react-parallax-tilt';
 
 export default function GithubStats() {
     const username = "Ksheeraj18";
@@ -25,24 +26,28 @@ export default function GithubStats() {
                     className="flex flex-col lg:flex-row gap-6 justify-center items-center"
                 >
                     {/* Main Stats Card */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] group hover:bg-white/10 transition-colors">
-                        <img
-                            src={`https://github-readme-stats-eight-theta.vercel.app/api?username=${username}&show_icons=true&theme=omni&hide_border=true&bg_color=00000000&title_color=3b82f6&text_color=9ca3af&icon_color=8b5cf6`}
-                            alt="GitHub Stats"
-                            className="w-full h-auto object-contain transition-transform group-hover:scale-[1.02]"
-                            loading="lazy"
-                        />
-                    </div>
+                    <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true}>
+                        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] group hover:bg-white/10 transition-colors">
+                            <img
+                                src={`https://github-readme-stats-eight-theta.vercel.app/api?username=${username}&show_icons=true&theme=omni&hide_border=true&bg_color=00000000&title_color=3b82f6&text_color=9ca3af&icon_color=8b5cf6`}
+                                alt="GitHub Stats"
+                                className="w-full h-auto object-contain transition-transform group-hover:scale-[1.02]"
+                                loading="lazy"
+                            />
+                        </div>
+                    </Tilt>
 
                     {/* Top Languages Card */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] group hover:bg-white/10 transition-colors">
-                        <img
-                            src={`https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=omni&hide_border=true&bg_color=00000000&title_color=3b82f6&text_color=9ca3af`}
-                            alt="Top Languages"
-                            className="w-full h-auto object-contain transition-transform group-hover:scale-[1.02]"
-                            loading="lazy"
-                        />
-                    </div>
+                    <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true}>
+                        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 w-full max-w-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] group hover:bg-white/10 transition-colors">
+                            <img
+                                src={`https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=omni&hide_border=true&bg_color=00000000&title_color=3b82f6&text_color=9ca3af`}
+                                alt="Top Languages"
+                                className="w-full h-auto object-contain transition-transform group-hover:scale-[1.02]"
+                                loading="lazy"
+                            />
+                        </div>
+                    </Tilt>
                 </motion.div>
             </div>
         </section>

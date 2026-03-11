@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { Mail, Github, Linkedin, Send, Sparkles } from 'lucide-react';
+import { Mail, Github, Linkedin, Send, Sparkles, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
+import Tilt from 'react-parallax-tilt';
+import MagneticButton from './MagneticButton';
 
 export default function Contact() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -50,200 +52,142 @@ export default function Contact() {
     const contactLinks = [
         {
             href: "https://mail.google.com/mail/?view=cm&fs=1&to=ksheeraj1811@gmail.com",
-            icon: <Mail className="text-blue-400" size={24} />,
-            label: "Email",
+            icon: <Mail size={20} />,
+            label: "Communications",
             value: "ksheeraj1811@gmail.com",
-            hoverBg: "group-hover:bg-blue-500/20 group-hover:border-blue-500/50",
+            color: "text-blue-400",
             delay: 0
         },
         {
             href: "https://github.com/Ksheeraj18",
-            icon: <Github className="text-gray-400" size={24} />,
-            label: "GitHub",
+            icon: <Github size={20} />,
+            label: "Engineering Hub",
             value: "github.com/Ksheeraj18",
-            hoverBg: "group-hover:bg-gray-700/50 group-hover:border-white/30",
+            color: "text-white",
             delay: 0.1
         },
         {
             href: "https://linkedin.com/in/ksheeraj-gubbala",
-            icon: <Linkedin className="text-blue-500" size={24} />,
-            label: "LinkedIn",
-            value: "linkedin.com/in/ksheeraj-gubbala",
-            hoverBg: "group-hover:bg-blue-600/20 group-hover:border-blue-500/50",
+            icon: <Linkedin size={20} />,
+            label: "Professional Grid",
+            value: "LinkedIn Profile",
+            color: "text-blue-500",
             delay: 0.2
         }
     ];
 
-    const inputFields = [
-        { name: 'name', label: 'Your Name', type: 'text', placeholder: 'John Doe' },
-        { name: 'email', label: 'Your Email', type: 'email', placeholder: 'john@example.com' },
-    ];
-
     return (
-        <section id="contact" className="py-24 w-full bg-black/50 border-t border-white/5 relative overflow-hidden">
-            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/5 to-transparent pointer-events-none"></div>
+        <section id="contact" className="py-32 w-full bg-black relative overflow-hidden">
+            {/* Elite Background Atmosphere */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/5 to-transparent pointer-events-none blur-[120px] smooth-gpu" />
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
-            {/* Animated floating orbs */}
-            <motion.div
-                className="absolute top-20 right-20 w-3 h-3 rounded-full bg-blue-500/30"
-                animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-                className="absolute bottom-40 left-32 w-2 h-2 rounded-full bg-purple-500/30"
-                animate={{ y: [0, 15, 0], opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            />
-            <motion.div
-                className="absolute top-1/3 left-1/4 w-4 h-4 rounded-full bg-pink-500/20"
-                animate={{ y: [0, -25, 0], x: [0, 10, 0], opacity: [0.2, 0.4, 0.2] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            />
-
-            <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10 w-full">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-10 w-full">
                 <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.8 }}
                 >
-                    <div className="inline-flex items-center gap-2 mb-4">
-                        <Sparkles className="text-blue-400" size={16} />
-                        <h3 className="text-blue-500 font-semibold tracking-wider uppercase text-sm">Get in Touch</h3>
+                    <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-xl">
+                        <Sparkles className="text-blue-400" size={14} />
+                        <h3 className="text-white font-black uppercase tracking-[0.4em] text-[10px]">Signal Extraction</h3>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Let's build something <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500">together.</span></h2>
-                    <p className="text-gray-400 text-lg mb-10 leading-relaxed max-w-md">
-                        Whether you have a question, want to start a project, or simply want to connect, feel free to drop me a message.
+                    <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-tight">
+                        Ready to <span className="text-blue-500 italic">Scale?</span>
+                    </h2>
+                    <p className="text-gray-400 text-xl mb-12 leading-relaxed max-w-md font-medium">
+                        Initiate a transmission. Let's engineer the next generation of digital excellence together.
                     </p>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
                         {contactLinks.map((link, i) => (
                             <motion.a
                                 key={i}
                                 href={link.href}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex items-center gap-4 text-gray-300 hover:text-white transition-all group"
+                                className="group flex items-center gap-6 p-6 bg-white/5 border border-white/5 rounded-3xl hover:bg-white/10 transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl backdrop-blur-md"
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: link.delay }}
-                                whileHover={{ x: 8 }}
                             >
-                                <motion.div
-                                    className={`p-4 bg-white/5 border border-white/10 rounded-xl ${link.hoverBg} transition-all duration-150`}
-                                    whileHover={{ rotate: [0, -5, 5, 0], scale: 1.05 }}
-                                    transition={{ duration: 0.15 }}
-                                >
+                                <div className={`p-4 bg-black rounded-2xl border border-white/10 ${link.color} group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-500`}>
                                     {link.icon}
-                                </motion.div>
-                                <div>
-                                    <span className="block text-sm text-gray-500">{link.label}</span>
-                                    <span className="text-lg font-medium">{link.value}</span>
                                 </div>
+                                <div>
+                                    <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">{link.label}</span>
+                                    <span className="text-lg font-bold text-white tracking-tight">{link.value}</span>
+                                </div>
+                                <ArrowRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500" />
                             </motion.a>
                         ))}
                     </div>
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="bg-white/5 border border-white/10 p-8 rounded-3xl relative overflow-hidden"
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    {/* Animated gradient border glow */}
-                    <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-blue-500/10 via-transparent to-purple-500/10 opacity-0 hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                    <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} perspective={1500} scale={1.02} transitionSpeed={2000} disableTiltOnTouch={true}>
+                        <div className="bg-white/5 border border-white/10 p-10 md:p-12 rounded-[3.5rem] relative overflow-hidden backdrop-blur-2xl shadow-[0_50px_100px_rgba(0,0,0,0.6)] group">
+                            {/* Inner Glass Glow */}
+                            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
+                            
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-8 relative z-10">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {[
+                                        { name: 'name', label: 'Identity', type: 'text', placeholder: 'Ksheeraj Gubbala' },
+                                        { name: 'email', label: 'Frequency', type: 'email', placeholder: 'your@email.com' },
+                                    ].map(field => (
+                                        <div key={field.name} className="flex flex-col gap-4">
+                                            <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2">{field.label}</label>
+                                            <input
+                                                type={field.type}
+                                                name={field.name}
+                                                required
+                                                onChange={handleChange}
+                                                className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight"
+                                                placeholder={field.placeholder}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6 relative z-10">
-                        {inputFields.map(field => (
-                            <motion.div
-                                key={field.name}
-                                className="flex flex-col gap-2 relative"
-                                animate={focused === field.name ? { scale: 1.01 } : { scale: 1 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <label htmlFor={field.name} className={`text-sm font-medium transition-colors duration-150 ${focused === field.name ? 'text-blue-400' : 'text-gray-400'}`}>
-                                    {field.label}
-                                </label>
-                                <input
-                                    type={field.type}
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formData[field.name]}
-                                    onChange={handleChange}
-                                    onFocus={() => setFocused(field.name)}
-                                    onBlur={() => setFocused(null)}
-                                    required
-                                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-150"
-                                    placeholder={field.placeholder}
-                                />
-                                {/* Animated underline */}
-                                <motion.div
-                                    className="absolute bottom-0 left-0 h-[2px] bg-linear-to-r from-blue-500 to-purple-500 rounded-full"
-                                    initial={{ width: '0%' }}
-                                    animate={focused === field.name ? { width: '100%' } : { width: '0%' }}
-                                    transition={{ duration: 0.3 }}
-                                />
-                            </motion.div>
-                        ))}
+                                <div className="flex flex-col gap-4">
+                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2">Data Packet</label>
+                                    <textarea
+                                        name="message"
+                                        required
+                                        rows={5}
+                                        onChange={handleChange}
+                                        className="w-full bg-black/40 border border-white/5 rounded-3xl px-6 py-6 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight resize-none"
+                                        placeholder="Briefly describe the objective..."
+                                    />
+                                </div>
 
-                        <motion.div
-                            className="flex flex-col gap-2 relative"
-                            animate={focused === 'message' ? { scale: 1.01 } : { scale: 1 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <label htmlFor="message" className={`text-sm font-medium transition-colors duration-150 ${focused === 'message' ? 'text-blue-400' : 'text-gray-400'}`}>
-                                Your Message
-                            </label>
-                            <textarea
-                                id="message"
-                                name="message"
-                                value={formData.message}
-                                onChange={handleChange}
-                                onFocus={() => setFocused('message')}
-                                onBlur={() => setFocused(null)}
-                                required
-                                rows={5}
-                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-150 resize-none"
-                                placeholder="How can I help you?"
-                            ></textarea>
-                            <motion.div
-                                className="absolute bottom-0 left-0 h-[2px] bg-linear-to-r from-blue-500 to-purple-500 rounded-full"
-                                initial={{ width: '0%' }}
-                                animate={focused === 'message' ? { width: '100%' } : { width: '0%' }}
-                                transition={{ duration: 0.3 }}
-                            />
-                        </motion.div>
-
-                        <motion.button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className={`w-full py-4 mt-2 font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-150 group relative overflow-hidden ${submitStatus === 'success' ? 'bg-green-500 text-white' :
-                                submitStatus === 'error' ? 'bg-red-500 text-white' :
-                                    'bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white disabled:opacity-70'
-                                }`}
-                            whileHover={submitStatus ? {} : { scale: 1.02, boxShadow: '0 0 30px rgba(59,130,246,0.4)', transition: { duration: 0.15 } }}
-                            whileTap={submitStatus ? {} : { scale: 0.98 }}
-                        >
-                            {/* Shimmer effect */}
-                            {!submitStatus && !isSubmitting && (
-                                <motion.div
-                                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
-                                    animate={{ x: ['-100%', '100%'] }}
-                                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 6 }}
-                                />
-                            )}
-                            <span className="relative z-10 flex items-center gap-2">
-                                {isSubmitting ? 'Sending...' :
-                                    submitStatus === 'success' ? 'Message Sent Successfully!' :
-                                        submitStatus === 'error' ? 'Failed to send. Try again.' :
-                                            <>Send Message <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
-                                }
-                            </span>
-                        </motion.button>
-                    </form>
+                                <MagneticButton>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className={`w-full py-6 rounded-3xl font-black uppercase tracking-[0.4em] text-xs transition-all duration-700 relative overflow-hidden flex items-center justify-center gap-4 ${
+                                            submitStatus === 'success' ? 'bg-green-600 text-white' :
+                                            submitStatus === 'error' ? 'bg-red-600 text-white' :
+                                            'bg-white text-black hover:bg-blue-500 hover:text-white'
+                                        }`}
+                                    >
+                                        {isSubmitting ? 'Transmitting...' : 
+                                         submitStatus === 'success' ? 'Link Established' : 
+                                         submitStatus === 'error' ? 'Retry Link' : 
+                                         <>Initiate Transfer <ArrowRight size={16} /></>}
+                                    </button>
+                                </MagneticButton>
+                            </form>
+                        </div>
+                    </Tilt>
                 </motion.div>
             </div>
         </section>
