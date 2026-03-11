@@ -53,16 +53,17 @@ function ServiceCard({ service, index }) {
       transition={{ duration: 0.8, delay: index * 0.1 }}
     >
       <Tilt 
-        tiltMaxAngleX={12} 
-        tiltMaxAngleY={12} 
-        perspective={1500} 
-        scale={1.03} 
+        tiltMaxAngleX={8} 
+        tiltMaxAngleY={8} 
+        perspective={2000} 
+        scale={1.02} 
         transitionSpeed={1500} 
-        className="h-full transform-style-3d"
+        disableTiltOnTouch={true}
+        className="h-full transform-style-3d smooth-gpu"
       >
         <div
           onMouseMove={onMouseMove}
-          className={`group relative p-12 rounded-[2.5rem] bg-zinc-950/50 border border-white/5 transition-all duration-500 hover:border-white/20 hover:bg-zinc-900/50 h-full flex flex-col transform-style-3d ${service.shadow}`}
+          className={`group relative p-8 md:p-12 rounded-3xl md:rounded-[2.5rem] bg-zinc-950/50 border border-white/5 transition-all duration-500 hover:border-white/20 hover:bg-zinc-900/50 h-full flex flex-col transform-style-3d ${service.shadow}`}
         >
           {/* Spotlight Glow */}
           <motion.div
@@ -118,20 +119,20 @@ const Services = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-20 lg:mb-32"
         >
-          <div className="inline-flex items-center space-x-3 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl mb-8 shadow-2xl">
+          <div className="inline-flex items-center space-x-3 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 shadow-2xl">
             <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
             <span className="text-gray-400 font-bold text-[10px] tracking-[0.4em] uppercase">Intelligence Stack</span>
           </div>
           
-          <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-8 tracking-tighter leading-[0.9] lg:leading-none text-white">
+          <h2 className="text-4xl sm:text-6xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black mb-8 tracking-tighter leading-[0.9] lg:leading-none text-white">
             Specialized <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-purple-500 to-pink-500">Systems.</span>
           </h2>
-          <p className="max-w-3xl mx-auto text-gray-400 text-lg md:text-xl font-light italic border-t border-white/5 pt-8 px-4">
+          <p className="max-w-3xl mx-auto text-gray-400 text-sm sm:text-base md:text-xl font-light italic border-t border-white/5 pt-8 px-4">
             Deploying high-performance logic at the intersection of full-stack engineering and neural computation.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
           {servicesData.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
