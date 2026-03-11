@@ -27,16 +27,17 @@ function SkillCategoryCard({ category, index }) {
             className="h-full group"
         >
             <Tilt 
-                tiltMaxAngleX={12} 
-                tiltMaxAngleY={12} 
-                perspective={1200} 
-                scale={1.05} 
+                tiltMaxAngleX={8} 
+                tiltMaxAngleY={8} 
+                perspective={1500} 
+                scale={1.02} 
                 transitionSpeed={1500} 
-                className="h-full transform-style-3d"
+                disableTiltOnTouch={true}
+                className="h-full transform-style-3d smooth-gpu"
             >
                 <div 
                     onMouseMove={onMouseMove}
-                    className={`h-full relative overflow-hidden bg-zinc-950 border ${category.border} rounded-[2.5rem] p-10 transition-all duration-300 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.5)] transform-style-3d`}
+                    className={`h-full relative overflow-hidden bg-zinc-950 border ${category.border} rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 transition-all duration-300 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.5)] transform-style-3d`}
                 >
                     {/* Spotlight Glow */}
                     <motion.div
@@ -152,7 +153,7 @@ export default function Skills() {
                             transition={{ duration: 0.8 }}
                         />
                     </div>
-                    <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
+                    <h2 className="text-4xl sm:text-7xl md:text-8xl xl:text-8xl 2xl:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
                         Technical <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">Expertise.</span>
                     </h2>
                 </motion.div>

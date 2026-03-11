@@ -28,17 +28,18 @@ function SpotlightCard({ card, index }) {
             className="h-full"
         >
             <Tilt 
-                tiltMaxAngleX={12} 
-                tiltMaxAngleY={12} 
-                perspective={1200} 
-                scale={1.03} 
+                tiltMaxAngleX={8} 
+                tiltMaxAngleY={8} 
+                perspective={1500} 
+                scale={1.02} 
                 transitionSpeed={1500} 
+                disableTiltOnTouch={true}
                 className="h-full transform-style-3d"
                 glareEnable={false}
             >
                 <div 
                     onMouseMove={onMouseMove}
-                    className="relative group h-full bg-zinc-950 border border-white/5 rounded-[2.5rem] p-10 overflow-hidden transition-colors hover:bg-zinc-900/50"
+                    className="relative group h-full bg-zinc-950 border border-white/5 rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 overflow-hidden transition-colors hover:bg-zinc-900/50 smooth-gpu"
                 >
                     {/* Spotlight Glow */}
                     <motion.div
@@ -109,19 +110,19 @@ export default function About() {
             <div className="absolute right-0 bottom-0 w-full h-[600px] bg-[radial-gradient(ellipse_at_bottom,rgba(168,85,247,0.05),transparent_70%)] pointer-events-none"></div>
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
-                <div className="flex flex-col md:flex-row gap-12 lg:gap-16 mb-24 lg:mb-32 items-center">
+                <div className="flex flex-col md:flex-row gap-8 lg:gap-16 mb-20 lg:mb-32 items-center">
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
+                        viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.8 }}
                         className="w-full md:w-3/5"
                     >
                         <div className="inline-flex items-center gap-3 mb-6">
-                            <span className="w-12 h-[2px] bg-blue-500"></span>
-                            <h3 className="text-blue-400 font-bold tracking-[0.3em] uppercase text-[10px] sm:text-xs">Curriculum Vitae</h3>
+                            <span className="w-8 sm:w-12 h-px sm:h-[2px] bg-blue-500"></span>
+                            <h3 className="text-blue-400 font-bold tracking-[0.3em] uppercase text-[8px] sm:text-xs">Curriculum Vitae</h3>
                         </div>
-                        <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.9] lg:leading-none">
+                        <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 sm:mb-8 tracking-tighter leading-[0.9] lg:leading-none">
                             Engineering the <br />
                             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-cyan-300 to-purple-400">future of digital.</span>
                         </h2>
@@ -130,11 +131,11 @@ export default function About() {
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
+                        viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="w-full md:w-2/5"
                     >
-                        <p className="text-gray-400 text-lg md:text-xl leading-relaxed font-light italic border-l-2 border-white/10 pl-6 lg:pl-8">
+                        <p className="text-gray-400 text-base md:text-xl leading-relaxed font-light italic border-l-2 border-white/10 pl-6 lg:pl-8">
                             "I don't just write code; I design intelligent systems that bridge the gap between experimental AI research and impactful, user-centered applications."
                         </p>
                     </motion.div>

@@ -27,28 +27,29 @@ function ProjectCard({ project, index }) {
             className="group"
         >
             <Tilt 
-                tiltMaxAngleX={10} 
-                tiltMaxAngleY={10} 
-                perspective={1500} 
-                scale={1.03} 
-                transitionSpeed={2000} 
+                tiltMaxAngleX={5} 
+                tiltMaxAngleY={5} 
+                perspective={2000} 
+                scale={1.01} 
+                transitionSpeed={1500} 
+                disableTiltOnTouch={true}
                 className="h-full transform-style-3d"
                 glareEnable={false}
             >
                 <div 
                     onMouseMove={onMouseMove}
-                    className="relative bg-zinc-950/50 border border-white/5 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col"
+                    className="relative bg-zinc-950/50 border border-white/5 rounded-3xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col smooth-gpu"
                 >
                     {/* Spotlight Glow */}
                     <motion.div
-                        className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="pointer-events-none absolute -inset-px rounded-3xl md:rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         style={{ background: maskImage }}
                     />
 
                     {/* Accent Top Bar */}
-                    <div className={`h-[5px] w-full bg-linear-to-r ${project.color} opacity-80`} />
+                    <div className={`h-px md:h-[5px] w-full bg-linear-to-r ${project.color} opacity-80`} />
 
-                    <div className="p-10 flex flex-col h-full transform-style-3d">
+                    <div className="p-6 md:p-10 flex flex-col h-full transform-style-3d">
                         {/* Header Links */}
                         <div className="flex justify-between items-center mb-10 transform translate-z-20">
                             <motion.a
@@ -147,20 +148,20 @@ export default function Projects() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.05)_0%,transparent_50%)] pointer-events-none" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.03)_0%,transparent_50%)] pointer-events-none" />
 
-            <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="mb-20 lg:mb-24 flex flex-col md:flex-row md:justify-between md:items-end gap-10"
+                    className="mb-12 sm:mb-20 lg:mb-24 flex flex-col md:flex-row md:justify-between md:items-end gap-10"
                 >
                     <div className="w-full md:w-3/4">
-                        <div className="inline-flex items-center gap-3 mb-6">
-                            <span className="w-12 h-[2px] bg-blue-500"></span>
-                            <h3 className="text-blue-400 font-bold tracking-[0.4em] uppercase text-[10px] sm:text-xs">Innovation</h3>
+                        <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+                            <span className="w-8 sm:w-12 h-px sm:h-[2px] bg-blue-500"></span>
+                            <h3 className="text-blue-400 font-bold tracking-[0.4em] uppercase text-[8px] sm:text-xs">Innovation</h3>
                         </div>
-                        <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
+                        <h2 className="text-4xl sm:text-6xl md:text-7xl xl:text-8xl 2xl:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
                             Selected <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-cyan-400 to-blue-500">Works.</span>
                         </h2>
                     </div>
@@ -168,7 +169,7 @@ export default function Projects() {
                         href="https://github.com/Ksheeraj18"
                         target="_blank"
                         rel="noreferrer"
-                        className="group relative flex items-center gap-3 text-white bg-white/3 border border-white/10 px-8 lg:px-10 py-4 lg:py-5 rounded-2xl hover:bg-white/8 transition-all hover:border-white/30 w-fit"
+                        className="group relative flex items-center gap-3 text-white bg-white/3 border border-white/10 px-6 sm:px-10 py-4 lg:py-5 rounded-2xl hover:bg-white/8 transition-all hover:border-white/30 w-fit"
                         whileHover={{ y: -5 }}
                         whileTap={{ scale: 0.98 }}
                     >
@@ -177,7 +178,7 @@ export default function Projects() {
                     </motion.a>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                     {projects.map((project, index) => (
                         <ProjectCard key={index} project={project} index={index} />
                     ))}

@@ -69,12 +69,13 @@ export default function Hero() {
                     <div className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse" />
                     
                     <Tilt
-                        tiltMaxAngleX={10}
-                        tiltMaxAngleY={10}
-                        perspective={1000}
-                        scale={1.05}
-                        transitionSpeed={1500}
-                        gyroscope={true}
+                        tiltMaxAngleX={5}
+                        tiltMaxAngleY={5}
+                        perspective={1500}
+                        scale={1.02}
+                        transitionSpeed={2000}
+                        gyroscope={false}
+                        disableTiltOnTouch={true}
                         className="relative z-10"
                     >
                         <motion.div 
@@ -157,7 +158,7 @@ export default function Hero() {
                         
                         <motion.div
                             layoutId="profile-image"
-                            className="relative max-w-6xl w-full h-fit max-h-[90vh] rounded-[3rem] overflow-hidden border border-white/30 shadow-[0_50px_200px_rgba(0,0,0,0.8)] bg-zinc-950 pointer-events-auto"
+                            className="relative max-w-[95vw] md:max-w-4xl xl:max-w-6xl w-full h-fit max-h-[85vh] md:max-h-[80vh] xl:max-h-[90vh] rounded-4xl md:rounded-[3rem] overflow-hidden border border-white/30 shadow-[0_50px_200px_rgba(0,0,0,0.8)] bg-zinc-950 pointer-events-auto"
                             transition={{
                                 layout: { type: "spring", stiffness: 200, damping: 25, mass: 1 },
                             }}
@@ -196,7 +197,7 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                 >
-                    <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-[8rem] font-black tracking-tighter leading-[0.9] mb-6">
+                    <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[9rem] font-black tracking-tighter leading-[0.9] mb-4 sm:mb-6">
                         <motion.span
                             className="block text-white"
                             initial={{ opacity: 0, x: -50 }}
@@ -236,7 +237,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3 }}
-                    className="text-base sm:text-lg md:text-3xl text-gray-300 font-medium mb-6 tracking-wide h-8 md:h-12"
+                    className="text-sm sm:text-lg md:text-2xl xl:text-3xl text-gray-300 font-medium mb-4 sm:mb-6 tracking-wide h-6 sm:h-8 md:h-12"
                 >
                     <span className="text-white">{text}</span>
                     <Cursor cursorStyle="|" cursorColor="#8b5cf6" />
@@ -246,7 +247,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="max-w-2xl text-gray-400 text-base md:text-xl md:leading-relaxed mb-12 font-light px-4 md:px-0"
+                    className="max-w-2xl text-gray-400 text-sm sm:text-base md:text-xl md:leading-relaxed mb-8 sm:mb-12 font-light px-2 sm:px-0"
                 >
                     I build powerful AI-driven applications, scalable production systems, and design experiences that push the boundaries of modern web technologies.
                 </motion.p>
