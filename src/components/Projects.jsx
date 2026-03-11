@@ -1,14 +1,116 @@
-import { motion } from 'framer-motion';
-import { Github, Code2, ArrowUpRight } from 'lucide-react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { Github, Code2, ArrowUpRight, ExternalLink } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
+import React from 'react';
+
+function ProjectCard({ project, index }) {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    function onMouseMove({ currentTarget, clientX, clientY }) {
+        const { left, top } = currentTarget.getBoundingClientRect();
+        mouseX.set(clientX - left);
+        mouseY.set(clientY - top);
+    }
+
+    const maskImage = useTransform(
+        [mouseX, mouseY],
+        ([x, y]) => `radial-gradient(500px circle at ${x}px ${y}px, rgba(255,255,255,0.08), transparent 40%)`
+    );
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: index * 0.15 }}
+            className="group"
+        >
+            <Tilt 
+                tiltMaxAngleX={10} 
+                tiltMaxAngleY={10} 
+                perspective={1500} 
+                scale={1.03} 
+                transitionSpeed={2000} 
+                className="h-full transform-style-3d"
+                glareEnable={false}
+            >
+                <div 
+                    onMouseMove={onMouseMove}
+                    className="relative bg-zinc-950/50 border border-white/5 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col"
+                >
+                    {/* Spotlight Glow */}
+                    <motion.div
+                        className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{ background: maskImage }}
+                    />
+
+                    {/* Accent Top Bar */}
+                    <div className={`h-[5px] w-full bg-linear-to-r ${project.color} opacity-80`} />
+
+                    <div className="p-10 flex flex-col h-full transform-style-3d">
+                        {/* Header Links */}
+                        <div className="flex justify-between items-center mb-10 transform translate-z-20">
+                            <motion.a
+                                href={project.github}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="p-4 bg-white/5 rounded-[1.2rem] border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all shadow-xl"
+                                whileHover={{ scale: 1.1, rotate: -5 }}
+                            >
+                                <Github size={24} />
+                            </motion.a>
+                            <motion.a
+                                href={project.link || project.github}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={`p-4 bg-linear-to-br ${project.color} rounded-full text-white shadow-2xl hover:brightness-110 transition-all`}
+                                whileHover={{ scale: 1.1, rotate: 10 }}
+                            >
+                                <ArrowUpRight size={24} />
+                            </motion.a>
+                        </div>
+
+                        {/* Title & Subtitle */}
+                        <div className="mb-8 transform translate-z-30">
+                            <h3 className="text-4xl font-black text-white mb-2 leading-none tracking-tight group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-linear-to-r group-hover:from-white group-hover:to-gray-500 transition-all">
+                                {project.title}
+                            </h3>
+                            <div className={`text-xs font-bold uppercase tracking-[0.3em] text-transparent bg-clip-text bg-linear-to-r ${project.color} filter brightness-125`}>
+                                {project.subtitle}
+                            </div>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-gray-400 text-lg leading-relaxed font-light mb-10 transform translate-z-10 grow">
+                            {project.desc}
+                        </p>
+
+                        {/* Tech Stack Tags */}
+                        <div className="flex flex-wrap gap-2 mt-auto pt-8 border-t border-white/5 transform translate-z-20">
+                            {project.tech.map(tech => (
+                                <span 
+                                    key={tech} 
+                                    className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-black border border-white/10 rounded-xl text-gray-400 shadow-lg group-hover:border-white/20 transition-colors"
+                                >
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </Tilt>
+        </motion.div>
+    );
+}
 
 export default function Projects() {
     const projects = [
         {
             title: 'ChefAssist',
             subtitle: 'AI Recipe Generator',
-            desc: 'An intelligent culinary companion using the Gemini API. It analyzes dietary preferences and ingredient availability to generate highly personalized, step-by-step recipes on the fly.',
-            tech: ['React', 'Node.js', 'Tailwind CSS', 'Gemini AI'],
+            desc: 'An intelligent culinary companion using the Gemini API. It analyzes dietary preferences and ingredient availability to generate highly personalized recipes.',
+            tech: ['React', 'Node.js', 'Tailwind', 'Gemini AI'],
             github: 'https://github.com/Savant261/Flames-2025-Project-ChefAssist',
             link: 'https://chef-assist-frontend.vercel.app/',
             color: 'from-orange-400 to-red-500'
@@ -16,7 +118,7 @@ export default function Projects() {
         {
             title: 'ResearchScout',
             subtitle: 'AI Research Blog Auto-Generator',
-            desc: 'A powerful Flask engine that autonomously scrapes the latest AI research papers from arXiv and leverages Groq models to synthesize findings into comprehensive, readable blog posts.',
+            desc: 'A powerful Flask engine that autonomously scrapes the latest AI research papers and leverages Groq models to synthesize findings.',
             tech: ['Python', 'Flask', 'Groq API', 'Automation'],
             github: 'https://github.com/Ksheeraj18/AI-Research-Blog-Flask-Application-',
             color: 'from-blue-400 to-indigo-500'
@@ -24,15 +126,15 @@ export default function Projects() {
         {
             title: 'AgriVision',
             subtitle: 'Crop Disease Prediction Model',
-            desc: 'A robust computer vision convolutional neural network built with TensorFlow. It accurately diagnoses various plant diseases from high-res leaf images to assist farmers directly.',
-            tech: ['Python', 'TensorFlow', 'Neural Networks', 'CV'],
+            desc: 'A robust computer vision CNN built with TensorFlow. It accurately diagnoses various plant diseases from leaf images.',
+            tech: ['Python', 'TensorFlow', 'Neural Nets', 'CV'],
             github: 'https://github.com/Rohith-Pavan/CROP-DISEASE-PREDICTION-MODEL',
             color: 'from-emerald-400 to-green-500'
         },
         {
             title: 'OmniFlow',
             subtitle: 'AI Workflow Automation Systems',
-            desc: 'Engineered complex, highly resilient background automation workflows using n8n to connect disjointed APIs, aggregate data, and automatically pass it through AI reasoning steps.',
+            desc: 'Engineered complex background automation workflows using n8n to connect APIs and aggregate data through AI reasoning steps.',
             tech: ['n8n', 'REST Flow', 'Webhooks', 'LLMs'],
             github: 'https://github.com/Ksheeraj18/OmniFlow-AI-Automations',
             color: 'from-purple-400 to-pink-500'
@@ -40,96 +142,44 @@ export default function Projects() {
     ];
 
     return (
-        <section id="projects" className="py-32 w-full bg-black relative border-t border-white/5 overflow-hidden">
-            <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-blue-900/20 to-transparent pointer-events-none"></div>
+        <section id="projects" className="py-40 w-full bg-black relative border-t border-white/5 overflow-hidden">
+            {/* Mesh Gradient Background */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.05)_0%,transparent_50%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.03)_0%,transparent_50%)] pointer-events-none" />
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.7 }}
-                    className="mb-20 flex flex-col md:flex-row md:justify-between md:items-end gap-6"
+                    transition={{ duration: 0.8 }}
+                    className="mb-20 lg:mb-24 flex flex-col md:flex-row md:justify-between md:items-end gap-10"
                 >
-                    <div>
-                        <div className="inline-flex items-center gap-2 mb-4">
-                            <span className="w-8 h-[2px] bg-blue-500"></span>
-                            <h3 className="text-blue-400 font-bold tracking-widest uppercase text-sm">Portfolio</h3>
+                    <div className="w-full md:w-3/4">
+                        <div className="inline-flex items-center gap-3 mb-6">
+                            <span className="w-12 h-[2px] bg-blue-500"></span>
+                            <h3 className="text-blue-400 font-bold tracking-[0.4em] uppercase text-[10px] sm:text-xs">Innovation</h3>
                         </div>
-                        <h2 className="text-4xl md:text-7xl font-black text-white tracking-tight">
-                            Selected <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400">Works.</span>
+                        <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
+                            Selected <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-cyan-400 to-blue-500">Works.</span>
                         </h2>
                     </div>
-                    <a
+                    <motion.a
                         href="https://github.com/Ksheeraj18"
                         target="_blank"
                         rel="noreferrer"
-                        className="group inline-flex items-center gap-2 text-white bg-white/5 border border-white/10 px-6 py-3 rounded-full hover:bg-white/10 transition-all hover:scale-105"
+                        className="group relative flex items-center gap-3 text-white bg-white/3 border border-white/10 px-8 lg:px-10 py-4 lg:py-5 rounded-2xl hover:bg-white/8 transition-all hover:border-white/30 w-fit"
+                        whileHover={{ y: -5 }}
+                        whileTap={{ scale: 0.98 }}
                     >
-                        <Github size={18} /> Visit GitHub
-                    </a>
+                        <Github size={20} className="group-hover:rotate-12 transition-transform" /> 
+                        <span className="font-bold tracking-widest text-[10px] sm:text-sm uppercase">Engine Log</span>
+                    </motion.a>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     {projects.map((project, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.7, delay: index * 0.15 }}
-                            className="h-full flex"
-                        >
-                            <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} perspective={1000} scale={1.02} transitionSpeed={1000} disableTiltOnTouch={true} className="w-full flex">
-                                <div className="group relative bg-white/5 border border-white/5 rounded-3xl overflow-hidden backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_40px_rgba(14,165,233,0.15)] flex flex-col h-full w-full">
-                                    <div className={`h-2 w-full bg-linear-to-r ${project.color}`}></div>
-
-                                    <div className="p-8 md:p-10 flex flex-col flex-grow">
-                                        <div className="flex justify-between items-start mb-8 z-10 relative">
-                                            <a
-                                                href={project.github}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="p-4 bg-white/5 rounded-2xl border border-white/10 block hover:bg-white/10 group-hover:scale-110 transition-all duration-150 cursor-pointer text-gray-300 hover:text-white"
-                                                title="View Source Code"
-                                            >
-                                                <Code2 size={28} />
-                                            </a>
-                                            <a
-                                                href={project.link || project.github}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="p-3 bg-white/5 rounded-full border border-white/10 text-gray-400 hover:text-white hover:bg-blue-500 hover:border-blue-500 transition-all group/link"
-                                                title="Visit Project"
-                                            >
-                                                <ArrowUpRight size={20} className="group-hover/link:rotate-45 transition-transform" />
-                                            </a>
-                                        </div>
-
-                                        <div className="mb-6">
-                                            <h3 className="text-3xl font-bold text-white mb-2 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-white group-hover:to-gray-400 transition-all">
-                                                {project.title}
-                                            </h3>
-                                            <h4 className={`text-sm font-bold uppercase tracking-widest text-transparent bg-clip-text bg-linear-to-r ${project.color}`}>
-                                                {project.subtitle}
-                                            </h4>
-                                        </div>
-
-                                        <p className="text-gray-400 mb-10 leading-relaxed font-light text-lg flex-grow">
-                                            {project.desc}
-                                        </p>
-
-                                        <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-white/5">
-                                            {project.tech.map(tech => (
-                                                <span key={tech} className="text-xs font-semibold px-3 py-1.5 bg-black border border-white/10 rounded-lg text-gray-300 shadow-sm">
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </Tilt>
-                        </motion.div>
+                        <ProjectCard key={index} project={project} index={index} />
                     ))}
                 </div>
             </div>

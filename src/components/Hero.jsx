@@ -1,8 +1,10 @@
-import { motion } from 'framer-motion';
-import { ArrowDown, Download } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowDown, Download, X } from 'lucide-react';
 import { Link } from 'react-scroll';
 import ParticleBackground from './ParticleBackground';
 import MagneticButton from './MagneticButton';
+import Tilt from 'react-parallax-tilt';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
 
 export default function Hero() {
@@ -14,6 +16,7 @@ export default function Hero() {
         deleteSpeed: 40,
     });
 
+    const [isEnlarged, setIsEnlarged] = useState(false);
     const nameLetters = "Ksheeraj.";
 
     return (
@@ -54,7 +57,127 @@ export default function Hero() {
             {/* Grid overlay */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-20 z-0"></div>
 
-            <div className="max-w-6xl mx-auto px-6 flex flex-col items-center justify-center text-center z-10 w-full">
+            {/* Premium 3D Profile Frame replacing Abstract Visual */}
+            <div className="absolute top-1/2 right-0 md:right-10 lg:right-20 -translate-y-1/2 pointer-events-none z-10 hidden md:flex items-center justify-center">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className="relative pointer-events-auto"
+                >
+                    {/* Atmospheric Glow behind photo */}
+                    <div className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse" />
+                    
+                    <Tilt
+                        tiltMaxAngleX={10}
+                        tiltMaxAngleY={10}
+                        perspective={1000}
+                        scale={1.05}
+                        transitionSpeed={1500}
+                        gyroscope={true}
+                        className="relative z-10"
+                    >
+                        <motion.div 
+                            layoutId="profile-image"
+                            onClick={() => setIsEnlarged(true)}
+                            className="relative w-[350px] h-[480px] lg:w-[450px] lg:h-[600px] rounded-[3rem] p-[3px] bg-linear-to-br from-white/40 via-transparent to-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] border border-white/20 overflow-hidden group cursor-pointer pointer-events-auto"
+                            whileHover={{ 
+                                scale: 1.02, 
+                                rotate: -1,
+                                boxShadow: "0 40px 100px rgba(59,130,246,0.3)" 
+                            }}
+                            whileTap={{ scale: 0.96 }}
+                            transition={{
+                                layout: { type: "spring", stiffness: 200, damping: 25, mass: 1 },
+                                scale: { duration: 0.2 }
+                            }}
+                        >
+                            <div className="relative w-full h-full rounded-[2.8rem] overflow-hidden bg-black bezel-screen">
+                                {/* Full-Image "Ambient Scan" Effect */}
+                                <div className="absolute inset-y-0 left-0 w-[400%] z-30 pointer-events-none overflow-hidden rounded-[2.8rem]">
+                                    <div className="absolute inset-0 glass-shine opacity-0 group-hover:opacity-100 group-hover:animate-[shine_4s_ease-in-out_infinite] mix-blend-lighten transition-opacity duration-1000" />
+                                </div>
+                                
+                                <img
+                                    src="/IMG_20260312_000902.jpg.jpeg"
+                                    alt="Ksheeraj Gubbala"
+                                    className="w-full h-full object-cover object-top img-sharp select-none smooth-gpu"
+                                />
+                                
+                                {/* Integrated HUD Elements */}
+                                <div className="absolute top-6 right-6 z-40 bg-black/60 border border-white/20 px-4 py-2 rounded-2xl backdrop-blur-xl pointer-events-none shadow-2xl">
+                                    <div className="text-blue-400 font-black text-xs tracking-[0.3em] italic">AI.DEV</div>
+                                </div>
+                                
+                                <div className="absolute bottom-6 left-6 z-40 bg-black/60 border border-white/20 px-4 py-3 rounded-2xl backdrop-blur-xl pointer-events-none shadow-2xl">
+                                    <div className="flex gap-3 items-center">
+                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] leading-tight">Engineering</span>
+                                            <span className="text-[8px] font-bold text-blue-400 uppercase tracking-[0.2em] leading-tight">The Future</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Sharp Inner Definition Border */}
+                                <div className="absolute inset-0 border border-white/10 rounded-[2.8rem] pointer-events-none" />
+                            </div>
+                        </motion.div>
+                    </Tilt>
+                </motion.div>
+            </div>
+
+            {/* Click to Enlarge Modal - macOS Genie Effect */}
+            <AnimatePresence>
+                {isEnlarged && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-1000000 bg-black/98 backdrop-blur-3xl flex items-center justify-center p-4 md:p-10 pointer-events-auto"
+                    >
+                        {/* Dimmer overlay for closing */}
+                        <div 
+                            className="absolute inset-0 cursor-zoom-out" 
+                            onClick={() => setIsEnlarged(false)} 
+                        />
+
+                        {/* macOS style close button */}
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.5, y: -20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            className="absolute top-8 right-8 text-white/40 hover:text-white transition-all bg-white/5 hover:bg-white/10 p-5 rounded-full border border-white/10 z-50 shadow-2xl group"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsEnlarged(false);
+                            }}
+                        >
+                            <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
+                        </motion.button>
+                        
+                        <motion.div
+                            layoutId="profile-image"
+                            className="relative max-w-6xl w-full h-fit max-h-[90vh] rounded-[3rem] overflow-hidden border border-white/30 shadow-[0_50px_200px_rgba(0,0,0,0.8)] bg-zinc-950 pointer-events-auto"
+                            transition={{
+                                layout: { type: "spring", stiffness: 200, damping: 25, mass: 1 },
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <img
+                                src="/IMG_20260312_000902.jpg.jpeg"
+                                alt="Ksheeraj Gubbala Full"
+                                className="w-full h-auto max-h-[90vh] object-contain block mx-auto img-sharp smooth-gpu"
+                            />
+                            
+                            {/* Retina Glass Overlays */}
+                            <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-white/20 via-transparent to-transparent pointer-events-none" />
+                            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-blue-500/10 via-transparent to-transparent pointer-events-none" />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -132,7 +255,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto px-6"
+                    className="flex flex-col sm:flex-row items-center justify-start gap-4 w-full sm:w-auto mt-4"
                 >
                     <MagneticButton>
                         <Link
@@ -148,7 +271,7 @@ export default function Hero() {
 
                     <MagneticButton>
                         <a
-                            href="/resume.pdf"
+                            href="/KSHEERAJ_GUBBALA%20RESUME.pdf"
                             download="Ksheeraj_Gubbala_Resume.pdf"
                             target="_blank"
                             rel="noreferrer"
@@ -164,7 +287,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.2, duration: 1 }}
-                    className="mt-16 md:mt-24 flex flex-col items-center gap-2"
+                    className="mt-16 md:mt-24 flex flex-col items-start gap-2 lg:absolute lg:bottom-10 lg:left-6"
                 >
                     <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Scroll Down</span>
                     <MagneticButton>

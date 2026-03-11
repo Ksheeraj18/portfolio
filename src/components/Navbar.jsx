@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-scroll';
+import MagneticButton from './MagneticButton';
 
 const navItems = [
     { name: 'Home', to: 'home' },
@@ -18,66 +19,74 @@ export default function Navbar() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            setScrolled(window.scrollY > 20);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 transition-all duration-300 pointer-events-none">
+        <header className="fixed top-0 left-0 right-0 z-50 flex justify-center p-6 transition-all duration-500 pointer-events-none">
             <motion.nav
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className={`pointer-events-auto w-full max-w-4xl rounded-full transition-all duration-500 flex flex-col ${scrolled
-                    ? 'bg-black/60 backdrop-blur-xl border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] mt-2'
-                    : 'bg-transparent border border-transparent mt-4'
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                className={`pointer-events-auto w-full max-w-5xl transition-all duration-700 ease-in-out flex flex-col smooth-gpu ${scrolled
+                    ? 'rounded-[2rem] bg-black/40 backdrop-blur-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] py-2'
+                    : 'rounded-full bg-transparent border border-transparent py-4'
                     }`}
             >
-                <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? 'px-6 py-3' : 'px-4 py-4'}`}>
-                    <div className="text-xl font-bold tracking-tighter cursor-pointer">
-                        <Link to="home" smooth={true} duration={500} className="flex items-center gap-1 text-white hover:opacity-80 transition-opacity">
-                            <span className="w-8 h-8 rounded-full bg-linear-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-sm mr-1">
+                <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? 'px-8 py-2' : 'px-4 py-0'}`}>
+                    <div className="text-xl font-black tracking-tighter cursor-pointer group">
+                        <Link to="home" smooth={true} duration={500} className="flex items-center gap-2 text-white transition-all transform group-hover:scale-105">
+                            <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center text-lg font-black shadow-xl group-hover:shadow-blue-500/20 transition-all duration-500">
                                 K
+                            </div>
+                            <span className="hidden sm:block font-black uppercase text-xs tracking-[0.3em] overflow-hidden whitespace-nowrap">
+                                Ksheeraj <span className="text-blue-500 font-bold">.Dev</span>
                             </span>
-                            <span className="hidden sm:block font-medium">Ksheeraj</span>
                         </Link>
                     </div>
 
                     {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center gap-1 bg-white/5 border border-white/5 rounded-full px-2 py-1 backdrop-blur-md">
+                    <div className="hidden md:flex items-center gap-2 p-1.5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-xl shadow-inner">
                         {navItems.map((item) => (
                             <Link
                                 key={item.name}
                                 to={item.to}
                                 smooth={true}
-                                duration={500}
+                                duration={800}
                                 spy={true}
-                                offset={-100}
-                                activeClass="bg-white/10 text-white shadow-sm"
-                                className="relative text-gray-400 hover:text-white cursor-pointer transition-all duration-300 text-sm font-medium px-4 py-2 rounded-full group"
+                                offset={-80}
+                                activeClass="active-nav-link"
+                                className="relative text-gray-400 hover:text-white cursor-pointer transition-all duration-500 text-[10px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl group overflow-hidden block"
                             >
-                                {item.name}
-                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-400 scale-0 group-hover:scale-100 transition-transform duration-300" />
+                                <span className="relative z-10">{item.name}</span>
+                                <motion.div 
+                                    className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
+                                />
+                                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-blue-500 transform scale-x-0 group-active-nav-link:scale-x-100 active-nav-link:scale-x-100 transition-transform duration-500 origin-left" />
                             </Link>
                         ))}
                     </div>
 
                     <div className="hidden md:flex items-center">
-                        <a
-                            href="https://mail.google.com/mail/?view=cm&fs=1&to=ksheeraj1811@gmail.com"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-sm font-bold bg-white text-black px-6 py-2.5 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)]"
-                        >
-                            Let's Talk
-                        </a>
+                        <MagneticButton>
+                            <a
+                                href="https://mail.google.com/mail/?view=cm&fs=1&to=ksheeraj1811@gmail.com"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] bg-white text-black px-8 py-3.5 rounded-2xl hover:bg-white/90 transition-all duration-500 shadow-2xl hover:shadow-white/20"
+                            >
+                                <span>Initiate</span>
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </a>
+                        </MagneticButton>
                     </div>
 
                     {/* Mobile Nav Toggle */}
                     <button
-                        className="md:hidden text-gray-300 hover:text-white p-2 bg-white/5 rounded-full border border-white/10"
+                        className="md:hidden text-white p-3 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl active:scale-90 transition-all"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                         {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -88,29 +97,30 @@ export default function Navbar() {
                 <AnimatePresence>
                     {mobileMenuOpen && (
                         <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="md:hidden overflow-hidden border-t border-white/10"
+                            initial={{ opacity: 0, height: 0, y: -20 }}
+                            animate={{ opacity: 1, height: 'auto', y: 0 }}
+                            exit={{ opacity: 0, height: 0, y: -20 }}
+                            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                            className="md:hidden overflow-hidden"
                         >
-                            <div className="flex flex-col px-6 py-8 gap-4 pb-12">
+                            <div className="flex flex-col px-8 py-10 gap-4 pb-12">
                                 {navItems.map((item, i) => (
                                     <motion.div
                                         key={item.name}
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.1 }}
+                                        transition={{ delay: i * 0.05 }}
                                     >
                                         <Link
                                             to={item.to}
                                             smooth={true}
                                             duration={500}
                                             offset={-100}
-                                            className="text-gray-300 hover:text-white hover:bg-white/5 text-2xl font-bold py-3 px-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between group"
+                                            className="text-gray-400 hover:text-white text-4xl font-black py-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between group uppercase tracking-tighter"
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             {item.name}
-                                            <span className="w-2 h-2 rounded-full bg-blue-500 scale-0 group-hover:scale-100 transition-transform" />
+                                            <ArrowRight className="w-8 h-8 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 text-blue-500" />
                                         </Link>
                                     </motion.div>
                                 ))}
@@ -121,10 +131,10 @@ export default function Navbar() {
                                     onClick={() => setMobileMenuOpen(false)}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: navItems.length * 0.1 }}
-                                    className="mt-8 text-center font-bold bg-linear-to-r from-blue-600 to-purple-600 text-white px-5 py-4 rounded-2xl shadow-xl active:scale-95 transition-transform"
+                                    transition={{ delay: 0.4 }}
+                                    className="mt-12 flex items-center justify-center gap-4 text-center font-black uppercase tracking-[0.4em] text-xs bg-white text-black px-6 py-6 rounded-[2rem] shadow-2xl active:scale-95 transition-all"
                                 >
-                                    Let's Talk
+                                    Transmission <ArrowRight className="w-4 h-4" />
                                 </motion.a>
                             </div>
                         </motion.div>

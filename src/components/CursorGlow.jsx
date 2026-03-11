@@ -1,60 +1,143 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
 
+/**
+ * Refined "Stardust" Canvas Cursor.
+ * Minimalist, elegant, and high-performance.
+ */
 export default function CursorGlow() {
+    const canvasRef = useRef(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    const cursorX = useMotionValue(-100);
-    const cursorY = useMotionValue(-100);
-
-    const springX = useSpring(cursorX, { stiffness: 120, damping: 18 });
-    const springY = useSpring(cursorY, { stiffness: 120, damping: 18 });
+    const mouse = useRef({ x: -100, y: -100, active: false });
+    const lastPos = useRef({ x: -100, y: -100 });
+    const particles = useRef([]);
+    const animationFrameId = useRef(null);
 
     useEffect(() => {
-        // Only enable on devices with a fine pointer (mouse)
         if (window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window)) {
             setIsTouchDevice(true);
             return;
         }
 
-        const handleMouseMove = (e) => {
-            cursorX.set(e.clientX);
-            cursorY.set(e.clientY);
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         };
+
+        // Classy, focused color palette
+        const colors = ['#8b5cf6', '#3b82f6', '#ffffff'];
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 1.5 + 0.5; // Tiny stardust
+                // Subtle random drift
+                this.vx = (Math.random() - 0.5) * 1;
+                this.vy = (Math.random() - 0.5) * 1;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1;
+                this.life = 0.015 + Math.random() * 0.02;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.life;
+                
+                // Shrink as it fades
+                if (this.size > 0.1) this.size -= 0.01;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = 4;
+                ctx.shadowColor = this.color;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Only spawn if mouse is moving (Stardust effect)
+            const dist = Math.hypot(
+                mouse.current.x - lastPos.current.x,
+                mouse.current.y - lastPos.current.y
+            );
+            
+            if (mouse.current.active && dist > 2) {
+                particles.current.push(new Particle(mouse.current.x, mouse.current.y));
+                lastPos.current = { ...mouse.current };
+            }
+
+            for (let i = 0; i < particles.current.length; i++) {
+                const p = particles.current[i];
+                p.update();
+                p.draw();
+
+                if (p.alpha <= 0) {
+                    particles.current.splice(i, 1);
+                    i--;
+                }
+            }
+            
+            // Minimalist Focus Glow (Small and subtle)
+            if (mouse.current.active) {
+                // Outer subtle aura
+                const outerGradient = ctx.createRadialGradient(
+                    mouse.current.x, mouse.current.y, 0,
+                    mouse.current.x, mouse.current.y, 100
+                );
+                outerGradient.addColorStop(0, 'rgba(139, 92, 246, 0.05)');
+                outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = outerGradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Tiny sharp white focus point
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'white';
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(mouse.current.x, mouse.current.y, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            animationFrameId.current = requestAnimationFrame(animate);
+        };
+
+        const handleMouseMove = (e) => {
+            mouse.current.x = e.clientX;
+            mouse.current.y = e.clientY;
+            mouse.current.active = true;
+        };
+
+        window.addEventListener('resize', resize);
         window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, [cursorX, cursorY]);
+        
+        resize();
+        animate();
+
+        return () => {
+            window.removeEventListener('resize', resize);
+            window.removeEventListener('mousemove', handleMouseMove);
+            cancelAnimationFrame(animationFrameId.current);
+        };
+    }, []);
 
     if (isTouchDevice) return null;
 
     return (
-        <>
-            {/* Large glow orb that follows the cursor (lagging) */}
-            <motion.div
-                className="fixed pointer-events-none z-50 rounded-full mix-blend-soft-light"
-                style={{
-                    width: 400,
-                    height: 400,
-                    x: springX,
-                    y: springY,
-                    translateX: '-50%',
-                    translateY: '-50%',
-                    background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.06) 50%, transparent 70%)',
-                }}
-            />
-            {/* Small sharp dot at exact cursor position */}
-            <motion.div
-                className="fixed pointer-events-none z-50 rounded-full"
-                style={{
-                    width: 6,
-                    height: 6,
-                    x: cursorX,
-                    y: cursorY,
-                    translateX: '-50%',
-                    translateY: '-50%',
-                    background: 'rgba(139,92,246,0.9)',
-                    boxShadow: '0 0 8px rgba(139,92,246,0.8)',
-                }}
-            />
-        </>
+        <canvas
+            ref={canvasRef}
+            className="fixed inset-0 pointer-events-none z-999999"
+            style={{ mixBlendMode: 'screen' }}
+        />
     );
 }
