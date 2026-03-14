@@ -1,10 +1,12 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Cpu, LayoutTemplate, Layers, Brain } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
+import React from 'react';
 import AnimatedCounter from './AnimatedCounter';
-import React, { useState } from 'react';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
-function SpotlightCard({ card, index }) {
+function SpotlightCard({ card, index, isScrolling }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
@@ -27,55 +29,72 @@ function SpotlightCard({ card, index }) {
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className="h-full"
         >
-            <Tilt 
-                tiltMaxAngleX={8} 
-                tiltMaxAngleY={8} 
-                perspective={1500} 
-                scale={1.02} 
-                transitionSpeed={1500} 
+            <Tilt
+                tiltMaxAngleX={8}
+                tiltMaxAngleY={8}
+                perspective={1500}
+                scale={1.02}
+                transitionSpeed={1500}
                 disableTiltOnTouch={true}
                 className="h-full transform-style-3d"
                 glareEnable={false}
             >
-                <div 
+                <div
                     onMouseMove={onMouseMove}
-                    className="relative group h-full bg-zinc-950 border border-white/5 rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 overflow-hidden transition-colors hover:bg-zinc-900/50 smooth-gpu"
+                    className="relative group h-full bg-zinc-950 border border-white/10 rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 overflow-hidden transition-all hover:bg-zinc-900 shadow-[0_20px_40px_rgba(0,0,0,0.8)] smooth-gpu"
                 >
                     {/* Spotlight Glow */}
                     <motion.div
-                        className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        className="pointer-events-none absolute -inset-px rounded-[2.5rem]"
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.15 }}
                         style={{ background: maskImage }}
                     />
 
                     {/* Background Gradient Tint */}
                     <div className={`absolute inset-0 bg-linear-to-br ${card.bg} opacity-20 group-hover:opacity-40 transition-opacity`} />
 
+                    {/* Dynamic Scanner Line */}
+                    <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                            <motion.div 
+                                className="bg-linear-to-b from-transparent via-white/20 to-transparent w-full h-[150px] rotate-15 blur-md mix-blend-overlay absolute -left-1/4"
+                                animate={{ y: ['-100%', '300%'] }}
+                                transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                            />
+                    </div>
+
                     <div className="relative z-10 flex flex-col h-full transform-style-3d">
                         <motion.div
-                            className="bg-white/5 border border-white/10 p-5 rounded-3xl w-fit mb-10 shadow-2xl transform translate-z-20"
-                            whileHover={{ rotateY: 20, rotateX: -10, scale: 1.1 }}
+                            className={`bg-linear-to-br ${card.bg} border-t border-l border-white/20 p-5 rounded-3xl w-fit mb-10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transform translate-z-20 relative overflow-hidden`}
+                            whileHover={{ rotateY: 25, rotateX: -15, scale: 1.15, translateZ: 50 }}
                         >
-                            {card.icon}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white blur-lg transition-opacity duration-500" />
+                            <div className="relative z-10 drop-shadow-[0_0_15px_currentColor]">
+                                {card.icon}
+                            </div>
                         </motion.div>
-                        
-                        <h4 className="text-3xl font-bold text-white mb-6 tracking-tight transform translate-z-10 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-white group-hover:to-gray-400">
+
+                        <h4 className="text-3xl font-bold text-white mb-6 tracking-tight transform translate-z-10 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-white group-hover:to-gray-400 group-hover:translate-z-30 transition-all duration-300">
                             {card.title}
                         </h4>
-                        
-                        <p className="text-gray-400 text-lg leading-relaxed font-light transform translate-z-10 mt-auto">
+
+                        <p className="text-gray-400 text-lg leading-relaxed font-light transform translate-z-10 mt-auto group-hover:text-gray-300 transition-colors">
                             {card.desc}
                         </p>
                     </div>
 
-                    {/* Decorative Corner */}
-                    <div className="absolute top-6 right-6 w-12 h-12 border-t border-r border-white/5 rounded-tr-2xl group-hover:border-white/20 transition-colors" />
+                    {/* Decorative Corner that animates on hover */}
+                    <motion.div 
+                        className="absolute top-6 right-6 w-12 h-12 border-t border-r border-white/5 rounded-tr-2xl group-hover:border-white/40 transition-colors pointer-events-none" 
+                        whileHover={{ scale: 1.2, x: -5, y: 5 }}
+                    />
                 </div>
             </Tilt>
         </motion.div>
     );
 }
 
-export default function About() {
+export default function About({ isScrolling = false }) {
     const cards = [
         {
             icon: <Brain className="text-purple-400" size={40} strokeWidth={1.5} />,
@@ -104,11 +123,31 @@ export default function About() {
     ];
 
     return (
-        <section id="about" className="py-40 w-full bg-black relative border-t border-white/5 overflow-hidden">
-            {/* Background Atmosphere */}
-            <div className="absolute left-0 top-0 w-full h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.08),transparent_70%)] pointer-events-none"></div>
-            <div className="absolute right-0 bottom-0 w-full h-[600px] bg-[radial-gradient(ellipse_at_bottom,rgba(168,85,247,0.05),transparent_70%)] pointer-events-none"></div>
-
+        <InteractiveSection 
+            id="about" 
+            className="py-40 border-t border-white/5" 
+            glowColor="rgba(79, 70, 229, 0.05)"
+            bgContent={
+                <div className="absolute inset-0 opacity-40">
+                    <Antigravity
+                        count={100}
+                        magnetRadius={18}
+                        ringRadius={15}
+                        waveSpeed={0.2}
+                        waveAmplitude={1.5}
+                        particleSize={1}
+                        lerpSpeed={0.4}
+                        color="#6366f1"
+                        autoAnimate
+                        particleVariance={1}
+                        depthFactor={1.2}
+                        pulseSpeed={1.5}
+                        particleShape="capsule"
+                        fieldStrength={6}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <div className="flex flex-col md:flex-row gap-8 lg:gap-16 mb-20 lg:mb-32 items-center">
                     <motion.div
@@ -157,10 +196,10 @@ export default function About() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                     {cards.map((card, index) => (
-                        <SpotlightCard key={index} card={card} index={index} />
+                        <SpotlightCard key={index} card={card} index={index} isScrolling={isScrolling} />
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

@@ -2,8 +2,10 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Github, Code2, ArrowUpRight, ExternalLink } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
 import React from 'react';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, isScrolling }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
@@ -38,11 +40,13 @@ function ProjectCard({ project, index }) {
             >
                 <div 
                     onMouseMove={onMouseMove}
-                    className="relative bg-zinc-950/50 border border-white/5 rounded-3xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col smooth-gpu"
+                    className="relative bg-zinc-950 border border-white/10 rounded-3xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col smooth-gpu"
                 >
                     {/* Spotlight Glow */}
                     <motion.div
-                        className="pointer-events-none absolute -inset-px rounded-3xl md:rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="pointer-events-none absolute -inset-px rounded-3xl md:rounded-[2.5rem]"
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.15 }}
                         style={{ background: maskImage }}
                     />
 
@@ -90,12 +94,21 @@ function ProjectCard({ project, index }) {
                         {/* Tech Stack Tags */}
                         <div className="flex flex-wrap gap-2 mt-auto pt-8 border-t border-white/5 transform translate-z-20">
                             {project.tech.map(tech => (
-                                <span 
+                                <motion.span 
                                     key={tech} 
-                                    className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-black border border-white/10 rounded-xl text-gray-400 shadow-lg group-hover:border-white/20 transition-colors"
+                                    className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-black border border-white/10 rounded-xl text-gray-400 shadow-[0_5px_15px_rgba(0,0,0,0.5)] cursor-default transition-colors relative overflow-hidden group/tag"
+                                    whileHover={{
+                                        scale: 1.05,
+                                        y: -2,
+                                        borderColor: 'rgba(255,255,255,0.3)',
+                                        color: 'white'
+                                    }}
                                 >
-                                    {tech}
-                                </span>
+                                    <span className="relative z-10">{tech}</span>
+                                    <motion.div 
+                                        className={`absolute inset-0 bg-linear-to-r ${project.color} opacity-0 group-hover/tag:opacity-20 transition-opacity duration-300 pointer-events-none z-0`}
+                                    />
+                                </motion.span>
                             ))}
                         </div>
                     </div>
@@ -105,7 +118,7 @@ function ProjectCard({ project, index }) {
     );
 }
 
-export default function Projects() {
+export default function Projects({ isScrolling = false }) {
     const projects = [
         {
             title: 'ChefAssist',
@@ -143,11 +156,31 @@ export default function Projects() {
     ];
 
     return (
-        <section id="projects" className="py-40 w-full bg-black relative border-t border-white/5 overflow-hidden">
-            {/* Mesh Gradient Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.05)_0%,transparent_50%)] pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.03)_0%,transparent_50%)] pointer-events-none" />
-
+        <InteractiveSection 
+            id="projects" 
+            className="py-40 border-t border-white/5" 
+            glowColor="rgba(59, 130, 246, 0.08)"
+            bgContent={
+                <div className="absolute inset-0 opacity-40">
+                    <Antigravity
+                        count={90}
+                        magnetRadius={20}
+                        ringRadius={15}
+                        waveSpeed={0.2}
+                        waveAmplitude={3}
+                        particleSize={1.5}
+                        lerpSpeed={0.4}
+                        color="#06b6d4"
+                        autoAnimate
+                        particleVariance={2}
+                        depthFactor={2}
+                        pulseSpeed={1}
+                        particleShape="capsule"
+                        fieldStrength={5}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -180,10 +213,10 @@ export default function Projects() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                     {projects.map((project, index) => (
-                        <ProjectCard key={index} project={project} index={index} />
+                        <ProjectCard key={index} project={project} index={index} isScrolling={isScrolling} />
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }
