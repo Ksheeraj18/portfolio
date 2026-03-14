@@ -62,6 +62,14 @@ export default function CursorGlow() {
         };
 
         const animate = () => {
+            const hasActiveParticles = particles.current.length > 0;
+            const isIdle = Date.now() - lastMouseMoveTime.current > 1000;
+
+            if (!hasActiveParticles && isIdle && !mouse.current.active) {
+                animationFrameId.current = null;
+                return;
+            }
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const dist = Math.hypot(
@@ -85,44 +93,64 @@ export default function CursorGlow() {
                 }
             }
 
-            if (mouse.current.active) {
-                // Focus aura without expensive shadowBlur
+            if (mouse.current.active && !isIdle) {
                 const outerGradient = ctx.createRadialGradient(
                     mouse.current.x, mouse.current.y, 0,
                     mouse.current.x, mouse.current.y, 80
                 );
-                outerGradient.addColorStop(0, 'rgba(139, 92, 246, 0.15)');
+                outerGradient.addColorStop(0, 'rgba(139, 92, 246, 0.1)');
                 outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.globalAlpha = 1;
                 ctx.fillStyle = outerGradient;
                 ctx.fillRect(mouse.current.x - 80, mouse.current.y - 80, 160, 160);
 
-                // Sharp focus point
-                ctx.fillStyle = 'white';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                 ctx.beginPath();
-                ctx.arc(mouse.current.x, mouse.current.y, 1.2, 0, Math.PI * 2);
+                ctx.arc(mouse.current.x, mouse.current.y, 1, 0, Math.PI * 2);
                 ctx.fill();
             }
 
             animationFrameId.current = requestAnimationFrame(animate);
         };
 
+        const lastMouseMoveTime = { current: Date.now() };
+
         const handleMouseMove = (e) => {
             mouse.current.x = e.clientX;
             mouse.current.y = e.clientY;
             mouse.current.active = true;
+            lastMouseMoveTime.current = Date.now();
+            
+            if (!animationFrameId.current) {
+                animationFrameId.current = requestAnimationFrame(animate);
+            }
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (animationFrameId.current) {
+                    cancelAnimationFrame(animationFrameId.current);
+                    animationFrameId.current = null;
+                }
+            } else {
+                if (!animationFrameId.current) {
+                    animationFrameId.current = requestAnimationFrame(animate);
+                }
+            }
         };
 
         window.addEventListener('resize', resize);
         window.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         resize();
-        animate();
+        animationFrameId.current = requestAnimationFrame(animate);
 
         return () => {
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', handleMouseMove);
-            cancelAnimationFrame(animationFrameId.current);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
         };
     }, []);
 

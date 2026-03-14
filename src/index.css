@@ -112,7 +112,7 @@
     );
     will-change: transform;
     pointer-events: none;
-    filter: blur(30px);
+    filter: blur(20px);
   }
 
   .smooth-gpu {
@@ -131,7 +131,7 @@
 
   .bg-glow {
     background: radial-gradient(circle at center, var(--glow-color, rgba(59, 130, 246, 0.1)), transparent 70%);
-    filter: blur(80px);
+    filter: blur(60px);
     pointer-events: none;
   }
 }

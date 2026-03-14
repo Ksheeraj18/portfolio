@@ -78,7 +78,7 @@ function SkillCategoryCard({ category, index }) {
     );
 }
 
-export default function Skills() {
+export default function Skills({ isScrolling = false }) {
     const skillCategories = [
         {
             title: 'Languages',
@@ -130,7 +130,7 @@ export default function Skills() {
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={400}
+                        count={120}
                         magnetRadius={8}
                         ringRadius={6}
                         waveSpeed={0.8}
@@ -144,6 +144,7 @@ export default function Skills() {
                         pulseSpeed={3}
                         particleShape="capsule"
                         fieldStrength={10}
+                        isScrolling={isScrolling}
                     />
                 </div>
             }

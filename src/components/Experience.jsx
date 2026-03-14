@@ -4,7 +4,7 @@ import Tilt from 'react-parallax-tilt';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 
-export default function Experience() {
+export default function Experience({ isScrolling = false }) {
     const experiences = [
         {
             company: 'Oibre Technologies',
@@ -42,7 +42,7 @@ export default function Experience() {
             bgContent={
                 <div className="absolute inset-0 opacity-30">
                     <Antigravity
-                        count={300}
+                        count={100}
                         magnetRadius={15}
                         ringRadius={12}
                         waveSpeed={0.3}
@@ -56,6 +56,7 @@ export default function Experience() {
                         pulseSpeed={2}
                         particleShape="sphere"
                         fieldStrength={8}
+                        isScrolling={isScrolling}
                     />
                 </div>
             }

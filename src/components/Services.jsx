@@ -200,7 +200,7 @@ function ServiceCard({ service, index }) {
   );
 }
 
-const Services = () => {
+const Services = ({ isScrolling = false }) => {
   return (
     <InteractiveSection 
         id="services" 
@@ -209,7 +209,7 @@ const Services = () => {
         bgContent={
             <div className="absolute inset-0 opacity-10">
                 <Antigravity
-                    count={150}
+                    count={100}
                     magnetRadius={35}
                     ringRadius={30}
                     waveSpeed={0.1}
@@ -218,6 +218,7 @@ const Services = () => {
                     color="#3b82f6"
                     autoAnimate
                     particleShape="capsule"
+                    isScrolling={isScrolling}
                 />
             </div>
         }

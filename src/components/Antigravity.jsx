@@ -1,10 +1,11 @@
 /* eslint-disable react/no-unknown-property */
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
+import { View, PerspectiveCamera } from '@react-three/drei';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 
 const AntigravityInner = ({
-  count = 200, // Increased for more engagement
+  count = 200,
   magnetRadius = 10,
   ringRadius = 10,
   waveSpeed = 0.4,
@@ -19,19 +20,14 @@ const AntigravityInner = ({
   pulseSpeed = 3,
   particleShape = 'capsule',
   fieldStrength = 10,
-  isVisible = true, // Received from parent
-  performanceMode = 'high'
+  isVisible = true,
+  performanceMode = 'high',
+  isScrolling = false
 }) => {
   const meshRef = useRef(null);
   const { viewport } = useThree();
   const dummy = useMemo(() => new THREE.Object3D(), []);
-  const lastFrame = useRef(0);
-  const mountTime = useRef(0);
   const isLowPower = performanceMode === 'low';
-
-  useEffect(() => {
-    mountTime.current = Date.now();
-  }, []);
 
   const lastMousePos = useRef({ x: 0, y: 0 });
   const lastMouseMoveTime = useRef(0);
@@ -67,14 +63,7 @@ const AntigravityInner = ({
   }, [count, viewport.width, viewport.height]);
 
   useFrame(state => {
-    if (!isVisible) return; // Full stop if offscreen
-
-    const now = state.clock.getElapsedTime();
-    const runtime = performance.now() - mountTime.current;
-    const fastRender = runtime < 1200; // keep it smooth right after load
-    const frameInterval = fastRender ? 1 / 60 : (isLowPower ? 1 / 20 : 1 / 30);
-    if (now - lastFrame.current < frameInterval) return;
-    lastFrame.current = now;
+    if (!isVisible) return; 
 
     const mesh = meshRef.current;
     if (!mesh) return;
@@ -84,7 +73,7 @@ const AntigravityInner = ({
 
     const mouseDist = Math.hypot(m.x - lastMousePos.current.x, m.y - lastMousePos.current.y);
 
-    if (mouseDist > 0.001) {
+    if (mouseDist > 0.0001) {
       lastMouseMoveTime.current = Date.now();
       lastMousePos.current = { x: m.x, y: m.y };
     }
@@ -92,22 +81,23 @@ const AntigravityInner = ({
     let destX = (m.x * v.width) / 2;
     let destY = (m.y * v.height) / 2;
 
-    if (autoAnimate && Date.now() - lastMouseMoveTime.current > 2000) {
+    if (autoAnimate && Date.now() - lastMouseMoveTime.current > 1000) {
       const time = state.clock.getElapsedTime();
       destX = Math.sin(time * 0.5) * (v.width / 4);
       destY = Math.cos(time * 0.5 * 2) * (v.height / 4);
     }
 
-    virtualMouse.current.x += (destX - valX) * 0.08;
-    virtualMouse.current.y += (destY - valY) * 0.08;
+    virtualMouse.current.x += (destX - valX) * 0.2;
+    virtualMouse.current.y += (destY - valY) * 0.2;
 
     const targetX = virtualMouse.current.x;
     const targetY = virtualMouse.current.y;
     const globalRotation = state.clock.getElapsedTime() * rotationSpeed;
+    const magnetRadiusSq = magnetRadius * magnetRadius;
 
     for (let i = 0; i < count; i++) {
       const p = particlesRef.current[i];
-      if (!p) continue; // Safety check
+      if (!p) continue;
 
       p.t += p.speed / 2;
 
@@ -119,11 +109,11 @@ const AntigravityInner = ({
       const dy = p.my - tY;
       const distSq = dx * dx + dy * dy;
 
-      let goalX = p.mx;
-      let goalY = p.my;
-      let goalZ = p.mz * depthFactor;
+      let goalX = p.mx + Math.sin(p.t * 0.2) * 0.5;
+      let goalY = p.my + Math.cos(p.t * 0.2) * 0.5;
+      let goalZ = p.mz * depthFactor + Math.sin(p.t * 0.5) * 2;
 
-      if (distSq < magnetRadius * magnetRadius) {
+      if (distSq < magnetRadiusSq) {
         const angle = Math.atan2(dy, dx) + globalRotation;
         const wave = Math.sin(p.t * waveSpeed + angle) * (0.5 * waveAmplitude);
         const radius = ringRadius + wave + (p.randomRadiusOffset * (5 / (fieldStrength + 0.1)));
@@ -162,31 +152,22 @@ const AntigravityInner = ({
   );
 };
 
-const Antigravity = ({ performanceMode = 'high', disableAnimation = false, ...props }) => {
+const Antigravity = ({ performanceMode = 'high', disableAnimation = false, isScrolling = false, ...props }) => {
   const containerRef = useRef(null);
-  const shouldRenderRef = useRef(false);
-  const shouldRenderCanvas = useMemo(() => {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [shouldRenderCanvas, setShouldRenderCanvas] = useState(() => {
     return !disableAnimation && performanceMode !== 'low';
-  }, [disableAnimation, performanceMode]);
+  });
   const timeoutRef = useRef(null);
-
-  useEffect(() => {
-    const newValue = !disableAnimation && performanceMode !== 'low';
-    setShouldRenderCanvas(newValue);
-  }, [disableAnimation, performanceMode]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        shouldRenderRef.current = true;
+        setIsIntersecting(true);
       } else {
-        // Delay unmounting slightly to prevent flickering during fast scrolls
-        timeoutRef.current = setTimeout(() => {
-            shouldRenderRef.current = false;
-        }, 5000); // 5 seconds extra life
+        setIsIntersecting(false);
       }
-    }, { threshold: 0.01, rootMargin: '1000px' });
+    }, { threshold: 0.01, rootMargin: '50px' });
     
     if (containerRef.current) observer.observe(containerRef.current);
     return () => {
@@ -196,26 +177,17 @@ const Antigravity = ({ performanceMode = 'high', disableAnimation = false, ...pr
   }, []);
 
   useEffect(() => {
-    shouldRenderRef.current = !disableAnimation;
-  }, [disableAnimation]);
+    const newValue = !disableAnimation && performanceMode !== 'low';
+    setShouldRenderCanvas(newValue);
+  }, [disableAnimation, performanceMode]);
 
   return (
     <div ref={containerRef} className="w-full h-full relative overflow-hidden antialiased">
-        {shouldRenderCanvas && (
-            <Canvas 
-                camera={{ position: [0, 0, 50], fov: 35 }}
-                dpr={window.innerWidth < 768 ? [1, 1] : [1, 1.5]} 
-                gl={{ 
-                    antialias: false, 
-                    powerPreference: "high-performance", 
-                    alpha: true,
-                    stencil: false,
-                    depth: false
-                }}
-                style={{ pointerEvents: 'none' }}
-            >
-                <AntigravityInner {...props} isVisible={true} performanceMode={performanceMode} />
-            </Canvas>
+        {(shouldRenderCanvas && isIntersecting) && (
+            <View className="w-full h-full absolute inset-0">
+                <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={35} />
+                <AntigravityInner {...props} isVisible={isIntersecting} performanceMode={performanceMode} isScrolling={isScrolling} />
+            </View>
         )}
     </div>
   );

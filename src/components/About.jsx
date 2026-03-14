@@ -77,7 +77,7 @@ function SpotlightCard({ card, index }) {
     );
 }
 
-export default function About() {
+export default function About({ isScrolling = false }) {
     const cards = [
         {
             icon: <Brain className="text-purple-400" size={40} strokeWidth={1.5} />,
@@ -113,7 +113,7 @@ export default function About() {
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={120}
+                        count={100}
                         magnetRadius={18}
                         ringRadius={15}
                         waveSpeed={0.2}
@@ -127,6 +127,7 @@ export default function About() {
                         pulseSpeed={1.5}
                         particleShape="capsule"
                         fieldStrength={6}
+                        isScrolling={isScrolling}
                     />
                 </div>
             }

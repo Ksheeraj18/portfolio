@@ -108,12 +108,12 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={performanceMode === 'low' ? 100 : 250}
+                        count={80}
                         magnetRadius={18}
                         ringRadius={14}
                         waveSpeed={0.4}
                         waveAmplitude={2}
-                        particleSize={performanceMode === 'low' ? 1 : 1.3}
+                        particleSize={1.3}
                         lerpSpeed={0.05}
                         color="#3b82f6"
                         autoAnimate
@@ -123,7 +123,6 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
                         particleShape="capsule"
                         fieldStrength={8}
                         performanceMode={performanceMode}
-                        disableAnimation={isScrolling}
                     />
                 </div>
             }

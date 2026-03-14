@@ -107,7 +107,7 @@ function ProjectCard({ project, index }) {
     );
 }
 
-export default function Projects() {
+export default function Projects({ isScrolling = false }) {
     const projects = [
         {
             title: 'ChefAssist',
@@ -152,7 +152,7 @@ export default function Projects() {
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={250}
+                        count={90}
                         magnetRadius={20}
                         ringRadius={15}
                         waveSpeed={0.2}
@@ -166,6 +166,7 @@ export default function Projects() {
                         pulseSpeed={1}
                         particleShape="tetrahedron"
                         fieldStrength={5}
+                        isScrolling={isScrolling}
                     />
                 </div>
             }

@@ -52,7 +52,7 @@ const certificatesData = [
   }
 ];
 
-const Certifications = () => {
+const Certifications = ({ isScrolling = false }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -71,7 +71,7 @@ const Certifications = () => {
       {/* Antigravity Dynamic Background Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
         <Antigravity
-            count={300}
+            count={120}
             magnetRadius={8}
             ringRadius={6}
             waveSpeed={0.3}
@@ -83,6 +83,7 @@ const Certifications = () => {
             particleVariance={1}
             particleShape="capsule"
             fieldStrength={12}
+            isScrolling={isScrolling}
         />
       </div>
 

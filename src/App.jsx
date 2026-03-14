@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import { View, Preload } from '@react-three/drei';
 import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -24,11 +26,11 @@ function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.5,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: performanceMode !== 'low',
-      wheelMultiplier: performanceMode === 'low' ? 1 : 1.2,
-      touchMultiplier: performanceMode === 'low' ? 1 : 1.5,
+      wheelMultiplier: performanceMode === 'low' ? 1 : 1.1,
+      touchMultiplier: performanceMode === 'low' ? 1 : 1.3,
       infinite: false,
     });
 
@@ -61,7 +63,7 @@ function App() {
     const handleScroll = () => {
       setIsScrolling(true);
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      scrollTimeout.current = window.setTimeout(() => setIsScrolling(false), 250);
+      scrollTimeout.current = window.setTimeout(() => setIsScrolling(false), 100);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -71,47 +73,68 @@ function App() {
     };
   }, []);
 
+  const containerRef = useRef(null);
+
   return (
-    <div className="bg-[#050505] min-h-screen text-gray-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
+    <div ref={containerRef} className="bg-[#050505] min-h-screen text-gray-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
       <AnimatePresence mode="wait">
         {loading ? (
           <Loader key="loader" onComplete={() => setLoading(false)} />
         ) : (
-          <motion.div
-            key="main-content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="relative w-full flex flex-col items-center"
-          >
-            <CursorGlow />
-            <AmbientBackground />
+          <>
+            <Canvas
+              eventSource={containerRef}
+              style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0 }}
+              gl={{ 
+                antialias: false, 
+                alpha: true, 
+                stencil: false, 
+                depth: false,
+                powerPreference: "high-performance"
+              }}
+              dpr={Math.min(1.5, window.devicePixelRatio || 1)}
+              frameloop="always"
+            >
+              <View.Port />
+              <Preload all />
+            </Canvas>
+
             <motion.div
-              className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 origin-left z-100 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
-              style={{ scaleX }}
-            />
-            <Navbar />
-            <main className="flex flex-col items-center w-full">
-        <Hero performanceMode={performanceMode} isScrolling={isScrolling} />
-        <SectionDivider variant="wave" />
-        <About />
-        <SectionDivider variant="dots" />
-        <Services />
-        <SectionDivider variant="line" />
-        <Skills />
-        <SectionDivider variant="wave" />
-        <Certifications />
-        <SectionDivider variant="dots" />
-        <Projects />
-        <SectionDivider variant="dots" />
-        <GithubStats />
-        <SectionDivider variant="wave" />
-        <Experience />
-        <SectionDivider variant="line" />
-        <Contact performanceMode={performanceMode} isScrolling={isScrolling} />
-            </main>
-            <Footer />
-          </motion.div>
+              key="main-content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="relative w-full flex flex-col items-center"
+            >
+              <CursorGlow />
+              <AmbientBackground isScrolling={isScrolling} />
+              <motion.div
+                className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 origin-left z-100 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
+                style={{ scaleX }}
+              />
+              <Navbar />
+              <main className="flex flex-col items-center w-full">
+          <Hero performanceMode={performanceMode} isScrolling={isScrolling} />
+          <SectionDivider variant="wave" />
+          <About isScrolling={isScrolling} />
+          <SectionDivider variant="dots" />
+          <Services isScrolling={isScrolling} />
+          <SectionDivider variant="line" />
+          <Skills isScrolling={isScrolling} />
+          <SectionDivider variant="wave" />
+          <Certifications isScrolling={isScrolling} />
+          <SectionDivider variant="dots" />
+          <Projects isScrolling={isScrolling} />
+          <SectionDivider variant="dots" />
+          <GithubStats />
+          <SectionDivider variant="wave" />
+          <Experience isScrolling={isScrolling} />
+          <SectionDivider variant="line" />
+          <Contact performanceMode={performanceMode} isScrolling={isScrolling} />
+              </main>
+              <Footer />
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
