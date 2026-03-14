@@ -37,7 +37,7 @@ class Particle {
     }
 }
 
-export default function CursorGlow() {
+export default function CursorGlow({ isScrolling = false }) {
     const canvasRef = useRef(null);
     const isTouchDeviceRef = useRef(false);
     const mouse = useRef({ x: -100, y: -100, active: false });

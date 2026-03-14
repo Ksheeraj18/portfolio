@@ -6,6 +6,7 @@ const InteractiveSection = ({
     className = "", 
     glowColor = "rgba(59, 130, 246, 0.15)", 
     bgContent,
+    isScrolling = false,
     ...props 
 }) => {
     const sectionRef = useRef(null);
@@ -37,7 +38,9 @@ const InteractiveSection = ({
                 {bgContent}
                 
                 <motion.div
-                    className="absolute rounded-full pointer-events-none will-change-transform opacity-40"
+                    className="absolute rounded-full pointer-events-none will-change-transform"
+                    animate={{ opacity: isHovered ? 0.4 : 0 }}
+                    transition={{ duration: 0.15 }}
                     style={{
                         width: '800px',
                         height: '800px',
@@ -46,7 +49,6 @@ const InteractiveSection = ({
                         top: mouseY,
                         x: '-50%',
                         y: '-50%',
-                        display: isHovered ? 'block' : 'none',
                     }}
                 />
                 <div className="absolute inset-0 bg-grid opacity-[0.05] pointer-events-none" />

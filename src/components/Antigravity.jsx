@@ -11,7 +11,7 @@ const AntigravityInner = ({
   waveSpeed = 0.4,
   waveAmplitude = 1,
   particleSize = 2,
-  lerpSpeed = 0.1,
+  lerpSpeed = 0.5,
   color = '#FF9FFC',
   autoAnimate = false,
   particleVariance = 1,
@@ -188,9 +188,9 @@ const Antigravity = ({ performanceMode = 'high', disableAnimation = false, isScr
                 <AntigravityInner 
                     {...props} 
                     count={performanceMode === 'low' ? Math.floor((props.count || 200) * 0.4) : (props.count || 200)}
+                    lerpSpeed={0.4} // Increased lerpSpeed for snappier response
                     isVisible={isIntersecting} 
                     performanceMode={performanceMode} 
-                    isScrolling={isScrolling} 
                 />
             </View>
         )}

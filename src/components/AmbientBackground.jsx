@@ -25,7 +25,7 @@ const AmbientBackground = ({ isScrolling = false }) => {
   }, [y1, y2, y3]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#050505]">
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
       {/* Universal Grid */}
       <div className="absolute inset-0 bg-grid opacity-30" />
       

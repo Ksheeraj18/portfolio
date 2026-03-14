@@ -106,7 +106,7 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
             className="py-32 border-t border-white/5" 
             glowColor="rgba(37, 99, 235, 0.08)"
             bgContent={
-                <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 opacity-40">
                     <Antigravity
                         count={80}
                         magnetRadius={18}
@@ -123,11 +123,12 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
                         particleShape="capsule"
                         fieldStrength={8}
                         performanceMode={performanceMode}
+                        isScrolling={isScrolling}
                     />
                 </div>
             }
         >
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-10 w-full">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-start relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -176,11 +177,22 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="mt-12 lg:mt-16"
                 >
                     <Tilt tiltMaxAngleX={3} tiltMaxAngleY={3} perspective={1500} scale={1.02} transitionSpeed={2000} disableTiltOnTouch={true}>
-                        <div className="bg-white/5 border border-white/10 p-10 md:p-12 rounded-[3.5rem] relative overflow-hidden backdrop-blur-2xl shadow-[0_50px_100px_rgba(0,0,0,0.6)] group">
-                            {/* Inner Glass Glow */}
-                            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
+                        <div className="bg-zinc-950 border border-white/10 p-10 md:p-12 rounded-[3.5rem] relative overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.8)] group">
+                            {/* Inner Glass Glow & HUD Elements */}
+                            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent z-20 group-hover:via-blue-400 transition-all duration-700" />
+                            <div className="absolute top-10 right-10 flex gap-2 z-20 opacity-20 group-hover:opacity-60 transition-opacity">
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse delay-75" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse delay-150" />
+                            </div>
+
+                            {/* Cyber Background Mesh */}
+                            <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
+                                <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-size-[40px_40px]" />
+                            </div>
                             
                             <form onSubmit={handleSubmit} className="flex flex-col gap-8 relative z-10">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -188,23 +200,28 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
                                         { name: 'name', label: 'Identity', type: 'text', placeholder: 'Ksheeraj Gubbala' },
                                         { name: 'email', label: 'Frequency', type: 'email', placeholder: 'your@email.com' },
                                     ].map(field => (
-                                        <div key={field.name} className="flex flex-col gap-4">
-                                            <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2">{field.label}</label>
+                                        <div key={field.name} className="flex flex-col gap-4 relative">
+                                            <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2 flex justify-between">
+                                                {field.label}
+                                                <span className="text-blue-500/40 opacity-0 group-focus-within:opacity-100 transition-opacity">REC_SIGNAL</span>
+                                            </label>
                                             <input
                                                 type={field.type}
                                                 name={field.name}
                                                 required
                                                 onChange={handleChange}
                                                 value={formData[field.name]}
-                                                className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight"
+                                                className="w-full bg-black/60 border border-white/5 rounded-2xl px-6 py-5 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/10 focus:shadow-[0_0_30px_rgba(59,130,246,0.1)] transition-all duration-500 font-bold tracking-tight smooth-gpu"
                                                 placeholder={field.placeholder}
                                             />
                                         </div>
                                     ))}
                                 </div>
- 
                                 <div className="flex flex-col gap-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2">Data Packet</label>
+                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2 flex justify-between">
+                                        Data Packet
+                                        <span className="text-blue-500/40 opacity-0 group-focus-within:opacity-100 transition-opacity">UPLINK_READY</span>
+                                    </label>
                                     <textarea
                                         ref={messageRef}
                                         name="message"
@@ -215,25 +232,34 @@ export default function Contact({ performanceMode = 'high', isScrolling = false 
                                         onWheel={(e) => e.stopPropagation()}
                                         onTouchMove={(e) => e.stopPropagation()}
                                         value={formData.message}
-                                        className="w-full bg-black/40 border border-white/5 rounded-3xl px-6 py-8 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight overflow-y-auto"
+                                        className="w-full bg-black/60 border border-white/5 rounded-3xl px-6 py-8 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/10 focus:shadow-[0_0_30px_rgba(59,130,246,0.1)] transition-all duration-500 font-bold tracking-tight overflow-y-auto smooth-gpu"
                                         placeholder="Briefly describe the objective..."
                                     />
                                 </div>
-
+ 
                                 <MagneticButton>
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className={`w-full py-6 rounded-3xl font-black uppercase tracking-[0.4em] text-xs transition-all duration-700 relative overflow-hidden flex items-center justify-center gap-4 ${
+                                        className={`w-full py-6 rounded-3xl font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs transition-all duration-700 relative overflow-hidden flex items-center justify-center gap-4 ${
                                             submitStatus === 'success' ? 'bg-green-600 text-white' :
                                             submitStatus === 'error' ? 'bg-red-600 text-white' :
-                                            'bg-white text-black hover:bg-blue-500 hover:text-white'
+                                            'bg-white text-black hover:bg-blue-500 hover:text-white hover:shadow-[0_0_50px_rgba(59,130,246,0.5)]'
                                         }`}
                                     >
-                                        {isSubmitting ? 'Transmitting...' : 
-                                         submitStatus === 'success' ? 'Link Established' : 
-                                         submitStatus === 'error' ? 'Retry Link' : 
-                                         <>Initiate Transfer <ArrowRight size={16} /></>}
+                                        <span className="relative z-10 flex items-center gap-4">
+                                            {isSubmitting ? 'Transmitting Signal...' : 
+                                             submitStatus === 'success' ? 'Link Established' : 
+                                             submitStatus === 'error' ? 'Retry Link' : 
+                                             <>Initiate Packet Transfer <ArrowRight size={16} /></>}
+                                        </span>
+                                        {/* Sheen Effect */}
+                                        <motion.div 
+                                            className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent -translate-x-full"
+                                            animate={isSubmitting ? { x: ['100%', '-100%'] } : {}}
+                                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                                        />
+
                                     </button>
                                 </MagneticButton>
                             </form>

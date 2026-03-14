@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 
-function Orb({ orb, smoothMouseX, smoothMouseY, isVisible }) {
+function Orb({ orb, smoothMouseX, smoothMouseY, isVisible, isLowPower }) {
     const x = useTransform(smoothMouseX, (val) => val * (orb.distance / window.innerWidth) - window.innerWidth / 2);
     const y = useTransform(smoothMouseY, (val) => val * (orb.distance / window.innerHeight) - window.innerHeight / 2);
 
     return (
         <motion.div
-            className={`absolute rounded-full bg-linear-to-r ${orb.color} blur-xl`}
+            className={`absolute rounded-full bg-linear-to-r ${orb.color} ${isLowPower ? 'blur-md' : 'blur-xl'}`}
             style={{
                 width: orb.size,
                 height: orb.size,
@@ -18,17 +18,18 @@ function Orb({ orb, smoothMouseX, smoothMouseY, isVisible }) {
             }}
             animate={{
                 scale: [1, 1.08, 1],
+                opacity: isVisible ? 0.5 : 0
             }}
             transition={{
                 scale: {
                     duration: 4 + orb.delay,
                     repeat: Infinity,
                     ease: [0.25, 0.46, 0.45, 0.94]
-                }
+                },
+                opacity: { duration: 0.5 }
             }}
             initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: isVisible ? 0.5 : 0, scale: 1 }}
-            viewport={{ once: false }}
+            exit={{ opacity: 0, scale: 0 }}
         />
     );
 }
@@ -74,19 +75,20 @@ export default function InteractiveOrbs({ performanceMode = 'high', paused = fal
             { id: 4, size: 50, color: 'from-indigo-400/25 to-cyan-500/25', delay: 0.9, distance: 40, stiffness: 190, damping: 24 },
         ];
 
-    if (paused) return null;
-
     return (
-        <div className="fixed inset-0 pointer-events-none z-5 overflow-hidden">
-            {orbs.map((orb) => (
-                <Orb 
-                    key={orb.id} 
-                    orb={orb} 
-                    smoothMouseX={smoothMouseX} 
-                    smoothMouseY={smoothMouseY} 
-                    isVisible={isVisible} 
-                />
-            ))}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+            <AnimatePresence>
+                {!paused && orbs.map((orb) => (
+                    <Orb 
+                        key={orb.id} 
+                        orb={orb} 
+                        smoothMouseX={smoothMouseX} 
+                        smoothMouseY={smoothMouseY} 
+                        isVisible={isVisible} 
+                        isLowPower={isLowPower}
+                    />
+                ))}
+            </AnimatePresence>
         </div>
     );
 }

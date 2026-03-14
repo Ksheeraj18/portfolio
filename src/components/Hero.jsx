@@ -14,7 +14,7 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
     const [text] = useTypewriter({
         words: ['AI Engineer', 'ML Developer', 'Full-Stack Builder', 'Automation Architect', 'LLM Integrator'],
         loop: true,
-        delaySpeed: 2000,
+        delaySpeed: 2000, // Reverted to original delaySpeed as lerpSpeed is not a valid property for useTypewriter and the provided syntax was incorrect.
         typeSpeed: 60,
         deleteSpeed: 40,
     });
@@ -31,41 +31,16 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
             {/* Interactive Floating Orbs */}
             <InteractiveOrbs paused={showResume || performanceMode === 'low'} performanceMode={performanceMode} />
 
-            <FloatingParticles paused={showResume || performanceMode === 'low'} performanceMode={performanceMode} />
+            {/* Floating Particles Removed for Performance (overkill with WebGL ParticleBackground) */}
 
             <ResumePreview 
                 isOpen={showResume} 
                 onClose={() => setShowResume(false)} 
                 resumeUrl="/KSHEERAJ CV (3).pdf"
             />
-            {/* Background Gradients - Subtle Floating for Premium Feel */}
-            <motion.div 
-                animate={{ 
-                    x: [0, 30, 0],
-                    y: [0, -30, 0],
-                }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="hidden md:block absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/10 to-transparent pointer-events-none z-0 opacity-50" 
-            />
-            <motion.div 
-                animate={{ 
-                    x: [0, -40, 0],
-                    y: [0, 40, 0],
-                }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="hidden md:block absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-purple-600/10 to-transparent pointer-events-none z-0 opacity-50" 
-            />
-            <motion.div 
-                animate={{ 
-                    scale: [1, 1.1, 1],
-                    opacity: [0.3, 0.5, 0.3]
-                }}
-                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                className="hidden md:block absolute top-1/3 right-1/3 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-pink-600/10 to-transparent pointer-events-none z-0 opacity-50" 
-            />
 
             {/* Grid overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-20 z-0"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[4rem_4rem] pointer-events-none opacity-[0.15] z-0"></div>
 
             {/* Premium 3D Profile Frame replacing Abstract Visual */}
             <div className="absolute top-[48%] right-0 md:right-10 lg:right-20 -translate-y-1/2 pointer-events-none z-10 hidden md:flex items-center justify-center group">
@@ -75,31 +50,7 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                     transition={{ duration: 1.2, ease: "easeOut" }}
                     className="relative pointer-events-auto"
                 >
-                    {/* Enhanced Atmospheric Glow behind photo with cursor interaction */}
-                    <motion.div
-                        className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse"
-                        animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.15, 0.25, 0.15]
-                        }}
-                        transition={{ duration: 4, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        whileHover={{
-                            scale: 1.4,
-                            opacity: 0.35,
-                            transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
-                        }}
-                    />
-
-                    {/* Additional interactive glow layers */}
-                    <motion.div
-                        className="absolute inset-0 bg-purple-500/10 blur-[150px] rounded-full"
-                        animate={{
-                            scale: [1.1, 1.4, 1.1],
-                            rotate: [0, 180, 360]
-                        }}
-                        transition={{ duration: 10, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    />
-
+                    {/* Heavy GPU blur/glow elements optimized out */}
                     <Tilt
                         tiltMaxAngleX={8}
                         tiltMaxAngleY={8}
@@ -128,7 +79,9 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                             <div className="relative w-full h-full rounded-[2.8rem] overflow-hidden bg-black bezel-screen">
                                 {/* Full-Image "Ambient Scan" Effect */}
                                 <div className="absolute inset-y-0 left-0 w-[400%] z-30 pointer-events-none overflow-hidden rounded-[2.8rem]">
-                                    <div className="absolute inset-0 glass-shine opacity-0 group-hover:opacity-100 group-hover:animate-[shine_4s_ease-in-out_infinite] mix-blend-lighten transition-opacity duration-1000" />
+                                    {!isScrolling && (
+                                        <div className="absolute inset-0 glass-shine opacity-0 group-hover:opacity-100 group-hover:animate-[shine_4s_ease-in-out_infinite] mix-blend-lighten transition-opacity duration-1000" />
+                                    )}
                                 </div>
                                 
                                 <img
@@ -212,8 +165,6 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
 
             {/* UI Content */}
             <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full will-change-transform relative">
-                {/* Floating Interactive Particles */}
-                <FloatingParticles performanceMode={performanceMode} />
                 <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -278,13 +229,13 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                 >
                     <motion.span
                         className="text-white inline-block"
-                        animate={{
+                        animate={!isScrolling ? {
                             textShadow: [
                                 "0 0 0px rgba(139, 92, 246, 0)",
                                 "0 0 15px rgba(139, 92, 246, 0.4)",
                                 "0 0 0px rgba(139, 92, 246, 0)"
                             ]
-                        }}
+                        } : {}}
                         transition={{ duration: 3, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
                     >
                         {text}
@@ -292,7 +243,7 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                     <Cursor cursorStyle="|" cursorColor="#8b5cf6" />
                     {/* Interactive glow effect on hover */}
                     <motion.div
-                        className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                         initial={false}
                         animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -307,9 +258,9 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                     whileHover={{ scale: 1.01 }}
                 >
                     <motion.span
-                        animate={{
+                        animate={!isScrolling ? {
                             backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                        }}
+                        } : {}}
                         transition={{ duration: 4, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
                         className="bg-linear-to-r from-gray-400 via-gray-300 to-gray-400 bg-clip-text text-transparent bg-size-[200%_200%]"
                     >
@@ -317,8 +268,8 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                     </motion.span>
                     {/* Subtle interactive background */}
                     <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-sm"
-                        animate={{ rotate: [0, 1, 0] }}
+                        className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-transparent to-purple-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"
+                        animate={!isScrolling ? { rotate: [0, 1, 0] } : {}}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     />
                 </motion.div>

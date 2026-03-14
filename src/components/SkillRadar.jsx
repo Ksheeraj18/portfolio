@@ -14,7 +14,7 @@ const radarPoints = (values, size) => {
   });
 };
 
-export default function SkillRadar({ categories }) {
+export default function SkillRadar({ categories, isScrolling = false, paused = false }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '0px 0px -120px 0px' });
   const size = 230;
@@ -74,9 +74,23 @@ export default function SkillRadar({ categories }) {
             fill="url(#radarGradient)"
             stroke="rgba(255,255,255,0.5)"
             strokeWidth="1.5"
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
+            initial={{ opacity: 0, scale: 0.6, pathLength: 0 }}
+            animate={inView && !paused ? { opacity: 1, scale: 1, pathLength: 1 } : {}}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+          />
+
+          {/* Animated Active Radar Scanner */}
+          <motion.circle
+            cx={size / 2}
+            cy={size / 2}
+            r={size / 2.5}
+            fill="none"
+            stroke="url(#radarGradient)"
+            strokeWidth="2"
+            strokeDasharray="4 12"
+            animate={!isScrolling && !paused ? { rotate: 360, scale: [1, 1.05, 1] } : {}}
+            transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+            style={{ originX: '50%', originY: '50%' }}
           />
         </svg>
 

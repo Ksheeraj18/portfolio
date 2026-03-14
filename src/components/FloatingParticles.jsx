@@ -97,7 +97,7 @@ export default function FloatingParticles({ performanceMode = 'high', paused = f
     if (paused) return null;
 
     return (
-        <div ref={containerRef} className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+        <div ref={containerRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
             {particles.map((particle) => (
                 <Particle 
                     key={particle.id} 

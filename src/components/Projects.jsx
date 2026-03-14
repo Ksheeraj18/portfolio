@@ -5,7 +5,7 @@ import React from 'react';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, isScrolling }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
@@ -40,11 +40,13 @@ function ProjectCard({ project, index }) {
             >
                 <div 
                     onMouseMove={onMouseMove}
-                    className="relative bg-zinc-950/50 border border-white/5 rounded-3xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col smooth-gpu"
+                    className="relative bg-zinc-950 border border-white/10 rounded-3xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:bg-zinc-900 shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:shadow-[0_40px_100px_rgba(0,0,0,0.8)] h-full flex flex-col smooth-gpu"
                 >
                     {/* Spotlight Glow */}
                     <motion.div
-                        className="pointer-events-none absolute -inset-px rounded-3xl md:rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="pointer-events-none absolute -inset-px rounded-3xl md:rounded-[2.5rem]"
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.15 }}
                         style={{ background: maskImage }}
                     />
 
@@ -92,12 +94,21 @@ function ProjectCard({ project, index }) {
                         {/* Tech Stack Tags */}
                         <div className="flex flex-wrap gap-2 mt-auto pt-8 border-t border-white/5 transform translate-z-20">
                             {project.tech.map(tech => (
-                                <span 
+                                <motion.span 
                                     key={tech} 
-                                    className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-black border border-white/10 rounded-xl text-gray-400 shadow-lg group-hover:border-white/20 transition-colors"
+                                    className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-black border border-white/10 rounded-xl text-gray-400 shadow-[0_5px_15px_rgba(0,0,0,0.5)] cursor-default transition-colors relative overflow-hidden group/tag"
+                                    whileHover={{
+                                        scale: 1.05,
+                                        y: -2,
+                                        borderColor: 'rgba(255,255,255,0.3)',
+                                        color: 'white'
+                                    }}
                                 >
-                                    {tech}
-                                </span>
+                                    <span className="relative z-10">{tech}</span>
+                                    <motion.div 
+                                        className={`absolute inset-0 bg-linear-to-r ${project.color} opacity-0 group-hover/tag:opacity-20 transition-opacity duration-300 pointer-events-none z-0`}
+                                    />
+                                </motion.span>
                             ))}
                         </div>
                     </div>
@@ -150,7 +161,7 @@ export default function Projects({ isScrolling = false }) {
             className="py-40 border-t border-white/5" 
             glowColor="rgba(59, 130, 246, 0.08)"
             bgContent={
-                <div className="absolute inset-0 opacity-30">
+                <div className="absolute inset-0 opacity-40">
                     <Antigravity
                         count={90}
                         magnetRadius={20}
@@ -158,15 +169,14 @@ export default function Projects({ isScrolling = false }) {
                         waveSpeed={0.2}
                         waveAmplitude={3}
                         particleSize={1.5}
-                        lerpSpeed={0.06}
+                        lerpSpeed={0.4}
                         color="#06b6d4"
                         autoAnimate
                         particleVariance={2}
                         depthFactor={2}
                         pulseSpeed={1}
-                        particleShape="tetrahedron"
+                        particleShape="capsule"
                         fieldStrength={5}
-                        isScrolling={isScrolling}
                     />
                 </div>
             }
@@ -203,7 +213,7 @@ export default function Projects({ isScrolling = false }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                     {projects.map((project, index) => (
-                        <ProjectCard key={index} project={project} index={index} />
+                        <ProjectCard key={index} project={project} index={index} isScrolling={isScrolling} />
                     ))}
                 </div>
             </div>

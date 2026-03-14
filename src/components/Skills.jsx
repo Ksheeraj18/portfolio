@@ -5,7 +5,7 @@ import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 import SkillRadar from './SkillRadar';
 
-function SkillCategoryCard({ category, index }) {
+function SkillCategoryCard({ category, index, isScrolling }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
@@ -39,11 +39,13 @@ function SkillCategoryCard({ category, index }) {
             >
                 <div 
                     onMouseMove={onMouseMove}
-                    className={`h-full relative overflow-hidden bg-zinc-950 border ${category.border} rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 transition-all duration-300 hover:border-white/20 hover:shadow-[0_40px_100px_rgba(0,0,0,0.5)] transform-style-3d`}
+                    className={`h-full relative overflow-hidden bg-zinc-950 border ${category.border} rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 transition-all duration-300 hover:bg-zinc-900 hover:border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:shadow-[0_40px_100px_rgba(0,0,0,0.5)] transform-style-3d`}
                 >
                     {/* Spotlight Glow */}
                     <motion.div
-                        className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        className="pointer-events-none absolute -inset-px rounded-3xl md:rounded-[2.5rem]"
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.15 }}
                         style={{ background: maskImage }}
                     />
 
@@ -59,7 +61,7 @@ function SkillCategoryCard({ category, index }) {
                             {category.skills.map((skill) => (
                                 <motion.span
                                     key={skill}
-                                    className="px-5 py-3 bg-white/2 border border-white/5 rounded-2xl text-gray-300 text-xs font-bold uppercase tracking-widest hover:bg-white/10 hover:border-white/20 transition-all cursor-default shadow-xl transform translate-z-10"
+                                    className="px-5 py-3 bg-white/2 border border-white/5 rounded-2xl text-gray-300 text-xs font-bold uppercase tracking-widest hover:border-white/20 transition-all cursor-default shadow-xl transform translate-z-10 relative overflow-hidden group/skill"
                                     whileHover={{
                                         scale: 1.1,
                                         y: -5,
@@ -67,7 +69,10 @@ function SkillCategoryCard({ category, index }) {
                                         boxShadow: `0 10px 30px ${category.glow}`
                                     }}
                                 >
-                                    {skill}
+                                    <span className="relative z-10 group-hover/skill:text-white transition-colors duration-300">{skill}</span>
+                                    <motion.div 
+                                        className={`absolute inset-0 opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300 pointer-events-none z-0 ${category.bg}`}
+                                    />
                                 </motion.span>
                             ))}
                         </div>
@@ -128,7 +133,7 @@ export default function Skills({ isScrolling = false }) {
             className="py-40 border-t border-white/5" 
             glowColor="rgba(16, 185, 129, 0.08)"
             bgContent={
-                <div className="absolute inset-0 opacity-30">
+                <div className="absolute inset-0 opacity-40">
                     <Antigravity
                         count={120}
                         magnetRadius={8}
@@ -136,20 +141,19 @@ export default function Skills({ isScrolling = false }) {
                         waveSpeed={0.8}
                         waveAmplitude={1}
                         particleSize={1.5}
-                        lerpSpeed={0.1}
+                        lerpSpeed={0.5}
                         color="#10b981"
                         autoAnimate
                         particleVariance={1}
                         depthFactor={1}
-                        pulseSpeed={3}
+                        pulseSpeed={1}
                         particleShape="capsule"
-                        fieldStrength={10}
-                        isScrolling={isScrolling}
+                        fieldStrength={5}
                     />
                 </div>
             }
         >
-            <FloatingIcons />
+            <FloatingIcons paused={false} />
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16 mb-12">
@@ -191,9 +195,11 @@ export default function Skills({ isScrolling = false }) {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="flex flex-wrap justify-center gap-8">
                     {skillCategories.map((category, index) => (
-                        <SkillCategoryCard key={category.title} category={category} index={index} />
+                        <div key={category.title} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md">
+                            <SkillCategoryCard category={category} index={index} isScrolling={isScrolling} />
+                        </div>
                     ))}
                 </div>
             </div>

@@ -44,7 +44,7 @@ const servicesData = [
   }
 ];
 
-function ServiceCard({ service, index }) {
+function ServiceCard({ service, index, isScrolling }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -100,28 +100,47 @@ function ServiceCard({ service, index }) {
       >
         <div
           onMouseMove={onMouseMove}
-          className={`group relative p-10 md:p-14 rounded-[3.5rem] bg-[#080808] border border-white/5 transition-all duration-700 h-full flex flex-col transform-style-3d overflow-hidden`}
+          className={`group relative p-10 md:p-14 rounded-[3.5rem] bg-zinc-950 shadow-[0_20px_40px_rgba(0,0,0,0.8)] border border-white/10 transition-all duration-300 hover:border-white/20 h-full flex flex-col transform-style-3d overflow-hidden`}
         >
+          {/* Grid/Circuit Background Pattern */}
+          <div className="absolute inset-0 z-0 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-700 pointer-events-none">
+            <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-size-[30px_30px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-size-[120px_120px]" />
+          </div>
+
           {/* Spotlight Effect */}
           <motion.div
-            className="pointer-events-none absolute -inset-px rounded-[3.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"
+            className="pointer-events-none absolute -inset-px rounded-[3.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
             style={{ background: maskImage }}
           />
 
-          {/* Technical Branding */}
-          <div className="flex items-center justify-between mb-16 relative z-10">
-            <div className="flex items-center gap-4">
-               <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 italic">Module_0{index + 1}</span>
-            </div>
-            <ShieldCheck className="w-4 h-4 text-white/10 group-hover:text-white/40 transition-colors" />
+          {/* Rapid Scanline Animation */}
+          <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-[3.5rem]">
+              <motion.div 
+                 className="w-full h-px bg-white/20 absolute"
+                 animate={{ top: ['-5%', '105%'] }}
+                 transition={{ duration: 0.8, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
+              />
           </div>
 
-          <div className="relative z-10 flex flex-col h-full transform-style-3d">
-            {/* Elegant Icon Presentation */}
-            <div className="mb-12 relative w-fit">
-              <div className="absolute inset-0 bg-blue-500/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-              <div className="relative p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-3xl transform translate-z-30 group-hover:scale-110 group-hover:bg-white group-hover:border-white transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
+          {/* Technical Branding */}
+          <div className="flex items-center justify-between mb-16 relative z-20">
+            <div className="flex items-center gap-4">
+               <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 italic">Module_0{index + 1}</span>
+            </div>
+            <ShieldCheck className="w-5 h-5 text-white/5 group-hover:text-blue-400 group-hover:rotate-12 transition-all duration-500" />
+          </div>
+
+          <div className="relative z-20 flex flex-col h-full transform-style-3d">
+            {/* Elegant Icon Presentation with Reactive Glow */}
+              <div className="relative w-fit">
+                <motion.div 
+                  className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-40 blur-3xl transition-opacity duration-300"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                />
+              <div className="relative p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-3xl transform translate-z-30 group-hover:scale-110 group-hover:bg-white group-hover:border-white group-hover:shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]">
                 {React.cloneElement(service.icon, { 
                   className: "w-10 h-10 transition-colors duration-700 group-hover:text-black" 
                 })}
@@ -132,19 +151,33 @@ function ServiceCard({ service, index }) {
                 <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter leading-none mb-4 group-hover:translate-x-3 transition-transform duration-700">
                 {service.title}
                 </h3>
-                <div className="w-12 h-1 bg-blue-500/50 rounded-full group-hover:w-24 transition-all duration-700" />
+                <motion.div 
+                  className="h-1 bg-blue-500/50 rounded-full"
+                  initial={{ width: 48 }}
+                  whileInView={{ width: 96 }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                />
             </div>
             
             <p className="text-gray-400 text-lg grow leading-relaxed font-light transform translate-z-10 mb-12 group-hover:text-gray-200 transition-colors duration-500">
               {service.description}
             </p>
 
-            {/* Futuristic Tech Tags */}
+            {/* Futuristic Tech Tags with Hover Animation */}
             <div className="flex flex-wrap gap-3 mb-16 transform translate-z-10">
                 {service.tags.map(tag => (
-                    <span key={tag} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/5 text-[9px] font-black uppercase tracking-[0.2em] text-white/40 group-hover:border-white/10 group-hover:text-white/60 transition-all duration-500">
+                    <motion.span 
+                      key={tag} 
+                      className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 cursor-default"
+                      whileHover={{ 
+                        scale: 1.05, 
+                        backgroundColor: "rgba(255,255,255,0.1)", 
+                        borderColor: "rgba(255,255,255,0.2)",
+                        color: "white"
+                      }}
+                    >
                         {tag}
-                    </span>
+                    </motion.span>
                 ))}
             </div>
 
@@ -155,7 +188,6 @@ function ServiceCard({ service, index }) {
               className="relative w-full group/btn cursor-pointer focus:outline-none z-50 transform translate-z-40"
             >
               <div className="relative overflow-hidden px-8 py-6 rounded-2xl bg-black border border-white/10 flex items-center justify-between transition-all duration-500 group-hover/btn:border-blue-500/50 group-hover/btn:bg-zinc-900 shadow-2xl">
-                
                 <div className="flex flex-col items-start">
                     <div className="flex items-center gap-2 mb-1">
                         <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
@@ -214,11 +246,10 @@ const Services = ({ isScrolling = false }) => {
                     ringRadius={30}
                     waveSpeed={0.1}
                     particleSize={1.5}
-                    lerpSpeed={0.03}
+                    lerpSpeed={0.4}
                     color="#3b82f6"
                     autoAnimate
                     particleShape="capsule"
-                    isScrolling={isScrolling}
                 />
             </div>
         }
@@ -243,7 +274,7 @@ const Services = ({ isScrolling = false }) => {
  
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14">
            {servicesData.map((service, index) => (
-             <ServiceCard key={service.id} service={service} index={index} />
+             <ServiceCard key={service.id} service={service} index={index} isScrolling={isScrolling} />
            ))}
          </div>
        </div>

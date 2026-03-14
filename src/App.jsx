@@ -26,12 +26,12 @@ function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: performanceMode === 'low' ? 0.1 : 0.06, // Smaller lerp = more fluid/buttery momentum
       smoothWheel: performanceMode !== 'low',
-      wheelMultiplier: performanceMode === 'low' ? 1 : 1.1,
-      touchMultiplier: performanceMode === 'low' ? 1 : 1.3,
+      wheelMultiplier: performanceMode === 'low' ? 0.8 : 1.1,
+      touchMultiplier: performanceMode === 'low' ? 1.5 : 2,
       infinite: false,
+      normalizeWheel: true,
     });
 
     window.lenis = lenis;
@@ -51,27 +51,10 @@ function App() {
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 50,
+    damping: 15,
     restDelta: 0.001
   });
-
-  const [isScrolling, setIsScrolling] = useState(false);
-  const scrollTimeout = useRef(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      scrollTimeout.current = window.setTimeout(() => setIsScrolling(false), 100);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-    };
-  }, []);
 
   const containerRef = useRef(null);
 
@@ -84,7 +67,7 @@ function App() {
           <>
             <Canvas
               eventSource={containerRef}
-              style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 50 }}
+              style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0 }}
               gl={{ 
                 antialias: false, 
                 alpha: true, 
@@ -104,33 +87,33 @@ function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
-              className="relative w-full flex flex-col items-center"
+              className="relative w-full flex flex-col items-center z-10"
             >
-              <CursorGlow />
-              <AmbientBackground isScrolling={isScrolling} />
+               <CursorGlow />
+              <AmbientBackground />
               <motion.div
                 className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 origin-left z-100 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
                 style={{ scaleX }}
               />
               <Navbar />
               <main className="flex flex-col items-center w-full">
-          <Hero performanceMode={performanceMode} isScrolling={isScrolling} />
+          <Hero performanceMode={performanceMode} />
           <SectionDivider variant="wave" />
-          <About isScrolling={isScrolling} />
+          <About />
           <SectionDivider variant="dots" />
-          <Services isScrolling={isScrolling} />
+          <Services />
           <SectionDivider variant="line" />
-          <Skills isScrolling={isScrolling} />
+          <Skills />
           <SectionDivider variant="wave" />
-          <Certifications isScrolling={isScrolling} />
+          <Certifications />
           <SectionDivider variant="dots" />
-          <Projects isScrolling={isScrolling} />
+          <Projects />
           <SectionDivider variant="dots" />
           <GithubStats />
           <SectionDivider variant="wave" />
-          <Experience isScrolling={isScrolling} />
+          <Experience />
           <SectionDivider variant="line" />
-          <Contact performanceMode={performanceMode} isScrolling={isScrolling} />
+          <Contact performanceMode={performanceMode} />
               </main>
               <Footer />
             </motion.div>

@@ -73,17 +73,21 @@ export default function Navbar() {
                 }`}
             >
                 {/* Visual Identity Logo */}
-                <div className="flex items-center gap-4 pl-2 pr-4 border-r border-white/5">
+                <div className="flex items-center gap-4 pl-2 pr-4 border-r border-white/5 relative group/logo">
                     <ScrollLink to="home" className="cursor-pointer group">
                         <div className="relative flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-[10px] bg-white flex items-center justify-center overflow-hidden shadow-2xl group-hover:rotate-6 transition-transform duration-500">
-                                <Cpu className="w-5 h-5 text-black" />
-                                <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="w-10 h-10 rounded-[12px] bg-white flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.3)] group-hover:rotate-12 transition-all duration-700 relative">
+                                <Cpu className="w-5 h-5 text-black relative z-10" />
+                                <motion.div 
+                                    className="absolute inset-x-0 h-px bg-black opacity-0 group-hover/logo:opacity-20 pointer-events-none"
+                                    animate={{ top: ['0%', '100%'] }}
+                                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-black tracking-[0.4em] text-white uppercase leading-none">KSHEERAJ</span>
+                                <span className="text-[10px] font-black tracking-[0.4em] text-white uppercase leading-none group-hover:text-blue-400 transition-colors duration-500">KSHEERAJ</span>
                                 <div className="flex items-center gap-1 mt-1">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
                                     <span className="text-[8px] font-bold tracking-[0.2em] text-white/30 uppercase">System_Active</span>
                                 </div>
                             </div>
@@ -92,7 +96,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Primary Navigation Array */}
-                <div className="hidden md:flex items-center gap-1">
+                <div className="hidden md:flex items-center gap-2 px-1">
                     <LayoutGroup>
                         {navItems.map((item) => {
                             const isActive = activeSection === item.to;
@@ -100,18 +104,21 @@ export default function Navbar() {
                                 <ScrollLink
                                     key={item.name}
                                     to={item.to}
-                                    className={`relative px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 cursor-pointer ${
-                                        isActive ? 'text-white' : 'text-white/30 hover:text-white/60'
+                                    className={`relative px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 cursor-pointer group/nav ${
+                                        isActive ? 'text-white' : 'text-white/40 hover:text-white/70'
                                     }`}
                                 >
                                     <span className="relative z-10">{item.name}</span>
                                     {isActive && (
                                         <motion.div
-                                            layoutId="active-nav-glow"
-                                            className="absolute inset-x-2 -bottom-1 h-0.5 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,1)]"
-                                            transition={navSpring}
+                                            layoutId="active-nav-pill"
+                                            className="absolute inset-0 bg-white/5 border border-white/10 rounded-xl shadow-[inset_0_0_15px_rgba(255,255,255,0.05)]"
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                         />
                                     )}
+                                    <motion.div 
+                                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-blue-500 opacity-0 group-hover/nav:w-1/2 group-hover/nav:opacity-100 transition-all duration-300 pointer-events-none"
+                                    />
                                 </ScrollLink>
                             );
                         })}
