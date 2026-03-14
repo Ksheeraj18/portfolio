@@ -111,7 +111,7 @@ export default function About({ isScrolling = false }) {
             className="py-40 border-t border-white/5" 
             glowColor="rgba(79, 70, 229, 0.05)"
             bgContent={
-                <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 opacity-30">
                     <Antigravity
                         count={100}
                         magnetRadius={18}

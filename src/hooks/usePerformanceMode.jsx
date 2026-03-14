@@ -25,7 +25,7 @@ export default function usePerformanceMode() {
     const deviceMemory = navigator.deviceMemory || 4;
     const cores = navigator.hardwareConcurrency || 4;
 
-    if (deviceMemory <= 4 || cores <= 4) return 'low';
+    if (deviceMemory < 4 || cores < 4) return 'low';
     if (deviceMemory <= 8 || cores <= 6) return 'medium';
     return 'high';
   }, []);

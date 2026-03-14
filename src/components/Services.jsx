@@ -207,7 +207,7 @@ const Services = ({ isScrolling = false }) => {
         className="py-40 border-t border-white/5" 
         glowColor="rgba(37, 99, 235, 0.03)"
         bgContent={
-            <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0 opacity-30">
                 <Antigravity
                     count={100}
                     magnetRadius={35}

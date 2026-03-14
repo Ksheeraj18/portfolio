@@ -83,7 +83,7 @@ export default function FloatingParticles({ performanceMode = 'high', paused = f
         };
     }, [updateMousePosition, paused]);
 
-    const particles = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
+    const particles = useMemo(() => Array.from({ length: isLowPower ? 6 : 15 }, (_, i) => ({
         id: i,
         size: Math.random() * 3.5 + 1.5,
         color: ['#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4', '#4f46e5'][Math.floor(Math.random() * 5)],
@@ -92,9 +92,9 @@ export default function FloatingParticles({ performanceMode = 'high', paused = f
         speed: Math.random() * 0.4 + 0.5,
         offsetX: (Math.random() - 0.5) * 400,
         offsetY: (Math.random() - 0.5) * 400,
-    })), []);
+    })), [isLowPower]);
 
-    if (isLowPower || paused) return null;
+    if (paused) return null;
 
     return (
         <div ref={containerRef} className="absolute inset-0 pointer-events-none z-10 overflow-hidden">

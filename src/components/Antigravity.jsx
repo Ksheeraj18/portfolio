@@ -156,7 +156,7 @@ const Antigravity = ({ performanceMode = 'high', disableAnimation = false, isScr
   const containerRef = useRef(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [shouldRenderCanvas, setShouldRenderCanvas] = useState(() => {
-    return !disableAnimation && performanceMode !== 'low';
+    return !disableAnimation;
   });
   const timeoutRef = useRef(null);
 
@@ -177,16 +177,21 @@ const Antigravity = ({ performanceMode = 'high', disableAnimation = false, isScr
   }, []);
 
   useEffect(() => {
-    const newValue = !disableAnimation && performanceMode !== 'low';
-    setShouldRenderCanvas(newValue);
-  }, [disableAnimation, performanceMode]);
+    setShouldRenderCanvas(!disableAnimation);
+  }, [disableAnimation]);
 
   return (
     <div ref={containerRef} className="w-full h-full relative overflow-hidden antialiased">
         {(shouldRenderCanvas && isIntersecting) && (
             <View className="w-full h-full absolute inset-0">
                 <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={35} />
-                <AntigravityInner {...props} isVisible={isIntersecting} performanceMode={performanceMode} isScrolling={isScrolling} />
+                <AntigravityInner 
+                    {...props} 
+                    count={performanceMode === 'low' ? Math.floor((props.count || 200) * 0.4) : (props.count || 200)}
+                    isVisible={isIntersecting} 
+                    performanceMode={performanceMode} 
+                    isScrolling={isScrolling} 
+                />
             </View>
         )}
     </div>

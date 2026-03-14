@@ -121,7 +121,7 @@ export default function ParticleBackground({ paused = false, performanceMode = '
         };
     }, [isMobile]);
 
-    const shouldAnimate = !paused && !isLowPower;
+    const shouldAnimate = !paused;
 
     return (
         <div ref={containerRef} className="w-full h-full absolute inset-0 z-0 overflow-hidden pointer-events-none">

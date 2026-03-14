@@ -128,7 +128,7 @@ export default function Skills({ isScrolling = false }) {
             className="py-40 border-t border-white/5" 
             glowColor="rgba(16, 185, 129, 0.08)"
             bgContent={
-                <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 opacity-30">
                     <Antigravity
                         count={120}
                         magnetRadius={8}
