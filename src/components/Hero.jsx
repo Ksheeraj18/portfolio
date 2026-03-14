@@ -7,8 +7,10 @@ import MagneticButton from './MagneticButton';
 import Tilt from 'react-parallax-tilt';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
 import ResumePreview from './ResumePreview';
+import InteractiveOrbs from './InteractiveOrbs';
+import FloatingParticles from './FloatingParticles';
 
-export default function Hero() {
+export default function Hero({ performanceMode = 'high', isScrolling = false }) {
     const [text] = useTypewriter({
         words: ['AI Engineer', 'ML Developer', 'Full-Stack Builder', 'Automation Architect', 'LLM Integrator'],
         loop: true,
@@ -24,7 +26,10 @@ export default function Hero() {
     return (
         <section id="home" className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-32 pb-20">
             {/* Interactive 3D Particle Background */}
-            <ParticleBackground paused={showResume} />
+            <ParticleBackground paused={showResume || isScrolling || performanceMode === 'low'} performanceMode={performanceMode} />
+
+            {/* Interactive Floating Orbs */}
+            <InteractiveOrbs performanceMode={performanceMode} />
 
             <ResumePreview 
                 isOpen={showResume} 
@@ -66,22 +71,44 @@ export default function Hero() {
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-20 z-0"></div>
 
             {/* Premium 3D Profile Frame replacing Abstract Visual */}
-            <div className="absolute top-1/2 right-0 md:right-10 lg:right-20 -translate-y-1/2 pointer-events-none z-10 hidden md:flex items-center justify-center">
+            <div className="absolute top-[48%] right-0 md:right-10 lg:right-20 -translate-y-1/2 pointer-events-none z-10 hidden md:flex items-center justify-center group">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
                     className="relative pointer-events-auto"
                 >
-                    {/* Atmospheric Glow behind photo */}
-                    <div className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse" />
-                    
+                    {/* Enhanced Atmospheric Glow behind photo with cursor interaction */}
+                    <motion.div
+                        className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse"
+                        animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.15, 0.25, 0.15]
+                        }}
+                        transition={{ duration: 4, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        whileHover={{
+                            scale: 1.4,
+                            opacity: 0.35,
+                            transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+                        }}
+                    />
+
+                    {/* Additional interactive glow layers */}
+                    <motion.div
+                        className="absolute inset-0 bg-purple-500/10 blur-[150px] rounded-full"
+                        animate={{
+                            scale: [1.1, 1.4, 1.1],
+                            rotate: [0, 180, 360]
+                        }}
+                        transition={{ duration: 10, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    />
+
                     <Tilt
-                        tiltMaxAngleX={5}
-                        tiltMaxAngleY={5}
-                        perspective={1500}
+                        tiltMaxAngleX={8}
+                        tiltMaxAngleY={8}
+                        perspective={1200}
                         scale={1.02}
-                        transitionSpeed={2000}
+                        transitionSpeed={1500}
                         gyroscope={false}
                         disableTiltOnTouch={true}
                         className="relative z-10"
@@ -187,7 +214,9 @@ export default function Hero() {
             </AnimatePresence>
 
             {/* UI Content */}
-            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full will-change-transform">
+            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full will-change-transform relative">
+                {/* Floating Interactive Particles */}
+                <FloatingParticles performanceMode={performanceMode} />
                 <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -247,19 +276,54 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3 }}
-                    className="text-sm sm:text-lg md:text-2xl xl:text-3xl text-gray-300 font-medium mb-4 sm:mb-6 tracking-wide h-6 sm:h-8 md:h-12"
+                    className="text-sm sm:text-lg md:text-2xl xl:text-3xl text-gray-300 font-medium mb-4 sm:mb-6 tracking-wide h-6 sm:h-8 md:h-12 relative group cursor-pointer"
+                    whileHover={{ scale: 1.02 }}
                 >
-                    <span className="text-white">{text}</span>
+                    <motion.span
+                        className="text-white inline-block"
+                        animate={{
+                            textShadow: [
+                                "0 0 0px rgba(139, 92, 246, 0)",
+                                "0 0 15px rgba(139, 92, 246, 0.4)",
+                                "0 0 0px rgba(139, 92, 246, 0)"
+                            ]
+                        }}
+                        transition={{ duration: 3, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    >
+                        {text}
+                    </motion.span>
                     <Cursor cursorStyle="|" cursorColor="#8b5cf6" />
+                    {/* Interactive glow effect on hover */}
+                    <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        initial={false}
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
                 </motion.h2>
 
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="max-w-2xl text-gray-400 text-sm sm:text-base md:text-xl md:leading-relaxed mb-8 sm:mb-12 font-light px-2 sm:px-0"
+                    className="max-w-2xl text-gray-400 text-sm sm:text-base md:text-xl md:leading-relaxed mb-8 sm:mb-12 font-light px-2 sm:px-0 relative group cursor-pointer"
+                    whileHover={{ scale: 1.01 }}
                 >
-                    I build powerful AI-driven applications, scalable production systems, and design experiences that push the boundaries of modern web technologies.
+                    <motion.span
+                        animate={{
+                            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                        }}
+                        transition={{ duration: 4, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400 bg-clip-text text-transparent bg-[length:200%_200%]"
+                    >
+                        I build powerful AI-driven applications, scalable production systems, and design experiences that push the boundaries of modern web technologies.
+                    </motion.span>
+                    {/* Subtle interactive background */}
+                    <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-sm"
+                        animate={{ rotate: [0, 1, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    />
                 </motion.p>
 
                 <motion.div
@@ -291,23 +355,8 @@ export default function Hero() {
                     </MagneticButton>
                 </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.2, duration: 1 }}
-                    className="mt-20 md:mt-32 flex flex-col items-start gap-4 pb-10"
-                >
-                    <div className="flex flex-col items-start gap-2">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-[0.4em] font-black">Scroll_to_Deploy</span>
-                        <button 
-                            onClick={() => window.lenis?.scrollTo('#about', { offset: -100, duration: 1.2 })}
-                            className="cursor-pointer text-gray-400 hover:text-white transition-all hover:scale-110 animate-bounce mt-2 bg-white/5 p-4 rounded-full border border-white/10 backdrop-blur-md shadow-2xl group focus:outline-none"
-                        >
-                            <ArrowDown size={24} className="group-hover:translate-y-1 transition-transform" />
-                        </button>
-                    </div>
-                </motion.div>
             </div>
+
         </section>
     );
 }

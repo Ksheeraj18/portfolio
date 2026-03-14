@@ -3,6 +3,7 @@ import Tilt from 'react-parallax-tilt';
 import FloatingIcons from './FloatingIcons';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
+import SkillRadar from './SkillRadar';
 
 function SkillCategoryCard({ category, index }) {
     const mouseX = useMotionValue(0);
@@ -55,7 +56,7 @@ function SkillCategoryCard({ category, index }) {
                         </h4>
 
                         <div className="flex flex-wrap gap-3 transform translate-z-10">
-                            {category.skills.map((skill, skillIdx) => (
+                            {category.skills.map((skill) => (
                                 <motion.span
                                     key={skill}
                                     className="px-5 py-3 bg-white/2 border border-white/5 rounded-2xl text-gray-300 text-xs font-bold uppercase tracking-widest hover:bg-white/10 hover:border-white/20 transition-all cursor-default shadow-xl transform translate-z-10"
@@ -129,7 +130,7 @@ export default function Skills() {
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={300}
+                        count={400}
                         magnetRadius={8}
                         ringRadius={6}
                         waveSpeed={0.8}
@@ -150,34 +151,44 @@ export default function Skills() {
             <FloatingIcons />
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="mb-20 lg:mb-32 text-center flex flex-col items-center"
-                >
-                    <div className="inline-flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
-                        <motion.span
-                            className="w-12 lg:w-16 h-[2px] bg-indigo-500"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: "inherit" }}
+                <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16 mb-12">
+                    <div className="flex-1">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
-                        />
-                        <h3 className="text-indigo-400 font-bold tracking-[0.4em] lg:tracking-[0.5em] uppercase text-[10px] lg:text-xs">Arsenal</h3>
-                        <motion.span
-                            className="w-12 lg:w-16 h-[2px] bg-indigo-500"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: "inherit" }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                        />
+                        >
+                            <div className="inline-flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
+                                <motion.span
+                                    className="w-12 lg:w-16 h-[2px] bg-indigo-500"
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: "inherit" }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8 }}
+                                />
+                                <h3 className="text-indigo-400 font-bold tracking-[0.4em] lg:tracking-[0.5em] uppercase text-[10px] lg:text-xs">Arsenal</h3>
+                                <motion.span
+                                    className="w-12 lg:w-16 h-[2px] bg-indigo-500"
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: "inherit" }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8 }}
+                                />
+                            </div>
+                            <h2 className="text-4xl sm:text-7xl md:text-8xl xl:text-8xl 2xl:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
+                                Technical <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">Expertise.</span>
+                            </h2>
+                            <p className="text-gray-400 max-w-2xl">
+                                A dynamic view of the tools, frameworks, and AI tech I use to build every project — optimized for performance, maintainability, and innovation.
+                            </p>
+                        </motion.div>
                     </div>
-                    <h2 className="text-4xl sm:text-7xl md:text-8xl xl:text-8xl 2xl:text-9xl font-black text-white tracking-tighter leading-[0.9] lg:leading-none mb-4">
-                        Technical <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">Expertise.</span>
-                    </h2>
-                </motion.div>
+
+                    <div className="flex-0">
+                        <SkillRadar categories={skillCategories} />
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {skillCategories.map((category, index) => (

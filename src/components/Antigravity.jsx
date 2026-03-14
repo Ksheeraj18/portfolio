@@ -4,7 +4,7 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 
 const AntigravityInner = ({
-  count = 150, // Further reduced for stability
+  count = 200, // Increased for more engagement
   magnetRadius = 10,
   ringRadius = 10,
   waveSpeed = 0.4,
@@ -19,38 +19,63 @@ const AntigravityInner = ({
   pulseSpeed = 3,
   particleShape = 'capsule',
   fieldStrength = 10,
-  isVisible // Received from parent
+  isVisible = true, // Received from parent
+  performanceMode = 'high'
 }) => {
   const meshRef = useRef(null);
   const { viewport } = useThree();
   const dummy = useMemo(() => new THREE.Object3D(), []);
+  const lastFrame = useRef(0);
+  const mountTime = useRef(0);
+  const isLowPower = performanceMode === 'low';
+
+  useEffect(() => {
+    mountTime.current = Date.now();
+  }, []);
 
   const lastMousePos = useRef({ x: 0, y: 0 });
   const lastMouseMoveTime = useRef(0);
   const virtualMouse = useRef({ x: 0, y: 0 });
 
-  const particles = useMemo(() => {
+  const particlesRef = useRef([]);
+
+  useEffect(() => {
     const temp = [];
     const width = viewport.width || 100;
     const height = viewport.height || 100;
 
     for (let i = 0; i < count; i++) {
+        // Generate random values once during initialization
+        const randomT = Math.random() * 100;
+        const randomSpeed = 0.01 + Math.random() / 200;
+        const randomMx = (Math.random() - 0.5) * width;
+        const randomMy = (Math.random() - 0.5) * height;
+        const randomMz = (Math.random() - 0.5) * 20;
+        const randomRadiusOffset = (Math.random() - 0.5) * 2;
+
         temp.push({
-            t: Math.random() * 100,
-            speed: 0.01 + Math.random() / 200,
-            mx: (Math.random() - 0.5) * width,
-            my: (Math.random() - 0.5) * height,
-            mz: (Math.random() - 0.5) * 20,
+            t: randomT,
+            speed: randomSpeed,
+            mx: randomMx,
+            my: randomMy,
+            mz: randomMz,
             cx: 0, cy: 0, cz: 0,
-            randomRadiusOffset: (Math.random() - 0.5) * 2
+            randomRadiusOffset: randomRadiusOffset
         });
     }
-    return temp;
+    particlesRef.current = temp;
   }, [count, viewport.width, viewport.height]);
 
   useFrame(state => {
     if (!isVisible) return; // Full stop if offscreen
-    
+
+    const now = state.clock.getElapsedTime();
+    const runtime = performance.now() - mountTime.current;
+    const fastRender = runtime < 1200; // keep it smooth right after load
+    const frameInterval = fastRender ? 1 / 60 : (isLowPower ? 1 / 20 : 1 / 30);
+    if (now - lastFrame.current < frameInterval) return;
+    lastFrame.current = now;
+
     const mesh = meshRef.current;
     if (!mesh) return;
 
@@ -81,7 +106,9 @@ const AntigravityInner = ({
     const globalRotation = state.clock.getElapsedTime() * rotationSpeed;
 
     for (let i = 0; i < count; i++) {
-      const p = particles[i];
+      const p = particlesRef.current[i];
+      if (!p) continue; // Safety check
+
       p.t += p.speed / 2;
 
       const pFactor = 1 - p.cz / 50;
@@ -135,20 +162,28 @@ const AntigravityInner = ({
   );
 };
 
-const Antigravity = props => {
+const Antigravity = ({ performanceMode = 'high', disableAnimation = false, ...props }) => {
   const containerRef = useRef(null);
-  const [shouldRender, setShouldRender] = useState(false);
+  const shouldRenderRef = useRef(false);
+  const shouldRenderCanvas = useMemo(() => {
+    return !disableAnimation && performanceMode !== 'low';
+  }, [disableAnimation, performanceMode]);
   const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    const newValue = !disableAnimation && performanceMode !== 'low';
+    setShouldRenderCanvas(newValue);
+  }, [disableAnimation, performanceMode]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setShouldRender(true);
+        shouldRenderRef.current = true;
       } else {
         // Delay unmounting slightly to prevent flickering during fast scrolls
         timeoutRef.current = setTimeout(() => {
-            setShouldRender(false);
+            shouldRenderRef.current = false;
         }, 5000); // 5 seconds extra life
       }
     }, { threshold: 0.01, rootMargin: '1000px' });
@@ -160,9 +195,13 @@ const Antigravity = props => {
     };
   }, []);
 
+  useEffect(() => {
+    shouldRenderRef.current = !disableAnimation;
+  }, [disableAnimation]);
+
   return (
     <div ref={containerRef} className="w-full h-full relative overflow-hidden antialiased">
-        {shouldRender && (
+        {shouldRenderCanvas && (
             <Canvas 
                 camera={{ position: [0, 0, 50], fov: 35 }}
                 dpr={window.innerWidth < 768 ? [1, 1] : [1, 1.5]} 
@@ -175,7 +214,7 @@ const Antigravity = props => {
                 }}
                 style={{ pointerEvents: 'none' }}
             >
-                <AntigravityInner {...props} isVisible={true} />
+                <AntigravityInner {...props} isVisible={true} performanceMode={performanceMode} />
             </Canvas>
         )}
     </div>

@@ -71,7 +71,7 @@ const Certifications = () => {
       {/* Antigravity Dynamic Background Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
         <Antigravity
-            count={200}
+            count={300}
             magnetRadius={8}
             ringRadius={6}
             waveSpeed={0.3}

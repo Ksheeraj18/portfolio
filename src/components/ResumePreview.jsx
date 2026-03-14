@@ -3,7 +3,7 @@ import { X, Download, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const ResumePreview = ({ isOpen, onClose, resumeUrl }) => {
-    const [renderPdf, setRenderPdf] = useState(false);
+    const renderPdfRef = useRef(false);
     
     // Snappier Mouse Tracking
     const mouseX = useSpring(0, { stiffness: 100, damping: 30 });
@@ -24,10 +24,10 @@ const ResumePreview = ({ isOpen, onClose, resumeUrl }) => {
             window.lenis?.stop();
             
             // Shorter delay for faster perceived load
-            const timer = setTimeout(() => setRenderPdf(true), 400);
+            const timer = setTimeout(() => renderPdfRef.current = true, 400);
             return () => clearTimeout(timer);
         } else {
-            setRenderPdf(false);
+            renderPdfRef.current = false;
         }
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
@@ -96,7 +96,7 @@ const ResumePreview = ({ isOpen, onClose, resumeUrl }) => {
 
                         {/* Instant Content Area */}
                         <div className="flex-1 w-full relative bg-[#111] overflow-hidden group">
-                           {renderPdf ? (
+                           {renderPdfRef.current ? (
                                <motion.iframe 
                                    initial={{ opacity: 0 }}
                                    animate={{ opacity: 1 }}

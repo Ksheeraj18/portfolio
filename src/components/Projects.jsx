@@ -152,7 +152,7 @@ export default function Projects() {
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={150}
+                        count={250}
                         magnetRadius={20}
                         ringRadius={15}
                         waveSpeed={0.2}

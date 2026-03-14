@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useInView, useMotionValue, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion, useTransform, useMotionValue, AnimatePresence } from 'framer-motion';
 import { Code2, BrainCircuit, DatabaseZap, TerminalSquare, ArrowRight, Sparkles, Cpu, Zap, Activity, ShieldCheck } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
 import InteractiveSection from './InteractiveSection';
@@ -209,7 +209,7 @@ const Services = () => {
         bgContent={
             <div className="absolute inset-0 opacity-10">
                 <Antigravity
-                    count={80}
+                    count={150}
                     magnetRadius={35}
                     ringRadius={30}
                     waveSpeed={0.1}

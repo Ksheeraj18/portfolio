@@ -3,19 +3,36 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Preload, Float, TorusKnot, Icosahedron } from '@react-three/drei';
 import * as random from 'maath/random/dist/maath-random.esm';
 
-const Stars = ({ mousePosition, isMobile, ...props }) => {
+const Stars = ({ mousePosition, isMobile, shouldAnimate, isLowPower, ...props }) => {
     const ref = useRef();
-    const numStars = isMobile ? 1500 : 5000;
+    const lastFrame = useRef(0);
+    const mountTime = useRef(performance.now());
+    const numStars = isLowPower ? (isMobile ? 800 : 1500) : (isMobile ? 1500 : 5000);
     const [sphere] = useState(() => random.inSphere(new Float32Array(numStars * 3), { radius: 1.5 }));
 
     useFrame((state, delta) => {
-        ref.current.rotation.x -= delta / 15;
-        ref.current.rotation.y -= delta / 20;
+        if (!shouldAnimate) return;
 
-        // Subtle mouse parallax
+        const now = state.clock.getElapsedTime();
+        const runtime = performance.now() - mountTime.current;
+        const fastRender = runtime < 1200; // first 1.2s: full framerate
+        const frameInterval = fastRender ? 1 / 60 : (isLowPower ? 1 / 25 : 1 / 35);
+        if (now - lastFrame.current < frameInterval) return;
+        lastFrame.current = now;
+
+        ref.current.rotation.x -= delta / 18;
+        ref.current.rotation.y -= delta / 22;
+
+        // Smoother mouse parallax with better interpolation
         if (!isMobile) {
-            ref.current.position.x += (mousePosition.current.x * 0.1 - ref.current.position.x) * 0.05;
-            ref.current.position.y += (mousePosition.current.y * 0.1 - ref.current.position.y) * 0.05;
+            const mouseInfluence = isLowPower ? 0.025 : 0.045;
+            const targetX = mousePosition.current.x * 0.15 - ref.current.position.x;
+            const targetY = mousePosition.current.y * 0.15 - ref.current.position.y;
+            const targetRotZ = mousePosition.current.x * 0.005 - ref.current.rotation.z;
+
+            ref.current.position.x += targetX * mouseInfluence;
+            ref.current.position.y += targetY * mouseInfluence;
+            ref.current.rotation.z += targetRotZ * mouseInfluence * 0.5;
         }
     });
 
@@ -34,15 +51,30 @@ const Stars = ({ mousePosition, isMobile, ...props }) => {
     );
 };
 
-const AbstractShapes = ({ mousePosition, isMobile }) => {
+const AbstractShapes = ({ mousePosition, isMobile, shouldAnimate, isLowPower }) => {
     const groupRef = useRef();
+    const lastFrame = useRef(0);
+    const mountTime = useRef(performance.now());
 
-    useFrame((state, delta) => {
-        // Subtle floating movement and array response
-        if (!isMobile) {
-            groupRef.current.position.x += (mousePosition.current.x * 0.3 - groupRef.current.position.x) * 0.02;
-            groupRef.current.position.y += (mousePosition.current.y * 0.3 - groupRef.current.position.y) * 0.02;
-        }
+    useFrame((state) => {
+        if (!shouldAnimate || isMobile) return;
+
+        const now = state.clock.getElapsedTime();
+        const runtime = performance.now() - mountTime.current;
+        const fastRender = runtime < 1200; // keep it smooth during initial mount
+        const frameInterval = fastRender ? 1 / 60 : (isLowPower ? 1 / 25 : 1 / 35);
+        if (now - lastFrame.current < frameInterval) return;
+        lastFrame.current = now;
+
+        // Smoother mouse interaction with better interpolation
+        const mouseInfluence = isLowPower ? 0.012 : 0.025;
+        const targetX = mousePosition.current.x * 0.4 - groupRef.current.position.x;
+        const targetY = mousePosition.current.y * 0.4 - groupRef.current.position.y;
+        const targetRotZ = mousePosition.current.x * 0.008 - groupRef.current.rotation.z;
+
+        groupRef.current.position.x += targetX * mouseInfluence;
+        groupRef.current.position.y += targetY * mouseInfluence;
+        groupRef.current.rotation.z += targetRotZ * mouseInfluence * 0.3;
     });
 
     if (isMobile) return null; // Very heavy to render on mobile
@@ -68,9 +100,10 @@ const AbstractShapes = ({ mousePosition, isMobile }) => {
     );
 };
 
-export default function ParticleBackground({ paused = false }) {
+export default function ParticleBackground({ paused = false, performanceMode = 'high' }) {
     const mousePosition = useRef({ x: 0, y: 0 });
     const [isMobile, setIsMobile] = useState(false);
+    const isLowPower = performanceMode === 'low';
     const containerRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -104,6 +137,8 @@ export default function ParticleBackground({ paused = false }) {
         };
     }, [isMobile]);
 
+    const shouldAnimate = !paused && !isLowPower;
+
     return (
         <div ref={containerRef} className="w-full h-full absolute inset-0 z-0 overflow-hidden pointer-events-none">
             {isVisible && (
@@ -111,12 +146,12 @@ export default function ParticleBackground({ paused = false }) {
                     camera={{ position: [0, 0, 1] }} 
                     dpr={isMobile ? [1, 1] : [1, 1.5]}
                     gl={{ antialias: false, powerPreference: "high-performance", alpha: true }}
-                    frameloop={paused ? "never" : "always"}
+                    frameloop={shouldAnimate ? "always" : "never"}
                 >
                     <ambientLight intensity={1} />
                     <Suspense fallback={null}>
-                        <Stars mousePosition={mousePosition} isMobile={isMobile} />
-                        <AbstractShapes mousePosition={mousePosition} isMobile={isMobile} />
+                        <Stars mousePosition={mousePosition} isMobile={isMobile} shouldAnimate={shouldAnimate} isLowPower={isLowPower} />
+                        <AbstractShapes mousePosition={mousePosition} isMobile={isMobile} shouldAnimate={shouldAnimate} isLowPower={isLowPower} />
                     </Suspense>
                     <Preload all />
                 </Canvas>

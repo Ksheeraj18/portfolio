@@ -6,9 +6,8 @@ import MagneticButton from './MagneticButton';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 
-export default function Contact() {
+export default function Contact({ performanceMode = 'high', isScrolling = false }) {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const [focused, setFocused] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
 
@@ -109,12 +108,12 @@ export default function Contact() {
             bgContent={
                 <div className="absolute inset-0 opacity-20">
                     <Antigravity
-                        count={150}
+                        count={performanceMode === 'low' ? 100 : 250}
                         magnetRadius={18}
                         ringRadius={14}
                         waveSpeed={0.4}
                         waveAmplitude={2}
-                        particleSize={1.3}
+                        particleSize={performanceMode === 'low' ? 1 : 1.3}
                         lerpSpeed={0.05}
                         color="#3b82f6"
                         autoAnimate
@@ -123,6 +122,8 @@ export default function Contact() {
                         pulseSpeed={3}
                         particleShape="capsule"
                         fieldStrength={8}
+                        performanceMode={performanceMode}
+                        disableAnimation={isScrolling}
                     />
                 </div>
             }
@@ -212,6 +213,8 @@ export default function Contact() {
                                         rows={8}
                                         data-lenis-prevent
                                         onChange={handleChange}
+                                        onWheel={(e) => e.stopPropagation()}
+                                        onTouchMove={(e) => e.stopPropagation()}
                                         value={formData.message}
                                         className="w-full bg-black/40 border border-white/5 rounded-3xl px-6 py-8 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight overflow-y-auto"
                                         placeholder="Briefly describe the objective..."

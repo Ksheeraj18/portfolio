@@ -42,7 +42,7 @@ export default function Experience() {
             bgContent={
                 <div className="absolute inset-0 opacity-30">
                     <Antigravity
-                        count={200}
+                        count={300}
                         magnetRadius={15}
                         ringRadius={12}
                         waveSpeed={0.3}
@@ -190,7 +190,7 @@ export default function Experience() {
                                     </div>
 
                                     <div className="pt-6 flex flex-wrap gap-3 transform translate-z-10">
-                                        {exp.tech.map((tech, techIdx) => (
+                                        {exp.tech.map((tech) => (
                                             <motion.span
                                                 key={tech}
                                                 className="text-sm font-semibold px-4 py-2 bg-linear-to-br from-white/10 to-transparent border border-white/10 rounded-xl text-white shadow-sm"

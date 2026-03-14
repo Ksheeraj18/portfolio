@@ -1,7 +1,7 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Cpu, LayoutTemplate, Layers, Brain } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
-import React, { useState } from 'react';
+import React from 'react';
 import AnimatedCounter from './AnimatedCounter';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';

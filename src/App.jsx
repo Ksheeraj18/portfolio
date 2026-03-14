@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 import Navbar from './components/Navbar';
@@ -16,16 +16,19 @@ import Loader from './components/Loader';
 import Services from './components/Services';
 import Certifications from './components/Certifications';
 import AmbientBackground from './components/AmbientBackground';
+import usePerfMode from './hooks/usePerformanceMode';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const { mode: performanceMode } = usePerfMode();
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1.2, // Slightly more responsive
-      touchMultiplier: 1.5,
+      smoothWheel: performanceMode !== 'low',
+      wheelMultiplier: performanceMode === 'low' ? 1 : 1.2,
+      touchMultiplier: performanceMode === 'low' ? 1 : 1.5,
       infinite: false,
     });
 
@@ -42,7 +45,7 @@ function App() {
       lenis.destroy();
       window.lenis = null;
     };
-  }, []);
+  }, [performanceMode]);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -50,6 +53,23 @@ function App() {
     damping: 30,
     restDelta: 0.001
   });
+
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeout = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolling(true);
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      scrollTimeout.current = window.setTimeout(() => setIsScrolling(false), 250);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
 
   return (
     <div className="bg-[#050505] min-h-screen text-gray-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
@@ -72,7 +92,7 @@ function App() {
             />
             <Navbar />
             <main className="flex flex-col items-center w-full">
-        <Hero />
+        <Hero performanceMode={performanceMode} isScrolling={isScrolling} />
         <SectionDivider variant="wave" />
         <About />
         <SectionDivider variant="dots" />
@@ -88,7 +108,7 @@ function App() {
         <SectionDivider variant="wave" />
         <Experience />
         <SectionDivider variant="line" />
-        <Contact />
+        <Contact performanceMode={performanceMode} isScrolling={isScrolling} />
             </main>
             <Footer />
           </motion.div>
