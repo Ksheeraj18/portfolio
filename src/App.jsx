@@ -14,18 +14,22 @@ import CursorGlow from './components/CursorGlow';
 import SectionDivider from './components/SectionDivider';
 import Loader from './components/Loader';
 import Services from './components/Services';
-import Certificates from './components/Certificates';
+import Certifications from './components/Certifications';
+import AmbientBackground from './components/AmbientBackground';
 
 function App() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
+      wheelMultiplier: 1.2, // Slightly more responsive
+      touchMultiplier: 1.5,
+      infinite: false,
     });
+
+    window.lenis = lenis;
 
     function raf(time) {
       lenis.raf(time);
@@ -36,6 +40,7 @@ function App() {
 
     return () => {
       lenis.destroy();
+      window.lenis = null;
     };
   }, []);
 
@@ -60,6 +65,7 @@ function App() {
             className="relative w-full flex flex-col items-center"
           >
             <CursorGlow />
+            <AmbientBackground />
             <motion.div
               className="fixed top-0 left-0 right-0 h-1 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 origin-left z-100 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
               style={{ scaleX }}
@@ -74,7 +80,7 @@ function App() {
         <SectionDivider variant="line" />
         <Skills />
         <SectionDivider variant="wave" />
-        <Certificates />
+        <Certifications />
         <SectionDivider variant="dots" />
         <Projects />
         <SectionDivider variant="dots" />

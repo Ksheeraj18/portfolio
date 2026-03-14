@@ -1,14 +1,39 @@
-import { motion } from 'framer-motion';
 import { Mail, Github, Linkedin, Send, Sparkles, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import MagneticButton from './MagneticButton';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
 export default function Contact() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [focused, setFocused] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+
+    const messageRef = useRef(null);
+ 
+    // System Protocol Listener
+    useEffect(() => {
+        const handleProtocol = (e) => {
+            const { title, id } = e.detail;
+            setFormData(prev => ({
+                ...prev,
+                message: `[MISSION_DATA_LINK_ESTABLISHED]\nPROTOCOL_ID: ${id}\nOBJECTIVE: ${title.toUpperCase()}\n\n-- MISSION BRIEFING REQUISITION --\n> [PROJECT GOALS]: \n> [TECHNICAL STACK]: \n> [TIMELINE]: \n\nWaiting for signal input...`
+            }));
+            
+            // Focus and scroll the textarea to the end
+            setTimeout(() => {
+              if (messageRef.current) {
+                messageRef.current.focus();
+                messageRef.current.scrollTop = messageRef.current.scrollHeight;
+              }
+            }, 100);
+        };
+        window.addEventListener('init-protocol', handleProtocol);
+        return () => window.removeEventListener('init-protocol', handleProtocol);
+    }, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -77,11 +102,31 @@ export default function Contact() {
     ];
 
     return (
-        <section id="contact" className="py-32 w-full bg-black relative overflow-hidden">
-            {/* Elite Background Atmosphere */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/5 to-transparent pointer-events-none blur-[120px] smooth-gpu" />
-            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
-
+        <InteractiveSection 
+            id="contact" 
+            className="py-32 border-t border-white/5" 
+            glowColor="rgba(37, 99, 235, 0.08)"
+            bgContent={
+                <div className="absolute inset-0 opacity-20">
+                    <Antigravity
+                        count={150}
+                        magnetRadius={18}
+                        ringRadius={14}
+                        waveSpeed={0.4}
+                        waveAmplitude={2}
+                        particleSize={1.3}
+                        lerpSpeed={0.05}
+                        color="#3b82f6"
+                        autoAnimate
+                        particleVariance={1.2}
+                        depthFactor={1.2}
+                        pulseSpeed={3}
+                        particleShape="capsule"
+                        fieldStrength={8}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -150,21 +195,25 @@ export default function Contact() {
                                                 name={field.name}
                                                 required
                                                 onChange={handleChange}
+                                                value={formData[field.name]}
                                                 className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight"
                                                 placeholder={field.placeholder}
                                             />
                                         </div>
                                     ))}
                                 </div>
-
+ 
                                 <div className="flex flex-col gap-4">
                                     <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 px-2">Data Packet</label>
                                     <textarea
+                                        ref={messageRef}
                                         name="message"
                                         required
-                                        rows={5}
+                                        rows={8}
+                                        data-lenis-prevent
                                         onChange={handleChange}
-                                        className="w-full bg-black/40 border border-white/5 rounded-3xl px-6 py-6 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight resize-none"
+                                        value={formData.message}
+                                        className="w-full bg-black/40 border border-white/5 rounded-3xl px-6 py-8 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all duration-500 font-bold tracking-tight overflow-y-auto"
                                         placeholder="Briefly describe the objective..."
                                     />
                                 </div>
@@ -190,6 +239,6 @@ export default function Contact() {
                     </Tilt>
                 </motion.div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

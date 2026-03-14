@@ -12,6 +12,7 @@
   --animate-fade-in: fadeIn 1s ease-out forwards;
   --animate-slide-up: slideUp 0.8s ease-out forwards;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
 
   @keyframes fadeIn {
     0% {
@@ -67,7 +68,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Removed scroll-behavior: smooth to avoid conflict with Lenis */
     background: #000;
   }
 }
@@ -118,6 +119,20 @@
     backface-visibility: hidden;
     transform: translateZ(0);
     will-change: transform, opacity;
+  }
+
+  .bg-grid {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+  }
+
+  .bg-glow {
+    background: radial-gradient(circle at center, var(--glow-color, rgba(59, 130, 246, 0.1)), transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
   }
 }
 

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowDown, Download, X } from 'lucide-react';
+import { ArrowDown, Download, X, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-scroll';
 import ParticleBackground from './ParticleBackground';
 import MagneticButton from './MagneticButton';
 import Tilt from 'react-parallax-tilt';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
+import ResumePreview from './ResumePreview';
 
 export default function Hero() {
     const [text] = useTypewriter({
@@ -17,12 +18,19 @@ export default function Hero() {
     });
 
     const [isEnlarged, setIsEnlarged] = useState(false);
+    const [showResume, setShowResume] = useState(false);
     const nameLetters = "Ksheeraj.";
 
     return (
         <section id="home" className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-32 pb-20">
             {/* Interactive 3D Particle Background */}
-            <ParticleBackground />
+            <ParticleBackground paused={showResume} />
+
+            <ResumePreview 
+                isOpen={showResume} 
+                onClose={() => setShowResume(false)} 
+                resumeUrl="/KSHEERAJ CV (3).pdf"
+            />
 
             {/* Massive Background Gradients with animation - hidden on mobile for performance */}
             <motion.div
@@ -178,7 +186,8 @@ export default function Hero() {
                 )}
             </AnimatePresence>
 
-            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full">
+            {/* UI Content */}
+            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full will-change-transform">
                 <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -196,6 +205,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                    className="transform-gpu"
                 >
                     <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[9rem] font-black tracking-tighter leading-[0.9] mb-4 sm:mb-6">
                         <motion.span
@@ -259,28 +269,25 @@ export default function Hero() {
                     className="flex flex-col sm:flex-row items-center justify-start gap-4 w-full sm:w-auto mt-4"
                 >
                     <MagneticButton>
-                        <Link
-                            to="projects"
-                            smooth={true}
-                            duration={500}
-                            offset={-100}
-                            className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-black font-bold text-lg transition-all duration-150 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_35px_rgba(255,255,255,0.8)] hover:-translate-y-1 hover:scale-105 block"
+                        <button
+                            onClick={() => window.lenis?.scrollTo('#projects', { offset: -100, duration: 1.5 })}
+                            className="w-full sm:w-auto px-10 py-5 rounded-full bg-white text-black font-black text-lg transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.8)] hover:-translate-y-1 hover:scale-105 active:scale-95 flex items-center justify-center gap-3 group"
                         >
-                            Explore My Work
-                        </Link>
+                            <span>Explore My Work</span>
+                            <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        </button>
                     </MagneticButton>
 
                     <MagneticButton>
-                        <a
-                            href="/KSHEERAJ_GUBBALA%20RESUME.pdf"
-                            download="Ksheeraj_Gubbala_Resume.pdf"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="group w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white font-medium text-lg transition-all duration-150 hover:bg-white/10 hover:-translate-y-1 hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center gap-2"
+                        <motion.button
+                            onClick={() => setShowResume(true)}
+                            whileHover={{ y: -5, scale: 1.02 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="group w-full sm:w-auto px-10 py-5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white font-bold text-lg transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] flex items-center justify-center gap-3 cursor-pointer"
                         >
-                            <Download size={20} className="group-hover:-translate-y-1 transition-transform" />
-                            Download Resume
-                        </a>
+                            <Download size={20} className="group-hover:-translate-y-1 transition-transform duration-500" />
+                            <span className="tracking-wide">Résumé</span>
+                        </motion.button>
                     </MagneticButton>
                 </motion.div>
 
@@ -288,14 +295,17 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.2, duration: 1 }}
-                    className="mt-16 md:mt-24 flex flex-col items-start gap-2 lg:absolute lg:bottom-10 lg:left-6"
+                    className="mt-20 md:mt-32 flex flex-col items-start gap-4 pb-10"
                 >
-                    <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Scroll Down</span>
-                    <MagneticButton>
-                        <Link to="about" smooth={true} duration={500} offset={-100} className="cursor-pointer text-gray-400 hover:text-white transition-colors animate-bounce mt-2 bg-white/5 p-2 rounded-full border border-white/10 backdrop-blur-md block">
-                            <ArrowDown size={24} />
-                        </Link>
-                    </MagneticButton>
+                    <div className="flex flex-col items-start gap-2">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-[0.4em] font-black">Scroll_to_Deploy</span>
+                        <button 
+                            onClick={() => window.lenis?.scrollTo('#about', { offset: -100, duration: 1.2 })}
+                            className="cursor-pointer text-gray-400 hover:text-white transition-all hover:scale-110 animate-bounce mt-2 bg-white/5 p-4 rounded-full border border-white/10 backdrop-blur-md shadow-2xl group focus:outline-none"
+                        >
+                            <ArrowDown size={24} className="group-hover:translate-y-1 transition-transform" />
+                        </button>
+                    </div>
                 </motion.div>
             </div>
         </section>

@@ -1,8 +1,10 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Cpu, LayoutTemplate, Layers, Brain } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
-import AnimatedCounter from './AnimatedCounter';
 import React, { useState } from 'react';
+import AnimatedCounter from './AnimatedCounter';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
 function SpotlightCard({ card, index }) {
     const mouseX = useMotionValue(0);
@@ -27,17 +29,17 @@ function SpotlightCard({ card, index }) {
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className="h-full"
         >
-            <Tilt 
-                tiltMaxAngleX={8} 
-                tiltMaxAngleY={8} 
-                perspective={1500} 
-                scale={1.02} 
-                transitionSpeed={1500} 
+            <Tilt
+                tiltMaxAngleX={8}
+                tiltMaxAngleY={8}
+                perspective={1500}
+                scale={1.02}
+                transitionSpeed={1500}
                 disableTiltOnTouch={true}
                 className="h-full transform-style-3d"
                 glareEnable={false}
             >
-                <div 
+                <div
                     onMouseMove={onMouseMove}
                     className="relative group h-full bg-zinc-950 border border-white/5 rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 overflow-hidden transition-colors hover:bg-zinc-900/50 smooth-gpu"
                 >
@@ -57,11 +59,11 @@ function SpotlightCard({ card, index }) {
                         >
                             {card.icon}
                         </motion.div>
-                        
+
                         <h4 className="text-3xl font-bold text-white mb-6 tracking-tight transform translate-z-10 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-white group-hover:to-gray-400">
                             {card.title}
                         </h4>
-                        
+
                         <p className="text-gray-400 text-lg leading-relaxed font-light transform translate-z-10 mt-auto">
                             {card.desc}
                         </p>
@@ -104,11 +106,31 @@ export default function About() {
     ];
 
     return (
-        <section id="about" className="py-40 w-full bg-black relative border-t border-white/5 overflow-hidden">
-            {/* Background Atmosphere */}
-            <div className="absolute left-0 top-0 w-full h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.08),transparent_70%)] pointer-events-none"></div>
-            <div className="absolute right-0 bottom-0 w-full h-[600px] bg-[radial-gradient(ellipse_at_bottom,rgba(168,85,247,0.05),transparent_70%)] pointer-events-none"></div>
-
+        <InteractiveSection 
+            id="about" 
+            className="py-40 border-t border-white/5" 
+            glowColor="rgba(79, 70, 229, 0.05)"
+            bgContent={
+                <div className="absolute inset-0 opacity-20">
+                    <Antigravity
+                        count={120}
+                        magnetRadius={18}
+                        ringRadius={15}
+                        waveSpeed={0.2}
+                        waveAmplitude={1.5}
+                        particleSize={1}
+                        lerpSpeed={0.06}
+                        color="#6366f1"
+                        autoAnimate
+                        particleVariance={1}
+                        depthFactor={1.2}
+                        pulseSpeed={1.5}
+                        particleShape="capsule"
+                        fieldStrength={6}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <div className="flex flex-col md:flex-row gap-8 lg:gap-16 mb-20 lg:mb-32 items-center">
                     <motion.div
@@ -161,6 +183,6 @@ export default function About() {
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

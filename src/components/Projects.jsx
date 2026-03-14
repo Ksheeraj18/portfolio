@@ -2,6 +2,8 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Github, Code2, ArrowUpRight, ExternalLink } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
 import React from 'react';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
 function ProjectCard({ project, index }) {
     const mouseX = useMotionValue(0);
@@ -143,11 +145,31 @@ export default function Projects() {
     ];
 
     return (
-        <section id="projects" className="py-40 w-full bg-black relative border-t border-white/5 overflow-hidden">
-            {/* Mesh Gradient Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.05)_0%,transparent_50%)] pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.03)_0%,transparent_50%)] pointer-events-none" />
-
+        <InteractiveSection 
+            id="projects" 
+            className="py-40 border-t border-white/5" 
+            glowColor="rgba(59, 130, 246, 0.08)"
+            bgContent={
+                <div className="absolute inset-0 opacity-20">
+                    <Antigravity
+                        count={150}
+                        magnetRadius={20}
+                        ringRadius={15}
+                        waveSpeed={0.2}
+                        waveAmplitude={3}
+                        particleSize={1.5}
+                        lerpSpeed={0.06}
+                        color="#06b6d4"
+                        autoAnimate
+                        particleVariance={2}
+                        depthFactor={2}
+                        pulseSpeed={1}
+                        particleShape="tetrahedron"
+                        fieldStrength={5}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -184,6 +206,6 @@ export default function Projects() {
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

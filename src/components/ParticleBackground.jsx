@@ -68,9 +68,11 @@ const AbstractShapes = ({ mousePosition, isMobile }) => {
     );
 };
 
-export default function ParticleBackground() {
+export default function ParticleBackground({ paused = false }) {
     const mousePosition = useRef({ x: 0, y: 0 });
     const [isMobile, setIsMobile] = useState(false);
+    const containerRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -78,10 +80,15 @@ export default function ParticleBackground() {
         };
 
         checkMobile();
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsVisible(entry.isIntersecting);
+        }, { threshold: 0.1 });
+
+        if (containerRef.current) observer.observe(containerRef.current);
+
         window.addEventListener('resize', checkMobile);
 
         const handleMouseMove = (e) => {
-            // Normalize mouse coordinates to -1 to +1
             mousePosition.current.x = (e.clientX / window.innerWidth) * 2 - 1;
             mousePosition.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
         };
@@ -93,19 +100,27 @@ export default function ParticleBackground() {
         return () => {
             window.removeEventListener('resize', checkMobile);
             window.removeEventListener('mousemove', handleMouseMove);
+            observer.disconnect();
         };
     }, [isMobile]);
 
     return (
-        <div className="w-full h-full absolute inset-0 z-0 overflow-hidden pointer-events-none">
-            <Canvas camera={{ position: [0, 0, 1] }} dpr={isMobile ? [1, 1] : [1, 2]}>
-                <ambientLight intensity={1} />
-                <Suspense fallback={null}>
-                    <Stars mousePosition={mousePosition} isMobile={isMobile} />
-                    <AbstractShapes mousePosition={mousePosition} isMobile={isMobile} />
-                </Suspense>
-                <Preload all />
-            </Canvas>
+        <div ref={containerRef} className="w-full h-full absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            {isVisible && (
+                <Canvas 
+                    camera={{ position: [0, 0, 1] }} 
+                    dpr={isMobile ? [1, 1] : [1, 1.5]}
+                    gl={{ antialias: false, powerPreference: "high-performance", alpha: true }}
+                    frameloop={paused ? "never" : "always"}
+                >
+                    <ambientLight intensity={1} />
+                    <Suspense fallback={null}>
+                        <Stars mousePosition={mousePosition} isMobile={isMobile} />
+                        <AbstractShapes mousePosition={mousePosition} isMobile={isMobile} />
+                    </Suspense>
+                    <Preload all />
+                </Canvas>
+            )}
         </div>
     );
 }

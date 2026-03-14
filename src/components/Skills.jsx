@@ -1,7 +1,8 @@
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import FloatingIcons from './FloatingIcons';
-import React from 'react';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
 function SkillCategoryCard({ category, index }) {
     const mouseX = useMotionValue(0);
@@ -121,12 +122,32 @@ export default function Skills() {
     ];
 
     return (
-        <section id="skills" className="py-40 w-full relative bg-black overflow-hidden border-t border-white/5">
+        <InteractiveSection 
+            id="skills" 
+            className="py-40 border-t border-white/5" 
+            glowColor="rgba(16, 185, 129, 0.08)"
+            bgContent={
+                <div className="absolute inset-0 opacity-20">
+                    <Antigravity
+                        count={300}
+                        magnetRadius={8}
+                        ringRadius={6}
+                        waveSpeed={0.8}
+                        waveAmplitude={1}
+                        particleSize={1.5}
+                        lerpSpeed={0.1}
+                        color="#10b981"
+                        autoAnimate
+                        particleVariance={1}
+                        depthFactor={1}
+                        pulseSpeed={3}
+                        particleShape="capsule"
+                        fieldStrength={10}
+                    />
+                </div>
+            }
+        >
             <FloatingIcons />
-
-            {/* Atmosphere */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_50%,rgba(59,130,246,0.03)_0%,transparent_50%)] pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_50%,rgba(168,85,247,0.03)_0%,transparent_50%)] pointer-events-none" />
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <motion.div
@@ -164,6 +185,6 @@ export default function Skills() {
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

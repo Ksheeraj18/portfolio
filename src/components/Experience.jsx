@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, CheckCircle2, Sparkles } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
 export default function Experience() {
     const experiences = [
@@ -33,14 +35,31 @@ export default function Experience() {
     ];
 
     return (
-        <section id="experience" className="py-32 w-full relative bg-zinc-950 overflow-hidden">
-            {/* Background element - hidden on mobile for performance */}
-            <motion.div
-                className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-900/10 to-transparent pointer-events-none"
-                animate={{ scale: [1, 1.15, 1], x: [0, -40, 0] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            />
-
+        <InteractiveSection 
+            id="experience" 
+            className="py-32 border-t border-white/5" 
+            glowColor="rgba(79, 70, 229, 0.08)"
+            bgContent={
+                <div className="absolute inset-0 opacity-30">
+                    <Antigravity
+                        count={200}
+                        magnetRadius={15}
+                        ringRadius={12}
+                        waveSpeed={0.3}
+                        waveAmplitude={2}
+                        particleSize={1.2}
+                        lerpSpeed={0.07}
+                        color="#8b5cf6"
+                        autoAnimate
+                        particleVariance={1.5}
+                        depthFactor={1.5}
+                        pulseSpeed={2}
+                        particleShape="sphere"
+                        fieldStrength={8}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -191,6 +210,6 @@ export default function Experience() {
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

@@ -53,8 +53,6 @@ export default function CursorGlow() {
 
             draw() {
                 ctx.globalAlpha = this.alpha;
-                ctx.shadowBlur = 4;
-                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -65,7 +63,6 @@ export default function CursorGlow() {
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Only spawn if mouse is moving (Stardust effect)
             const dist = Math.hypot(
                 mouse.current.x - lastPos.current.x,
                 mouse.current.y - lastPos.current.y
@@ -87,25 +84,22 @@ export default function CursorGlow() {
                 }
             }
             
-            // Minimalist Focus Glow (Small and subtle)
             if (mouse.current.active) {
-                // Outer subtle aura
+                // Focus aura without expensive shadowBlur
                 const outerGradient = ctx.createRadialGradient(
                     mouse.current.x, mouse.current.y, 0,
-                    mouse.current.x, mouse.current.y, 100
+                    mouse.current.x, mouse.current.y, 80
                 );
-                outerGradient.addColorStop(0, 'rgba(139, 92, 246, 0.05)');
+                outerGradient.addColorStop(0, 'rgba(139, 92, 246, 0.15)');
                 outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.globalAlpha = 1;
                 ctx.fillStyle = outerGradient;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillRect(mouse.current.x - 80, mouse.current.y - 80, 160, 160);
 
-                // Tiny sharp white focus point
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'white';
+                // Sharp focus point
                 ctx.fillStyle = 'white';
                 ctx.beginPath();
-                ctx.arc(mouse.current.x, mouse.current.y, 1.5, 0, Math.PI * 2);
+                ctx.arc(mouse.current.x, mouse.current.y, 1.2, 0, Math.PI * 2);
                 ctx.fill();
             }
 
