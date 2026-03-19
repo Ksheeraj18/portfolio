@@ -99,11 +99,11 @@ function App() {
               <main className="flex flex-col items-center w-full">
           <Hero performanceMode={performanceMode} />
           <SectionDivider variant="wave" />
-          <About />
+          <About performanceMode={performanceMode} />
           <SectionDivider variant="dots" />
-          <Services />
+          <Services performanceMode={performanceMode} />
           <SectionDivider variant="line" />
-          <Skills />
+          <Skills performanceMode={performanceMode} />
           <SectionDivider variant="wave" />
           <Certifications />
           <SectionDivider variant="dots" />
@@ -111,7 +111,7 @@ function App() {
           <SectionDivider variant="dots" />
           <GithubStats />
           <SectionDivider variant="wave" />
-          <Experience />
+          <Experience performanceMode={performanceMode} />
           <SectionDivider variant="line" />
           <Contact performanceMode={performanceMode} />
               </main>

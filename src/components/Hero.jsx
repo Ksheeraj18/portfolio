@@ -52,10 +52,10 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                 >
                     {/* Heavy GPU blur/glow elements optimized out */}
                     <Tilt
-                        tiltMaxAngleX={8}
-                        tiltMaxAngleY={8}
+                        tiltMaxAngleX={performanceMode === 'low' ? 0 : 8}
+                        tiltMaxAngleY={performanceMode === 'low' ? 0 : 8}
                         perspective={1200}
-                        scale={1.02}
+                        scale={performanceMode === 'low' ? 1 : 1.02}
                         transitionSpeed={1500}
                         gyroscope={false}
                         disableTiltOnTouch={true}

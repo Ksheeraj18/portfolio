@@ -6,9 +6,10 @@ import AnimatedCounter from './AnimatedCounter';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 
-function SpotlightCard({ card, index, isScrolling }) {
+function SpotlightCard({ card, index, isScrolling, performanceMode }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
+    const isLowPerf = performanceMode === 'low';
 
     function onMouseMove({ currentTarget, clientX, clientY }) {
         const { left, top } = currentTarget.getBoundingClientRect();
@@ -30,10 +31,10 @@ function SpotlightCard({ card, index, isScrolling }) {
             className="h-full"
         >
             <Tilt
-                tiltMaxAngleX={8}
-                tiltMaxAngleY={8}
+                tiltMaxAngleX={isLowPerf ? 0 : 5}
+                tiltMaxAngleY={isLowPerf ? 0 : 5}
                 perspective={1500}
-                scale={1.02}
+                scale={isLowPerf ? 1 : 1.02}
                 transitionSpeed={1500}
                 disableTiltOnTouch={true}
                 className="h-full transform-style-3d"
@@ -54,14 +55,16 @@ function SpotlightCard({ card, index, isScrolling }) {
                     {/* Background Gradient Tint */}
                     <div className={`absolute inset-0 bg-linear-to-br ${card.bg} opacity-20 group-hover:opacity-40 transition-opacity`} />
 
-                    {/* Dynamic Scanner Line */}
-                    <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                            <motion.div 
-                                className="bg-linear-to-b from-transparent via-white/20 to-transparent w-full h-[150px] rotate-15 blur-md mix-blend-overlay absolute -left-1/4"
-                                animate={{ y: ['-100%', '300%'] }}
-                                transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                            />
-                    </div>
+                    {/* Dynamic Scanner Line - Disabled on Low Perf */}
+                    {!isLowPerf && (
+                        <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                                <motion.div 
+                                    className="bg-linear-to-b from-transparent via-white/20 to-transparent w-full h-[150px] rotate-15 blur-md mix-blend-overlay absolute -left-1/4"
+                                    animate={{ y: ['-100%', '300%'] }}
+                                    transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                                />
+                        </div>
+                    )}
 
                     <div className="relative z-10 flex flex-col h-full transform-style-3d">
                         <motion.div
@@ -94,7 +97,8 @@ function SpotlightCard({ card, index, isScrolling }) {
     );
 }
 
-export default function About({ isScrolling = false }) {
+export default function About({ isScrolling = false, performanceMode = 'high' }) {
+    const isLowPerf = performanceMode === 'low';
     const cards = [
         {
             icon: <Brain className="text-purple-400" size={40} strokeWidth={1.5} />,
@@ -130,10 +134,10 @@ export default function About({ isScrolling = false }) {
             bgContent={
                 <div className="absolute inset-0 opacity-40">
                     <Antigravity
-                        count={100}
+                        count={isLowPerf ? 40 : 100}
                         magnetRadius={18}
                         ringRadius={15}
-                        waveSpeed={0.2}
+                        waveSpeed={isLowPerf ? 0.05 : 0.2}
                         waveAmplitude={1.5}
                         particleSize={1}
                         lerpSpeed={0.4}
@@ -144,6 +148,7 @@ export default function About({ isScrolling = false }) {
                         pulseSpeed={1.5}
                         particleShape="capsule"
                         fieldStrength={6}
+                        performanceMode={performanceMode}
                     />
                 </div>
             }
@@ -196,7 +201,7 @@ export default function About({ isScrolling = false }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                     {cards.map((card, index) => (
-                        <SpotlightCard key={index} card={card} index={index} isScrolling={isScrolling} />
+                        <SpotlightCard key={index} card={card} index={index} isScrolling={isScrolling} performanceMode={performanceMode} />
                     ))}
                 </div>
             </div>

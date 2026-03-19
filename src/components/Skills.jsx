@@ -5,9 +5,10 @@ import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 import SkillRadar from './SkillRadar';
 
-function SkillCategoryCard({ category, index, isScrolling }) {
+function SkillCategoryCard({ category, index, isScrolling, performanceMode }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
+    const isLowPerf = performanceMode === 'low';
 
     function onMouseMove({ currentTarget, clientX, clientY }) {
         const { left, top } = currentTarget.getBoundingClientRect();
@@ -29,10 +30,10 @@ function SkillCategoryCard({ category, index, isScrolling }) {
             className="h-full group"
         >
             <Tilt 
-                tiltMaxAngleX={8} 
-                tiltMaxAngleY={8} 
+                tiltMaxAngleX={isLowPerf ? 0 : 5} 
+                tiltMaxAngleY={isLowPerf ? 0 : 5} 
                 perspective={1500} 
-                scale={1.02} 
+                scale={isLowPerf ? 1 : 1.02} 
                 transitionSpeed={1500} 
                 disableTiltOnTouch={true}
                 className="h-full transform-style-3d smooth-gpu"
@@ -62,7 +63,7 @@ function SkillCategoryCard({ category, index, isScrolling }) {
                                 <motion.span
                                     key={skill}
                                     className="px-5 py-3 bg-white/2 border border-white/5 rounded-2xl text-gray-300 text-xs font-bold uppercase tracking-widest hover:border-white/20 transition-all cursor-default shadow-xl transform translate-z-10 relative overflow-hidden group/skill"
-                                    whileHover={{
+                                    whileHover={isLowPerf ? {} : {
                                         scale: 1.1,
                                         y: -5,
                                         translateZ: 20,
@@ -83,7 +84,8 @@ function SkillCategoryCard({ category, index, isScrolling }) {
     );
 }
 
-export default function Skills({ isScrolling = false }) {
+export default function Skills({ isScrolling = false, performanceMode = 'high' }) {
+    const isLowPerf = performanceMode === 'low';
     const skillCategories = [
         {
             title: 'Languages',
@@ -135,10 +137,10 @@ export default function Skills({ isScrolling = false }) {
             bgContent={
                 <div className="absolute inset-0 opacity-40">
                     <Antigravity
-                        count={120}
+                        count={isLowPerf ? 50 : 120}
                         magnetRadius={8}
                         ringRadius={6}
-                        waveSpeed={0.8}
+                        waveSpeed={isLowPerf ? 0.2 : 0.8}
                         waveAmplitude={1}
                         particleSize={1.5}
                         lerpSpeed={0.5}
@@ -149,6 +151,7 @@ export default function Skills({ isScrolling = false }) {
                         pulseSpeed={1}
                         particleShape="capsule"
                         fieldStrength={5}
+                        performanceMode={performanceMode}
                     />
                 </div>
             }
@@ -195,10 +198,10 @@ export default function Skills({ isScrolling = false }) {
                     </div>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-8">
+                <div className="flex flex-wrap justify-center gap-6 md:gap-8">
                     {skillCategories.map((category, index) => (
-                        <div key={category.title} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md">
-                            <SkillCategoryCard category={category} index={index} isScrolling={isScrolling} />
+                        <div key={category.title} className="w-full md:w-[calc(50%-1rem)] xl:w-[calc(33.333%-1.5rem)] max-w-md">
+                            <SkillCategoryCard category={category} index={index} isScrolling={isScrolling} performanceMode={performanceMode} />
                         </div>
                     ))}
                 </div>

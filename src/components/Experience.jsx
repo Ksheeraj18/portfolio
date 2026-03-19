@@ -4,7 +4,8 @@ import Tilt from 'react-parallax-tilt';
 import InteractiveSection from './InteractiveSection';
 import Antigravity from './Antigravity';
 
-export default function Experience({ isScrolling = false }) {
+export default function Experience({ isScrolling = false, performanceMode = 'high' }) {
+    const isLowPerf = performanceMode === 'low';
     const experiences = [
         {
             company: 'Oibre Technologies',
@@ -42,10 +43,10 @@ export default function Experience({ isScrolling = false }) {
             bgContent={
                 <div className="absolute inset-0 opacity-40">
                     <Antigravity
-                        count={100}
+                        count={isLowPerf ? 40 : 100}
                         magnetRadius={15}
                         ringRadius={12}
-                        waveSpeed={0.3}
+                        waveSpeed={isLowPerf ? 0.1 : 0.3}
                         waveAmplitude={2}
                         particleSize={1.2}
                         lerpSpeed={0.4}
@@ -56,6 +57,7 @@ export default function Experience({ isScrolling = false }) {
                         pulseSpeed={2}
                         particleShape="capsule"
                         fieldStrength={8}
+                        performanceMode={performanceMode}
                     />
                 </div>
             }
@@ -144,7 +146,14 @@ export default function Experience({ isScrolling = false }) {
                                 </motion.div>
                             </div>
 
-                            <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} scale={1.01} transitionSpeed={1000} disableTiltOnTouch={true}>
+                            <Tilt 
+                                tiltMaxAngleX={isLowPerf ? 0 : 4} 
+                                tiltMaxAngleY={isLowPerf ? 0 : 4} 
+                                perspective={1000} 
+                                scale={isLowPerf ? 1 : 1.01} 
+                                transitionSpeed={1000} 
+                                disableTiltOnTouch={true}
+                            >
                                 <motion.div
                                     className="bg-zinc-950 border border-white/10 rounded-3xl p-8 md:p-10 transition-all duration-200 mt-8 shadow-[0_20px_40px_rgba(0,0,0,0.8)] transform-style-3d"
                                     whileHover={{
@@ -164,7 +173,7 @@ export default function Experience({ isScrolling = false }) {
                                             </motion.span>
                                             {exp.project}
                                         </h4>
-                                        <p className="text-gray-400 leading-relaxed font-light text-lg">
+                                        <p className="text-gray-400 leading-relaxed font-light text-base md:text-lg">
                                             {exp.desc}
                                         </p>
                                     </div>
