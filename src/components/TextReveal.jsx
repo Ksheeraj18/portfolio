@@ -10,7 +10,6 @@ export default function TextReveal({ children, className = '' }) {
 
     const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
     const y = useTransform(scrollYProgress, [0, 1], [60, 0]);
-    const blur = useTransform(scrollYProgress, [0, 1], [10, 0]);
 
     return (
         <motion.div
@@ -18,7 +17,6 @@ export default function TextReveal({ children, className = '' }) {
             style={{
                 opacity,
                 y,
-                filter: blur.get ? `blur(${blur}px)` : undefined
             }}
             className={className}
         >

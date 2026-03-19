@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, CheckCircle2, Sparkles } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
+import InteractiveSection from './InteractiveSection';
+import Antigravity from './Antigravity';
 
-export default function Experience() {
+export default function Experience({ isScrolling = false, performanceMode = 'high' }) {
+    const isLowPerf = performanceMode === 'low';
     const experiences = [
         {
             company: 'Oibre Technologies',
@@ -33,14 +36,32 @@ export default function Experience() {
     ];
 
     return (
-        <section id="experience" className="py-32 w-full relative bg-zinc-950 overflow-hidden">
-            {/* Background element - hidden on mobile for performance */}
-            <motion.div
-                className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-900/10 to-transparent pointer-events-none"
-                animate={{ scale: [1, 1.15, 1], x: [0, -40, 0] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            />
-
+        <InteractiveSection 
+            id="experience" 
+            className="py-32 border-t border-white/5" 
+            glowColor="rgba(79, 70, 229, 0.08)"
+            bgContent={
+                <div className="absolute inset-0 opacity-40">
+                    <Antigravity
+                        count={isLowPerf ? 40 : 100}
+                        magnetRadius={15}
+                        ringRadius={12}
+                        waveSpeed={isLowPerf ? 0.1 : 0.3}
+                        waveAmplitude={2}
+                        particleSize={1.2}
+                        lerpSpeed={0.4}
+                        color="#8b5cf6"
+                        autoAnimate
+                        particleVariance={1.5}
+                        depthFactor={1.5}
+                        pulseSpeed={2}
+                        particleShape="capsule"
+                        fieldStrength={8}
+                        performanceMode={performanceMode}
+                    />
+                </div>
+            }
+        >
             <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -71,10 +92,10 @@ export default function Experience() {
                     </h2>
                 </motion.div>
 
-                <div className="max-w-4xl mx-auto relative border-l-2 border-white/5 ml-4 md:ml-auto">
+                <div className="max-w-4xl mx-auto relative border-l-2 border-white/5">
                     {/* Animated glowing line */}
                     <motion.div
-                        className="absolute left-[-1px] top-0 w-[2px] bg-linear-to-b from-purple-500 via-blue-500 to-transparent"
+                        className="absolute -left-px top-0 w-[2px] bg-linear-to-b from-purple-500 via-blue-500 to-transparent"
                         initial={{ height: 0 }}
                         whileInView={{ height: '100%' }}
                         viewport={{ once: true }}
@@ -92,7 +113,7 @@ export default function Experience() {
                         >
                             {/* Futuristic Timeline indicator with pulse */}
                             <motion.div
-                                className="absolute left-[-11px] top-2 w-5 h-5 rounded-full bg-zinc-950 border-4 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] group-hover:scale-125 transition-transform duration-300"
+                                className="absolute left-[-11px] top-2 w-5 h-5 rounded-full bg-zinc-950 border-4 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] group-hover:scale-125 transition-transform duration-200"
                                 animate={{ boxShadow: ['0 0 15px rgba(168,85,247,0.3)', '0 0 25px rgba(168,85,247,0.8)', '0 0 15px rgba(168,85,247,0.3)'] }}
                                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: index * 0.5 }}
                             />
@@ -125,9 +146,16 @@ export default function Experience() {
                                 </motion.div>
                             </div>
 
-                            <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} scale={1.01} transitionSpeed={1000} disableTiltOnTouch={true}>
+                            <Tilt 
+                                tiltMaxAngleX={isLowPerf ? 0 : 4} 
+                                tiltMaxAngleY={isLowPerf ? 0 : 4} 
+                                perspective={1000} 
+                                scale={isLowPerf ? 1 : 1.01} 
+                                transitionSpeed={1000} 
+                                disableTiltOnTouch={true}
+                            >
                                 <motion.div
-                                    className="bg-black/60 border border-white/10 rounded-3xl p-8 md:p-10 transition-all duration-200 mt-8 shadow-xl transform-style-3d"
+                                    className="bg-zinc-950 border border-white/10 rounded-3xl p-8 md:p-10 transition-all duration-200 mt-8 shadow-[0_20px_40px_rgba(0,0,0,0.8)] transform-style-3d"
                                     whileHover={{
                                         borderColor: 'rgba(168,85,247,0.3)',
                                         boxShadow: '0 0 30px rgba(168,85,247,0.1)',
@@ -145,7 +173,7 @@ export default function Experience() {
                                             </motion.span>
                                             {exp.project}
                                         </h4>
-                                        <p className="text-gray-400 leading-relaxed font-light text-lg">
+                                        <p className="text-gray-400 leading-relaxed font-light text-base md:text-lg">
                                             {exp.desc}
                                         </p>
                                     </div>
@@ -171,17 +199,21 @@ export default function Experience() {
                                     </div>
 
                                     <div className="pt-6 flex flex-wrap gap-3 transform translate-z-10">
-                                        {exp.tech.map((tech, techIdx) => (
+                                        {exp.tech.map((tech) => (
                                             <motion.span
                                                 key={tech}
-                                                className="text-sm font-semibold px-4 py-2 bg-linear-to-br from-white/10 to-transparent border border-white/10 rounded-xl text-white shadow-sm"
+                                                className="text-sm font-semibold px-4 py-2 bg-linear-to-br from-white/10 to-transparent border border-white/10 rounded-xl text-white shadow-[0_4px_15px_rgba(0,0,0,0.5)] relative overflow-hidden group/tech cursor-default"
                                                 whileHover={{
                                                     scale: 1.1,
                                                     y: -2,
-                                                    boxShadow: '0 4px 15px rgba(168,85,247,0.3)'
+                                                    borderColor: 'rgba(168,85,247,0.5)',
+                                                    boxShadow: '0 4px 15px rgba(168,85,247,0.5)'
                                                 }}
                                             >
-                                                {tech}
+                                                <span className="relative z-10 group-hover/tech:text-white transition-colors duration-300">{tech}</span>
+                                                <motion.div 
+                                                    className={`absolute inset-0 bg-purple-500 opacity-0 group-hover/tech:opacity-20 transition-opacity duration-300 pointer-events-none z-0`}
+                                                />
                                             </motion.span>
                                         ))}
                                     </div>
@@ -191,6 +223,6 @@ export default function Experience() {
                     ))}
                 </div>
             </div>
-        </section>
+        </InteractiveSection>
     );
 }

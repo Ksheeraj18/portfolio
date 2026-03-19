@@ -24,6 +24,9 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]|motion' }],
+      'react-hooks/purity': 'off', // Disable purity checks for 3D components
+      'react/no-unknown-property': 'off', // Disable for Three.js properties
+      'react-hooks/immutability': 'off', // Allow direct mutation in 3D animation loops
     },
   },
 ])

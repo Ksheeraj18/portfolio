@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export default function FloatingIcons() {
+export default function FloatingIcons({ paused = false }) {
     const icons = [
         { emoji: '⚡', x: '10%', y: '20%', size: 24, delay: 0, duration: 6 },
         { emoji: '🧠', x: '85%', y: '15%', size: 28, delay: 1, duration: 7 },
@@ -14,7 +14,7 @@ export default function FloatingIcons() {
 
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-            {icons.map((icon, i) => (
+            {!paused && icons.map((icon, i) => (
                 <motion.div
                     key={i}
                     className={`absolute ${i > 4 ? 'hidden md:block' : 'block'}`}

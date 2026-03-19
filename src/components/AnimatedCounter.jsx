@@ -9,7 +9,6 @@ export default function AnimatedCounter({ target, suffix = '', label, duration =
     useEffect(() => {
         if (!isInView) return;
 
-        let start = 0;
         const startTime = Date.now();
         const durationMs = duration * 1000;
 

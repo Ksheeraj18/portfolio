@@ -7,14 +7,12 @@ import MagneticButton from './MagneticButton';
 import Tilt from 'react-parallax-tilt';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
 import ResumePreview from './ResumePreview';
-import InteractiveOrbs from './InteractiveOrbs';
-import FloatingParticles from './FloatingParticles';
 
-export default function Hero({ performanceMode = 'high', isScrolling = false }) {
+export default function Hero() {
     const [text] = useTypewriter({
         words: ['AI Engineer', 'ML Developer', 'Full-Stack Builder', 'Automation Architect', 'LLM Integrator'],
         loop: true,
-        delaySpeed: 2000, // Reverted to original delaySpeed as lerpSpeed is not a valid property for useTypewriter and the provided syntax was incorrect.
+        delaySpeed: 2000,
         typeSpeed: 60,
         deleteSpeed: 40,
     });
@@ -26,12 +24,7 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
     return (
         <section id="home" className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-32 pb-20">
             {/* Interactive 3D Particle Background */}
-            <ParticleBackground paused={showResume || performanceMode === 'low'} performanceMode={performanceMode} />
-
-            {/* Interactive Floating Orbs */}
-            <InteractiveOrbs paused={showResume || performanceMode === 'low'} performanceMode={performanceMode} />
-
-            {/* Floating Particles Removed for Performance (overkill with WebGL ParticleBackground) */}
+            <ParticleBackground paused={showResume} />
 
             <ResumePreview 
                 isOpen={showResume} 
@@ -39,24 +32,56 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                 resumeUrl="/KSHEERAJ CV (3).pdf"
             />
 
+            {/* Massive Background Gradients with animation - hidden on mobile for performance */}
+            <motion.div
+                className="hidden md:block absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-600/20 to-transparent pointer-events-none z-0"
+                animate={{
+                    scale: [1, 1.2, 1],
+                    x: [0, 30, 0],
+                    y: [0, -20, 0]
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+                className="hidden md:block absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-purple-600/10 to-transparent pointer-events-none z-0"
+                animate={{
+                    scale: [1, 1.15, 1],
+                    x: [0, -25, 0],
+                    y: [0, 25, 0]
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            />
+            {/* Additional floating orb */}
+            <motion.div
+                className="hidden md:block absolute top-1/3 right-1/3 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-pink-600/15 to-transparent pointer-events-none z-0"
+                animate={{
+                    scale: [1, 1.3, 1],
+                    x: [0, 40, 0],
+                    y: [0, -30, 0]
+                }}
+                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+            />
+
             {/* Grid overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[4rem_4rem] pointer-events-none opacity-[0.15] z-0"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-20 z-0"></div>
 
             {/* Premium 3D Profile Frame replacing Abstract Visual */}
-            <div className="absolute top-[48%] right-0 md:right-10 lg:right-20 -translate-y-1/2 pointer-events-none z-10 hidden md:flex items-center justify-center group">
+            <div className="absolute top-1/2 right-0 md:right-10 lg:right-20 -translate-y-1/2 pointer-events-none z-10 hidden md:flex items-center justify-center">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
                     className="relative pointer-events-auto"
                 >
-                    {/* Heavy GPU blur/glow elements optimized out */}
+                    {/* Atmospheric Glow behind photo */}
+                    <div className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse" />
+                    
                     <Tilt
-                        tiltMaxAngleX={performanceMode === 'low' ? 0 : 8}
-                        tiltMaxAngleY={performanceMode === 'low' ? 0 : 8}
-                        perspective={1200}
-                        scale={performanceMode === 'low' ? 1 : 1.02}
-                        transitionSpeed={1500}
+                        tiltMaxAngleX={5}
+                        tiltMaxAngleY={5}
+                        perspective={1500}
+                        scale={1.02}
+                        transitionSpeed={2000}
                         gyroscope={false}
                         disableTiltOnTouch={true}
                         className="relative z-10"
@@ -79,9 +104,7 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                             <div className="relative w-full h-full rounded-[2.8rem] overflow-hidden bg-black bezel-screen">
                                 {/* Full-Image "Ambient Scan" Effect */}
                                 <div className="absolute inset-y-0 left-0 w-[400%] z-30 pointer-events-none overflow-hidden rounded-[2.8rem]">
-                                    {!isScrolling && (
-                                        <div className="absolute inset-0 glass-shine opacity-0 group-hover:opacity-100 group-hover:animate-[shine_4s_ease-in-out_infinite] mix-blend-lighten transition-opacity duration-1000" />
-                                    )}
+                                    <div className="absolute inset-0 glass-shine opacity-0 group-hover:opacity-100 group-hover:animate-[shine_4s_ease-in-out_infinite] mix-blend-lighten transition-opacity duration-1000" />
                                 </div>
                                 
                                 <img
@@ -164,7 +187,7 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
             </AnimatePresence>
 
             {/* UI Content */}
-            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full will-change-transform relative">
+            <div className="max-w-6xl mx-auto px-6 flex flex-col items-start lg:items-start justify-center text-left lg:text-left z-20 w-full will-change-transform">
                 <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -210,8 +233,8 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                                         visible: { opacity: 1, y: 0, rotateX: 0, scale: 1 }
                                     }}
                                     transition={{ type: 'spring', damping: 12, stiffness: 120 }}
-                                    className="inline-block hover:text-[#8b5cf6] transition-colors duration-200"
-                                    whileHover={{ scale: 1.2, transition: { duration: 0.2 } }}
+                                    className="inline-block"
+                                    whileHover={{ scale: 1.2, color: '#8b5cf6', transition: { duration: 0.2 } }}
                                 >
                                     {letter === ' ' ? '\u00A0' : letter}
                                 </motion.span>
@@ -224,55 +247,20 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3 }}
-                    className="text-sm sm:text-lg md:text-2xl xl:text-3xl text-gray-300 font-medium mb-4 sm:mb-6 tracking-wide h-6 sm:h-8 md:h-12 relative group cursor-pointer"
-                    whileHover={{ scale: 1.02 }}
+                    className="text-sm sm:text-lg md:text-2xl xl:text-3xl text-gray-300 font-medium mb-4 sm:mb-6 tracking-wide h-6 sm:h-8 md:h-12"
                 >
-                    <motion.span
-                        className="text-white inline-block"
-                        animate={!isScrolling ? {
-                            textShadow: [
-                                "0 0 0px rgba(139, 92, 246, 0)",
-                                "0 0 15px rgba(139, 92, 246, 0.4)",
-                                "0 0 0px rgba(139, 92, 246, 0)"
-                            ]
-                        } : {}}
-                        transition={{ duration: 3, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    >
-                        {text}
-                    </motion.span>
+                    <span className="text-white">{text}</span>
                     <Cursor cursorStyle="|" cursorColor="#8b5cf6" />
-                    {/* Interactive glow effect on hover */}
-                    <motion.div
-                        className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                        initial={false}
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    />
                 </motion.h2>
 
-                <motion.div
+                <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="max-w-2xl text-gray-400 text-sm sm:text-base md:text-xl md:leading-relaxed mb-8 sm:mb-12 font-light px-2 sm:px-0 relative group cursor-pointer"
-                    whileHover={{ scale: 1.01 }}
+                    className="max-w-2xl text-gray-400 text-sm sm:text-base md:text-xl md:leading-relaxed mb-8 sm:mb-12 font-light px-2 sm:px-0"
                 >
-                    <motion.span
-                        animate={!isScrolling ? {
-                            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                        } : {}}
-                        transition={{ duration: 4, repeat: Infinity, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        className="bg-linear-to-r from-gray-400 via-gray-300 to-gray-400 bg-clip-text text-transparent bg-size-[200%_200%]"
-                    >
-                        I build powerful AI-driven applications, scalable production systems, and design experiences that push the boundaries of modern web technologies.
-                    </motion.span>
-                    {/* Subtle interactive background */}
-                    <motion.div
-                        className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-transparent to-purple-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"
-                        animate={!isScrolling ? { rotate: [0, 1, 0] } : {}}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                </motion.div>
+                    I build powerful AI-driven applications, scalable production systems, and design experiences that push the boundaries of modern web technologies.
+                </motion.p>
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -298,13 +286,28 @@ export default function Hero({ performanceMode = 'high', isScrolling = false }) 
                             className="group w-full sm:w-auto px-10 py-5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white font-bold text-lg transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] flex items-center justify-center gap-3 cursor-pointer"
                         >
                             <Download size={20} className="group-hover:-translate-y-1 transition-transform duration-500" />
-                            <span className="tracking-wide">Résumé</span>
+                            <span className="tracking-wide">R??sum??</span>
                         </motion.button>
                     </MagneticButton>
                 </motion.div>
 
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2, duration: 1 }}
+                    className="mt-20 md:mt-32 flex flex-col items-start gap-4 pb-10"
+                >
+                    <div className="flex flex-col items-start gap-2">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-[0.4em] font-black">Scroll_to_Deploy</span>
+                        <button 
+                            onClick={() => window.lenis?.scrollTo('#about', { offset: -100, duration: 1.2 })}
+                            className="cursor-pointer text-gray-400 hover:text-white transition-all hover:scale-110 animate-bounce mt-2 bg-white/5 p-4 rounded-full border border-white/10 backdrop-blur-md shadow-2xl group focus:outline-none"
+                        >
+                            <ArrowDown size={24} className="group-hover:translate-y-1 transition-transform" />
+                        </button>
+                    </div>
+                </motion.div>
             </div>
-
         </section>
     );
 }
